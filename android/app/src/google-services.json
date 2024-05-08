@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "68231262569",
+    "project_id": "passaqui-prod",
+    "storage_bucket": "passaqui-prod.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:68231262569:android:630b16dd10eafdcc28cdf8",
+        "android_client_info": {
+          "package_name": "com.s21.passaqui"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaq6MejjWPnjTvPUACVg7TduulOwaeeKk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
