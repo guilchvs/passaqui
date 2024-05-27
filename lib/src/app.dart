@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:passaqui/src/core/app_theme.dart';
 import 'package:passaqui/src/core/di/service_locator.dart';
 import 'package:passaqui/src/core/navigation/navigation_handler.dart';
+import 'package:passaqui/src/modules/auth/create-account/create_account_screen.dart';
 import 'package:passaqui/src/modules/auth/login/login_screen.dart';
 
 class PassaquiApp extends StatefulWidget {
