@@ -19,9 +19,9 @@ class PassaquiLink extends StatelessWidget {
       },
       child: Text(label,
         style: const TextStyle(
-            color: Color(0xFFA8CA4C),
+            color: Color(0xFF189973),
             fontSize: 16,
-            fontWeight: FontWeight.w400,
+            fontWeight: FontWeight.bold,
             decoration: TextDecoration.underline
         ),
       ),
