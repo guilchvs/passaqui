@@ -29,34 +29,40 @@ class _WithdrawWelcomeScreenState extends State<WithdrawWelcomeScreen> {
             child: Column(
               children: [
                 const SizedBox(
-                  height: 32,
+                  height: 40,
                 ),
                 const Text(
                   "Como realizar a contratação?",
                   style: TextStyle(
                       fontSize: 22,
-                      color: Color(0xFF136048),
+                      color: Color(0xFF1E1E1E),
                       fontFamily: 'Raleway',
                       fontWeight: FontWeight.w700),
                 ),
                 const SizedBox(
-                  height: 24,
-                ),
-                SvgPicture.asset('assets/images/passaqui_logo.svg'),
-                const SizedBox(
                   height: 32,
                 ),
-                Text(
-                  "Para simular e antecipar seu saque aniversário, você precisa ter habilitado a modalidade e autorizado nosso banco a consultar seu saldo no aplicativo do FGTS.",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: 'Raleway',
-                    color: Color(0xFF1E1E1E)
-                  ),
-                  textAlign: TextAlign.center,
+                SvgPicture.asset('assets/images/passaqui_logo.svg', height: 200),
+                const SizedBox(
+                  height: 40,
                 ),
-                const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    right: 20, 
+                    left: 20, 
+                  ),
+                  child: Text(
+                    "Para simular e antecipar seu saque aniversário, você precisa ter habilitado a modalidade e autorizado nosso banco a consultar seu saldo no aplicativo do FGTS.",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Raleway',
+                      color: Color(0xFF1E1E1E)
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                const SizedBox(height: 120),
                 PassaquiButton(
                   label: "Veja como autorizar"
                 ),
