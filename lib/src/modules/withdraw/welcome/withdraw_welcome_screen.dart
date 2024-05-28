@@ -46,8 +46,8 @@ class _WithdrawWelcomeScreenState extends State<WithdrawWelcomeScreen> {
                 const SizedBox(
                   height: 40,
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(
+                const Padding(
+                  padding: EdgeInsets.only(
                     right: 20, 
                     left: 20, 
                   ),
@@ -63,10 +63,10 @@ class _WithdrawWelcomeScreenState extends State<WithdrawWelcomeScreen> {
                   ),
                 ),
                 const SizedBox(height: 120),
-                PassaquiButton(
+                const PassaquiButton(
                   label: "Veja como autorizar"
                 ),
-                Text("Ou"),
+                const Text("Ou"),
                 PassaquiButton(
                     label: "Habilitar Saque-Aniversário",
                   onTap: (){
