@@ -75,6 +75,12 @@ class _WithdrawStepsScreenState extends State<WithdrawStepsScreen> {
     ),
   ];
 
+  int getCurrentPageIndex() {
+    return _pageController.hasClients
+        ? (_pageController.page?.toInt() ?? 0)
+        : 0;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,28 +113,35 @@ class _WithdrawStepsScreenState extends State<WithdrawStepsScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Row(
               children: [
-                PassaquiTextButton(
-                  isLeading: true,
-                  label: "Anterior",
-                  onTap: () {
-                    _pageController
-                        .jumpToPage((_pageController.page?.toInt() ?? 0) - 1);
-                  },
-                ),
-                const Spacer(),
-                PassaquiTextButton(
-                  label: "Próximo",
-                  onTap: () {
-                    int? lastPage = _pageController.page?.toInt();
-                    if (lastPage == steps.length - 1) {
-                      DIService()
-                          .inject<NavigationHandler>()
-                          .navigate(HomeScreen.route);
-                    } else {
+                if (getCurrentPageIndex() > 0)
+                  PassaquiTextButton(
+                    isLeading: true,
+                    label: "Anterior",
+                    onTap: () {
                       _pageController
-                          .jumpToPage((_pageController.page?.toInt() ?? 0) + 1);
-                    }
-                  },
+                          .jumpToPage((_pageController.page?.toInt() ?? 0) - 1);
+                    },
+                  ),
+                const Spacer(),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 35
+                    ),
+                  child: PassaquiTextButton(
+                    label: "Próxima",
+                    onTap: () {
+                      int? lastPage = _pageController.page?.toInt();
+                      if (lastPage == steps.length - 1) {
+                        DIService()
+                            .inject<NavigationHandler>()
+                            .navigate(HomeScreen.route);
+                      } else {
+                        _pageController
+                            .jumpToPage((_pageController.page?.toInt() ?? 0) + 1);
+                      }
+                    },
+                  ),
                 )
               ],
             ),
