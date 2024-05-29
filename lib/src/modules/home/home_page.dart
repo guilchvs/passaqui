@@ -36,9 +36,12 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.asset(
-                  "assets/images/passaqui_nav_logo.jpeg",
-                  height: 60,
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child:Image.asset(
+                    "assets/images/passaqui_nav_logo.jpeg",
+                    height: 60,
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 28),
