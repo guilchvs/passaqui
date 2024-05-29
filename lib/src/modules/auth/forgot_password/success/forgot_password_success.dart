@@ -18,7 +18,7 @@ class _ForgotPasswordSuccessScreenState extends State<ForgotPasswordSuccessScree
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const PassaquiAppBar(),
+      appBar: const PassaquiAppBar(showLogo: false, showBackButton: true),
       body: Column(
         children: [
           const SizedBox(

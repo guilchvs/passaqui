@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child:Image.asset(
+                  child: Image.asset(
                     "assets/images/passaqui_nav_logo.jpeg",
                     height: 60,
                   ),
@@ -61,6 +61,9 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(
+              height: 10,
+            ),
             Padding(
               padding: const EdgeInsets.only(left: 16, top: 24, bottom: 16),
               child: Text(
@@ -116,101 +119,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     )),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 16, top: 24, bottom: 16),
-              child: Text(
-                "Funções da conta",
-                style: GoogleFonts.roboto(
-                    fontSize: 18,
-                    color: Color(0xFF515151),
-                    fontWeight: FontWeight.w500),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  Expanded(
-                      child: PassaquiCard(
-                    height: 128,
-                    content: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 16, horizontal: 16),
-                      child: Column(
-                        children: [
-                          SvgPicture.asset("assets/images/ic_pix.svg"),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Text(
-                            "Meu \nPix",
-                            style: GoogleFonts.roboto(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: Color(0xFF515151)),
-                            textAlign: TextAlign.center,
-                          )
-                        ],
-                      ),
-                    ),
-                  )),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Expanded(
-                      child: PassaquiCard(
-                    height: 128,
-                    content: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 16, horizontal: 12),
-                      child: Column(
-                        children: [
-                          SvgPicture.asset(
-                              "assets/images/ic_qr_code_access.svg"),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Text(
-                            "Pagar \ncom Pix",
-                            style: GoogleFonts.roboto(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: Color(0xFF515151)),
-                            textAlign: TextAlign.center,
-                          )
-                        ],
-                      ),
-                    ),
-                  )),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Expanded(
-                      child: PassaquiCard(
-                    height: 128,
-                    content: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 16, horizontal: 12),
-                      child: Column(
-                        children: [
-                          SvgPicture.asset("assets/images/ic_credit-card.svg"),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Text(
-                            "Pedir meu Cartão",
-                            style: GoogleFonts.roboto(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: Color(0xFF515151)),
-                            textAlign: TextAlign.center,
-                          )
-                        ],
-                      ),
-                    ),
-                  )),
-                ],
-              ),
+            SizedBox(
+              height: 20,
             ),
             Padding(
               padding: const EdgeInsets.only(left: 16, top: 24, bottom: 16),

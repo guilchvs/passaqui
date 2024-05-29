@@ -5,6 +5,7 @@ import 'package:passaqui/src/core/di/service_locator.dart';
 import 'package:passaqui/src/core/navigation/navigation_handler.dart';
 import 'package:passaqui/src/modules/auth/create-account/create_account_screen.dart';
 import 'package:passaqui/src/modules/auth/login/login_screen.dart';
+import 'package:passaqui/src/modules/welcome/welcome_screen.dart';
 
 class PassaquiApp extends StatefulWidget {
   const PassaquiApp({super.key});
@@ -29,7 +30,7 @@ class _PassaquiAppState extends State<PassaquiApp> {
       onGenerateRoute: _navigationHandler.routes,
       title: 'Passaqui',
       theme: AppTheme.appTheme,
-      initialRoute: LoginScreen.route,
+      initialRoute: WelcomeScreen.route,
     );
   }
 }

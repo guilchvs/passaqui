@@ -8,6 +8,7 @@ import 'package:passaqui/src/modules/hire/installment/hire_installment_screen.da
 import 'package:passaqui/src/modules/hire/steps/hire_step_screen.dart';
 import 'package:passaqui/src/modules/hire/value/hire_value_screen.dart';
 import 'package:passaqui/src/modules/home/home_page.dart';
+import 'package:passaqui/src/modules/welcome/welcome_screen.dart';
 import 'package:passaqui/src/modules/withdraw/steps/withdraw_step_screen.dart';
 import 'package:passaqui/src/modules/withdraw/welcome/withdraw_welcome_screen.dart';
 
@@ -18,6 +19,10 @@ class NavigationHandler {
 
   Route<dynamic>? routes(RouteSettings settings){
     switch(settings.name){
+      case WelcomeScreen.route:
+        return MaterialPageRoute(
+          builder: (context) => const WelcomeScreen(),
+        );
       case LoginScreen.route:
         return MaterialPageRoute(
           builder: (context) => const LoginScreen(),
