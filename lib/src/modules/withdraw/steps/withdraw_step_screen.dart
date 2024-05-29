@@ -193,12 +193,12 @@ class WithdrawStepItem extends StatelessWidget {
           ),
           Image.asset(
             image,
-            height: 300,
+            height: 270,
             width: double.infinity,
             fit: BoxFit.contain,
           ),
           const SizedBox(
-            height: 24,
+            height: 10,
           ),
           RichText(
               text: TextSpan(
@@ -216,9 +216,9 @@ class WithdrawStepItem extends StatelessWidget {
   List<TextSpan> _buildDescription(String description, int step) {
     final List<String> boldTexts = [
       "clique aqui e veja como autorizar",
-      "Autorizar bancos a consultarem seu FGTS", 
-      "visualizar o termo", 
-      "continuar" 
+      "Autorizar bancos a consultarem seu FGTS",
+      "visualizar o termo",
+      "continuar"
     ];
 
     const boldStyle = TextStyle(fontWeight: FontWeight.bold);

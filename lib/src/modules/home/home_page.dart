@@ -27,36 +27,92 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFe3e1e1),
-      appBar: const PassaquiAppBar(),
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Container(
-          color: Colors.white,
+          color: Theme.of(context).primaryColor,
           width: double.infinity,
           child: Padding(
-            padding: const EdgeInsets.only(left: 24, top: 28, bottom: 28),
+            padding: const EdgeInsets.only(left: 24, top: 48, bottom: 24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "Saldo dispinivel",
-                  style: GoogleFonts.roboto(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500),
+                Image.asset(
+                  "assets/images/passaqui_nav_logo.jpeg",
+                  height: 60,
                 ),
-                PassaquiHideText(
-                  value: "1500,00",
-                  isVisible: true,
-                  toggleVisibility: () {},
-                )
+                Padding(
+                  padding: const EdgeInsets.only(top: 28),
+                  child: Text(
+                    "Olá, João Silva",
+                    style: GoogleFonts.roboto(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w500),
+                  ),
+                ),
               ],
             ),
           ),
         ),
         Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 16, top: 24, bottom: 16),
+              child: Text(
+                "Meus serviços",
+                style: GoogleFonts.roboto(
+                    fontSize: 18,
+                    color: const Color(0xFF515151),
+                    fontWeight: FontWeight.w500),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: InkWell(
+                onTap: () {
+                  DIService()
+                      .inject<NavigationHandler>()
+                      .navigate(HireStepsScreen.route);
+                },
+                child: PassaquiCard(
+                    height: 112,
+                    content: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        children: [
+                          SvgPicture.asset("assets/images/ic_emprestimo.svg"),
+                          Expanded(
+                              child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "FGTS",
+                                  style: GoogleFonts.roboto(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xFF515151)),
+                                ),
+                                Text(
+                                  "Uma forma simples e fácil de dar alívio nas suas despesas",
+                                  style: GoogleFonts.roboto(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      color: Color(0xFF515151)),
+                                ),
+                              ],
+                            ),
+                          )),
+                          Icon(Icons.chevron_right)
+                        ],
+                      ),
+                    )),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.only(left: 16, top: 24, bottom: 16),
               child: Text(
@@ -200,59 +256,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   )),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 16, top: 24, bottom: 16),
-              child: Text(
-                "Meus serviços",
-                style: GoogleFonts.roboto(
-                    fontSize: 18,
-                    color: Color(0xFF515151),
-                    fontWeight: FontWeight.w500),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: InkWell(
-                onTap: (){
-                  DIService().inject<NavigationHandler>().navigate(HireStepsScreen.route);
-                },
-                child: PassaquiCard(
-                    height: 112,
-                    content: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Row(
-                        children: [
-                          SvgPicture.asset("assets/images/ic_emprestimo.svg"),
-                          Expanded(
-                              child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "FGTS",
-                                  style: GoogleFonts.roboto(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                      color: Color(0xFF515151)),
-                                ),
-                                Text(
-                                  "Uma forma simples e fácil de dar alívio nas suas despesas",
-                                  style: GoogleFonts.roboto(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                      color: Color(0xFF515151)),
-                                ),
-                              ],
-                            ),
-                          )),
-                          Icon(Icons.chevron_right)
-                        ],
-                      ),
-                    )),
-              ),
             ),
           ],
         ))

@@ -56,7 +56,7 @@ class _HireStepsScreenState extends State<HireStepsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const PassaquiAppBar(),
+      appBar: const PassaquiAppBar(showBackButton: true, showLogo: false),
       backgroundColor: Color.fromRGBO(18, 96, 73, 1),
       body: Stack(
         children: [
