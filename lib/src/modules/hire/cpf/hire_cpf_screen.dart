@@ -24,7 +24,7 @@ class _HireCpfScreenState extends State<HireCpfScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const PassaquiAppBar(),
+      appBar: const PassaquiAppBar(showBackButton: true, showLogo: false),
       backgroundColor: Color.fromRGBO(18, 96, 73, 1),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

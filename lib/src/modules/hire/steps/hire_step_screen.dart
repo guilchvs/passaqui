@@ -60,13 +60,12 @@ class _HireStepsScreenState extends State<HireStepsScreen> {
       backgroundColor: Color.fromRGBO(18, 96, 73, 1),
       body: Stack(
         children: [
-          Expanded(
-              child: PageView.builder(
+              PageView.builder(
                   controller: _pageController,
                   itemCount: steps.length,
                   itemBuilder: (context, index) {
                     return steps[index];
-                  })),
+                  }),
           Positioned(
             left: 0,
             right: 0,
@@ -114,7 +113,7 @@ class HireStepItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
+           Expanded(
               child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 24),
                   width: double.infinity,
