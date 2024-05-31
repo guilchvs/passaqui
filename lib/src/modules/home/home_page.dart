@@ -32,19 +32,21 @@ class _HomeScreenState extends State<HomeScreen> {
           color: Theme.of(context).primaryColor,
           width: double.infinity,
           child: Padding(
-            padding: const EdgeInsets.only(left: 24, top: 48, bottom: 24),
+            padding: const EdgeInsets.only(bottom: 24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(
-                    "assets/images/passaqui_nav_logo.jpeg",
-                    height: 60,
+                  child: Center(
+                    child: Image.asset(
+                      "assets/images/logo_passaqui_hor_1.png",
+                      height: 130,
+                    ),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 28),
+                  padding: const EdgeInsets.only(left: 18, top: 4),
                   child: Text(
                     "Olá, João Silva",
                     style: GoogleFonts.roboto(
