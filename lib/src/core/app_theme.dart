@@ -9,6 +9,8 @@ class AppTheme {
   static const Color grey = Color.fromRGBO(189, 190, 192, 1);
   static const Color _base = Color.fromRGBO(241, 241, 242, 1);
 
+  static Color get primaryColor => _primaryColor; // Getter for primaryColor
+
   static ThemeData appTheme = ThemeData(
     primaryColor: _primaryColor,
     highlightColor: grey,
