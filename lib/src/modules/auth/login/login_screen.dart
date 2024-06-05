@@ -115,6 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       PassaquiLink(
                         label: "Esqueci a senha",
+                        underline: true,
                         onTap: () {
                           DIService()
                               .inject<NavigationHandler>()
