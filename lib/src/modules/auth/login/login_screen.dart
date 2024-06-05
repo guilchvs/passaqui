@@ -26,12 +26,20 @@ class _LoginScreenState extends State<LoginScreen> {
   late TextEditingController userInputController;
   late TextEditingController passwordInputController;
 
+  bool isPasswordVisible = false;
+
   @override
   void initState() {
     controller = LoginController();
     userInputController = TextEditingController();
     passwordInputController = TextEditingController();
     super.initState();
+  }
+
+  void togglePasswordVisibility(){
+    setState(() {
+      isPasswordVisible = !isPasswordVisible;
+    });
   }
 
   @override
@@ -80,16 +88,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 PassaquiTextField(
                   editingController: userInputController,
-                  label: "Usuário",
+                  placeholder: "Digite seu email",
                 ),
                 const SizedBox(
                   height: 16,
                 ),
                 PassaquiTextField(
                   editingController: passwordInputController,
-                  label: "Senha",
-                  isVisible: true,
+                  placeholder: "Digite sua senha",
+                  isVisible: isPasswordVisible,
                   showVisibility: true,
+                  toggleVisibility: togglePasswordVisibility,
                 ),
                 const SizedBox(
                   height: 16,
