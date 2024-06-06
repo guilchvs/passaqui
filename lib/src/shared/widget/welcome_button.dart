@@ -31,9 +31,7 @@ class WelcomeButton extends StatelessWidget {
                   fontFamily: 'Raleway',
                   fontWeight: FontWeight.w700,
                   fontSize: 16,
-                  color: isSecondary
-                      ? Colors.white
-                      : Theme.of(context).primaryColor),
+                  color: Colors.white),
             )),
       ),
     );
@@ -41,7 +39,9 @@ class WelcomeButton extends StatelessWidget {
 }
 
 final ButtonStyle primaryButtonStyle = ButtonStyle(
-  backgroundColor: WidgetStateProperty.all<Color>(Colors.white),
+  backgroundColor:
+      WidgetStateProperty.all<Color>(const Color.fromRGBO(18, 96, 73, 1)),
+  foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
   minimumSize: WidgetStateProperty.all<Size>(const Size(0, 0)),
   shape: WidgetStateProperty.all<RoundedRectangleBorder>(
     RoundedRectangleBorder(
@@ -51,13 +51,14 @@ final ButtonStyle primaryButtonStyle = ButtonStyle(
 );
 
 final ButtonStyle secondaryButtonStyle = ButtonStyle(
-  backgroundColor: WidgetStateProperty.all<Color>(const Color.fromRGBO(18, 96, 73, 1)),
+  backgroundColor: WidgetStateProperty.all<Color>(
+      Colors.transparent), // Set background color to transparent
   foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
   overlayColor: WidgetStateProperty.all<Color>(Colors.white.withOpacity(0.1)),
   shape: WidgetStateProperty.all<RoundedRectangleBorder>(
     RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10.0),
-      side: const BorderSide(color: Colors.white),
+      side: const BorderSide(color: Color.fromRGBO(168, 202, 75, 1), width: 2),
     ),
   ),
 );
