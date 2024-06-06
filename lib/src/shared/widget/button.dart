@@ -21,19 +21,19 @@ class PassaquiButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
           style: ButtonStyle(
-            minimumSize: minimumSize != null ? MaterialStatePropertyAll(minimumSize) : null,
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            minimumSize: minimumSize != null ? WidgetStatePropertyAll(minimumSize) : null,
+            shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(18.0),
                 )
             ),
-            backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                  (Set<MaterialState> states) {
-                if (states.contains(MaterialState.disabled)) {
-                  return isLight ? Color(0xFF136048).withOpacity(.25) : Color(0xFFA8CA4B).withOpacity(.25);
+            backgroundColor: WidgetStateProperty.resolveWith<Color>(
+                  (Set<WidgetState> states) {
+                if (states.contains(WidgetState.disabled)) {
+                  return isLight ? const Color(0xFF136048).withOpacity(.25) : const Color(0xFFA8CA4B).withOpacity(.25);
                 }
                 else{
-                  return isLight ? Color(0xFF136048) : Color(0xFFA8CA4B);
+                  return isLight ? const Color(0xFF136048) : const Color(0xFFA8CA4B);
                 }
               },
             ),
