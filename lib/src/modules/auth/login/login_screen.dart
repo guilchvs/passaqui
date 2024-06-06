@@ -1,10 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:passaqui/src/core/app_theme.dart';
 import 'package:passaqui/src/core/di/service_locator.dart';
 import 'package:passaqui/src/core/navigation/navigation_handler.dart';
-import 'package:passaqui/src/modules/auth/create-account/create_account_screen.dart';
 import 'package:passaqui/src/modules/auth/forgot_password/forgot_password_screen.dart';
 import 'package:passaqui/src/modules/auth/login/login_controller.dart';
+import 'package:passaqui/src/modules/welcome/welcome_screen.dart';
 import 'package:passaqui/src/modules/withdraw/welcome/withdraw_welcome_screen.dart';
 import 'package:passaqui/src/shared/widget/button.dart';
 import 'package:passaqui/src/shared/widget/checkbox.dart';
@@ -36,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
   }
 
-  void togglePasswordVisibility(){
+  void togglePasswordVisibility() {
     setState(() {
       isPasswordVisible = !isPasswordVisible;
     });
@@ -64,22 +66,39 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: 160,
                 ),
                 const SizedBox(
-                  height: 64,
+                  height: 24,
                 ),
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: 24.0),
-                      child: Text(
-                        "Acesse sua conta:",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            fontSize: 25,
-                            color: Colors.white,
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w600),
-                      ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 18.0),
+                          child: GestureDetector(
+                            onTap: (){
+                              Navigator.of(context).pop();
+                            },
+                            child: const Icon(
+                              Icons.chevron_left, 
+                              color: const Color(0xFFA8CA4B)),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 24.0),
+                          child: Text(
+                            "Acesse sua conta:",
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                fontSize: 25,
+                                color: Colors.white,
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -131,7 +150,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: PassaquiButton(
-                    label: "Continuar",
+                    label: "Continue",
+                    showArrow: true,
                     minimumSize: const Size(200, 40),
                     onTap: () {
                       DIService()
@@ -142,25 +162,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(
                   height: 16,
-                ),
-                Container(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 24.0,
-                  ),
-                  width: double.infinity,
-                  height: 1.4,
-                  color: const Color(0xFF4D5D71),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                PassaquiLink(
-                  label: "Criar uma conta",
-                  onTap: () {
-                    DIService()
-                        .inject<NavigationHandler>()
-                        .navigate(CreateAccountScreen.route);
-                  },
                 ),
               ],
             ),
