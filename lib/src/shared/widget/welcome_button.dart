@@ -52,7 +52,7 @@ final ButtonStyle primaryButtonStyle = ButtonStyle(
 
 final ButtonStyle secondaryButtonStyle = ButtonStyle(
   backgroundColor: WidgetStateProperty.all<Color>(
-      Colors.transparent), // Set background color to transparent
+      Colors.transparent), 
   foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
   overlayColor: WidgetStateProperty.all<Color>(Colors.white.withOpacity(0.1)),
   shape: WidgetStateProperty.all<RoundedRectangleBorder>(
