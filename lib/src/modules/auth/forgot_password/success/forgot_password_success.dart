@@ -94,6 +94,7 @@ class _ForgotPasswordSuccessScreenState
                           label: "Reenviar recuperação",
                           showArrow: true,
                           minimumSize: const Size(200, 40),
+                          style: PassaquiButtonStyle.secondary,
                           onTap: () {
                             DIService()
                                 .inject<NavigationHandler>()
@@ -104,6 +105,7 @@ class _ForgotPasswordSuccessScreenState
                         PassaquiButton(
                           label: "Volte à tela de início",
                           showArrow: false,
+                          centerText: true,
                           minimumSize: const Size(200, 40),
                           onTap: () {
                             DIService()
