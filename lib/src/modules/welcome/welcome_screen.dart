@@ -3,6 +3,7 @@ import 'package:passaqui/src/core/di/service_locator.dart';
 import 'package:passaqui/src/core/navigation/navigation_handler.dart';
 import 'package:passaqui/src/modules/auth/create-account/create_account_screen.dart';
 import 'package:passaqui/src/modules/auth/login/login_screen.dart';
+import 'package:passaqui/src/shared/widget/button.dart';
 import 'package:passaqui/src/shared/widget/welcome_button.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -36,18 +37,25 @@ class WelcomeScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 360),
-                  WelcomeButton(
+                  PassaquiButton(
                     label: 'Faça seu cadastro',
+                    width: 320,
+                    height: 50,
+                    centerText: true,
                     onTap: () {
                       DIService()
                           .inject<NavigationHandler>()
                           .navigate(CreateAccountScreen.route);
                     },
+                    style: PassaquiButtonStyle.primary,
                   ),
                   const SizedBox(height: 30),
-                  WelcomeButton(
+                  PassaquiButton(
                     label: 'Já tenho conta',
-                    isSecondary: true,
+                    width: 320,
+                    height: 50,
+                    centerText: true,
+                    style: PassaquiButtonStyle.secondary,
                     onTap: () {
                       DIService()
                           .inject<NavigationHandler>()
