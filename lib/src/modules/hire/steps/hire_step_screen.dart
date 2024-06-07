@@ -157,7 +157,7 @@ class HireStepItem extends StatelessWidget {
                     onTap: (){
                       DIService().inject<NavigationHandler>().navigate(HireCpfScreen.route);
                     },
-                    isLight: false,
+                    style: PassaquiButtonStyle.defaultLight,
                   ),
                 ): const SizedBox()
               ],
