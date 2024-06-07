@@ -17,7 +17,7 @@ class PassaquiCard extends StatelessWidget {
       height: height,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: Colors.white,
+        color: Color(0xFFA8CA4B),
         boxShadow: [
           BoxShadow(
             color: Color(0xFF5151511F).withOpacity(0.12),
