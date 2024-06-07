@@ -69,7 +69,7 @@ class PassaquiTextField extends StatelessWidget {
               focusedBorder: const UnderlineInputBorder(
                 borderSide: BorderSide(
                   color: Color(0xFFA8CA4B),
-                  width: 2.0,
+                  width: 1.0,
                 ),
               ),
               filled: false,
