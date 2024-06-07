@@ -6,7 +6,6 @@ import 'package:passaqui/src/core/di/service_locator.dart';
 import 'package:passaqui/src/core/navigation/navigation_handler.dart';
 import 'package:passaqui/src/modules/auth/forgot_password/forgot_password_screen.dart';
 import 'package:passaqui/src/modules/auth/login/login_controller.dart';
-import 'package:passaqui/src/modules/welcome/welcome_screen.dart';
 import 'package:passaqui/src/modules/withdraw/welcome/withdraw_welcome_screen.dart';
 import 'package:passaqui/src/shared/widget/button.dart';
 import 'package:passaqui/src/shared/widget/checkbox.dart';
@@ -82,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             },
                             child: const Icon(
                               Icons.chevron_left, 
-                              color: const Color(0xFFA8CA4B)),
+                              color: Color(0xFFA8CA4B)),
                           ),
                         ),
                         const SizedBox(height: 16),
