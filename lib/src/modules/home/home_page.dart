@@ -249,7 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             textColor: Colors.black,
                             iconColor: Colors.black,
                             fontSize: 12,
-                            arrowSize: 1.0,
+                            arrowSize: 14.0,
                             fontWeight: FontWeight.w400,
                             style: PassaquiButtonStyle.secondary,
                             onTap: () {
