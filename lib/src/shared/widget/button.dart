@@ -16,6 +16,7 @@ class PassaquiButton extends StatelessWidget {
   final Color? textColor;
   final Color? iconColor;
   final double? arrowSize; // Optional arrow size parameter
+  final Color? borderColor; // Optional border color parameter
 
   const PassaquiButton({
     required this.label,
@@ -28,9 +29,10 @@ class PassaquiButton extends StatelessWidget {
     this.height = 60,
     this.fontSize = 18,
     this.fontWeight = FontWeight.w500,
-    this.textColor,
+    this.textColor, // Added optional textColor parameter
     this.iconColor,
     this.arrowSize, // Arrow size parameter
+    this.borderColor, // Border color parameter
     Key? key,
   }) : super(key: key);
 
@@ -51,12 +53,15 @@ class PassaquiButton extends StatelessWidget {
       case PassaquiButtonStyle.secondary:
         return ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-          foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+          foregroundColor: MaterialStateProperty.all<Color>(textColor ?? Colors.white), // Use textColor if provided, else default to white
           overlayColor: MaterialStateProperty.all<Color>(Colors.white.withOpacity(0.1)),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
-              side: const BorderSide(color: Color.fromRGBO(168, 202, 75, 1), width: 2),
+              side: BorderSide(
+                color: borderColor ?? const Color.fromRGBO(168, 202, 75, 1), // Use borderColor if provided, else default color
+                width: 2,
+              ),
             ),
           ),
         );
