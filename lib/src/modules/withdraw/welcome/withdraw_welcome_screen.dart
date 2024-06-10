@@ -20,13 +20,39 @@ class _WithdrawWelcomeScreenState extends State<WithdrawWelcomeScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: double.infinity,
-            height: MediaQuery.of(context).size.height / 3,
-            child: Image.asset(
-              "assets/images/homem.png",
-              fit: BoxFit.cover,
-            ),
+          Stack(
+            children: [
+              Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height / 3,
+                child: Image.asset(
+                  "assets/images/homem.png",
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Positioned(
+                top: 64,
+                left: 16,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Container(
+                    width: 28,
+                    height: 28,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFA8CA4B),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.chevron_left,
+                      color: Colors.white, // White chevron color
+                      size: 24, // Adjust size if necessary
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32),
