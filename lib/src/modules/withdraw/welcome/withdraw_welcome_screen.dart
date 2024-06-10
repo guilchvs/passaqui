@@ -17,76 +17,61 @@ class _WithdrawWelcomeScreenState extends State<WithdrawWelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Padding(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: double.infinity,
+            height: MediaQuery.of(context).size.height / 3,
+            child: Image.asset(
+              "assets/images/homem.png",
+              fit: BoxFit.cover,
+            ),
+          ),
+          Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32),
             child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.start, // Align text to the left
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(
-                  height: 40,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height /
-                          3, // Set height to 1/3 of screen height
-                      width: MediaQuery.of(context)
-                          .size
-                          .width, // Set width to full screen width
-                      child: Image.asset(
-                        "assets/images/homem.png",
-                        fit: BoxFit.cover, // Adjust the fit as needed
+                const SizedBox(height: 20),
+                RichText(
+                  text: const TextSpan(
+                    children: [
+                      TextSpan(
+                        text: "Como realizar\n",
+                        style: TextStyle(
+                          fontSize: 22,
+                          color: Color.fromRGBO(18, 96, 73, 1),
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w700,
+                          height: 1.5,
+                        ),
                       ),
-                    ),
-                    RichText(
-                      text: const TextSpan(
-                        children: [
-                          TextSpan(
-                            text: "Como realizar\n",
-                            style: TextStyle(
-                              fontSize: 22,
-                              color: Color.fromRGBO(18, 96, 73, 1),
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight
-                                  .w700, // Weight 700 for "Como realizar"
-                              height: 1.5, // Line height for "Como realizar"
-                            ),
-                          ),
-                          TextSpan(
-                            text: "a contratação?",
-                            style: TextStyle(
-                              fontSize: 22,
-                              color: Color.fromRGBO(18, 96, 73, 1),
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight
-                                  .w400, // Weight 400 for "a contratação"
-                              height: 1.5, // Line height for "a contratação"
-                            ),
-                          ),
-                        ],
+                      TextSpan(
+                        text: "a contratação?",
+                        style: TextStyle(
+                          fontSize: 22,
+                          color: Color.fromRGBO(18, 96, 73, 1),
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w400,
+                          height: 1.5,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 25,
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(
-                    right: 20,
+                    ],
                   ),
+                ),
+                const SizedBox(height: 25),
+                const Padding(
+                  padding: EdgeInsets.only(right: 20),
                   child: Text(
                     "Para simular e antecipar seu Saque-Aniversário você precisa ter habilitado a modalidade e autorizado nossa instituição a consultar o saldo pelo aplicativo do FGTS.",
                     style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Inter',
-                        color: Color(0xFF1E1E1E)),
-                    textAlign: TextAlign.left, // Text alignment left
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Inter',
+                      color: Color(0xFF1E1E1E),
+                    ),
+                    textAlign: TextAlign.left,
                   ),
                 ),
                 const SizedBox(height: 40),
@@ -111,8 +96,9 @@ class _WithdrawWelcomeScreenState extends State<WithdrawWelcomeScreen> {
               ],
             ),
           ),
-        ),
+        ],
       ),
     );
   }
 }
+
