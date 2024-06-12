@@ -1,10 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:passaqui/src/core/di/service_locator.dart';
+import 'package:passaqui/src/core/navigation/navigation_handler.dart';
+import 'package:passaqui/src/modules/hire/installment/hire_installment_screen.dart';
 import 'package:passaqui/src/shared/widget/appbar.dart';
 import 'package:passaqui/src/shared/widget/button.dart';
 import 'package:passaqui/src/shared/widget/card.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class HireCpfScreen extends StatefulWidget {
   static const String route = "/hire-cpf";
@@ -16,17 +19,25 @@ class HireCpfScreen extends StatefulWidget {
 }
 
 class _HireCpfScreenState extends State<HireCpfScreen> {
+  final cpfMaskFormatter = MaskTextInputFormatter(
+      mask: '###.###.###-##', filter: {"#": RegExp(r'[0-9]')});
+  final TextEditingController cpfController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
+  }
+
+  void _logCpfInput() {
+    final cpfInput = cpfController.text.replaceAll('.', '').replaceAll('-', '');
+    print('CPF Input: $cpfInput');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const PassaquiAppBar(showBackButton: true, showLogo: false),
-      backgroundColor: Color.fromRGBO(18, 96, 73, 1),
-      body: Column(
+      backgroundColor: Color.fromRGBO(18, 96, 73, 1), body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
@@ -67,89 +78,92 @@ class _HireCpfScreenState extends State<HireCpfScreen> {
               ],
             ),
           ),
-          const SizedBox(height: 24,),
+          const SizedBox(
+            height: 24,
+          ),
           Expanded(
               child: Stack(
-                children: [
-                  Positioned(
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      top: 50,
-                      child: Container(
-                        width: double.infinity,
-                        color: Colors.white,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            bottom: 32,
-                            left: 16, right: 16
+            children: [
+              Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  top: 50,
+                  child: Container(
+                    width: double.infinity,
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          bottom: 32, left: 16, right: 16),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          PassaquiButton(
+                            label: "Realizar consulta",
+                            showArrow: true,
+                            onTap: () {
+                              _logCpfInput();
+                              DIService()
+                                  .inject<NavigationHandler>()
+                                  .navigate(HireInstallmentScreen.route);
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+                  )),
+              Positioned(
+                  left: 16,
+                  right: 16,
+                  child: PassaquiCard(
+                    backgroundColor: Colors.white,
+                    height: 100,
+                    content: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Informe seu CPF: ",
+                            style: GoogleFonts.roboto(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              PassaquiButton(
-                                label: "Realizar consulta",
-                                onTap: (){},
-                              )
-                            ],
+                          const SizedBox(
+                            height: 8,
                           ),
-                        ),
-                      )),
-                  Positioned(
-                      left: 16,
-                      right: 16,
-                      child: PassaquiCard(
-                        height: 100,
-                        content: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Informe seu CPF: ",
-                                style: GoogleFonts.roboto(
-                                  color: Color(0xFF515151),
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                          SizedBox(
+                            width: 200, // Adjust width as needed
+                            child: TextFormField(
+                              controller: cpfController,
+                              inputFormatters: [cpfMaskFormatter],
+                              keyboardType: TextInputType.number,
+                              style: GoogleFonts.roboto(
+                                color: Color(0xFF136048),
+                                fontSize: 26,
+                                fontWeight: FontWeight.bold,
                               ),
-                              const SizedBox(height: 8,),
-                              Text(
-                                "000.000.000-00",
-                                style: GoogleFonts.roboto(
-                                  color: Color(0xFF136048),
-                                  fontSize: 26,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
-                            ],
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: '000.000.000-00',
+                              ),
+                            ),
                           ),
-                        ),
-                      )),
-                ],
-              )
-              // Stack(
-              //   children: [
-              //     Positioned(
-              //     //   left: 0,
-              //     //   right: 0,
-              //     // bottom: 0,
-              //     // top: 100,
-              //       child: Container(
-              //         height: 100,
-              //         width: double.infinity,
-              //         decoration: BoxDecoration(
-              //           borderRadius: BorderRadius.only(
-              //             topLeft: Radius.circular(12),
-              //             topRight: Radius.circular(12),
-              //           )
-              //         ),
-              //       ),
-              //     )
-              //   ],
-              // )
-              )
+                        ],
+                      ),
+                    ),
+                  )),
+            ],
+          ))
         ],
       ),
     );
   }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: HireCpfScreen(),
+  ));
 }
