@@ -11,6 +11,7 @@ import 'package:passaqui/src/shared/widget/button.dart';
 import 'package:passaqui/src/shared/widget/checkbox.dart';
 import 'package:passaqui/src/shared/widget/link.dart';
 import 'package:passaqui/src/shared/widget/text_field.dart';
+import '../../../services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String route = "/login";
@@ -26,8 +27,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
   late TextEditingController userInputController;
   late TextEditingController passwordInputController;
+  final AuthService _authService = AuthService('http://passcash-api-hml.us-east-1.elasticbeanstalk.com/api/Account');
 
   bool isPasswordVisible = false;
+
+  
 
   @override
   void initState() {
@@ -35,6 +39,23 @@ class _LoginScreenState extends State<LoginScreen> {
     userInputController = TextEditingController();
     passwordInputController = TextEditingController();
     super.initState();
+  }
+
+  Future<void> _login() async {
+    final username = userInputController.text;
+    final password = passwordInputController.text;
+
+    try {
+      await _authService.login(username, password);
+      // Handle successful login, e.g., navigate to a new screen
+      //print('Login successful');
+      DIService()
+        .inject<NavigationHandler>()
+        .navigate(WithdrawWelcomeScreen.route);
+    } catch (error) {
+      // Handle login error
+      print('Login failed: $error');
+    }
   }
 
   void togglePasswordVisibility() {
@@ -153,9 +174,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     showArrow: true,
                     minimumSize: const Size(200, 40),
                     onTap: () {
-                      DIService()
+                      _login();
+                      /*DIService()
                           .inject<NavigationHandler>()
-                          .navigate(WithdrawWelcomeScreen.route);
+                          .navigate(WithdrawWelcomeScreen.route);*/ 
                     },
                   ),
                 ),
