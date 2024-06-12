@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:passaqui/src/core/di/service_locator.dart';
 import 'package:passaqui/src/core/navigation/navigation_handler.dart';
 import 'package:passaqui/src/modules/withdraw/steps/withdraw_step_screen.dart';
-import 'package:passaqui/src/shared/widget/appbar.dart';
 import 'package:passaqui/src/shared/widget/button.dart';
 
 class WithdrawWelcomeScreen extends StatefulWidget {
@@ -19,66 +17,114 @@ class _WithdrawWelcomeScreenState extends State<WithdrawWelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const PassaquiAppBar(),
-      body: SafeArea(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 32
-            ),
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 40,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(
+            children: [
+              Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height / 3,
+                child: Image.asset(
+                  "assets/images/homem.png",
+                  fit: BoxFit.cover,
                 ),
-                const Text(
-                  "Como realizar a contratação?",
-                  style: TextStyle(
-                      fontSize: 22,
-                      color: Color(0xFF1E1E1E),
-                      fontFamily: 'Raleway',
-                      fontWeight: FontWeight.w700),
-                ),
-                const SizedBox(
-                  height: 32,
-                ),
-                SvgPicture.asset('assets/images/passaqui_logo.svg', height: 200),
-                const SizedBox(
-                  height: 40,
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(
-                    right: 20, 
-                    left: 20, 
+              ),
+              Positioned(
+                top: 64,
+                left: 16,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Container(
+                    width: 28,
+                    height: 28,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFA8CA4B),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.chevron_left,
+                      color: Colors.white, // White chevron color
+                      size: 24, // Adjust size if necessary
+                    ),
                   ),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 20),
+                RichText(
+                  text: const TextSpan(
+                    children: [
+                      TextSpan(
+                        text: "Como realizar\n",
+                        style: TextStyle(
+                          fontSize: 22,
+                          color: Color.fromRGBO(18, 96, 73, 1),
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w700,
+                          height: 1.5,
+                        ),
+                      ),
+                      TextSpan(
+                        text: "a contratação?",
+                        style: TextStyle(
+                          fontSize: 22,
+                          color: Color.fromRGBO(18, 96, 73, 1),
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w400,
+                          height: 1.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 25),
+                const Padding(
+                  padding: EdgeInsets.only(right: 20),
                   child: Text(
-                    "Para simular e antecipar seu saque aniversário, você precisa ter habilitado a modalidade e autorizado nosso banco a consultar seu saldo no aplicativo do FGTS.",
+                    "Para simular e antecipar seu Saque-Aniversário você precisa ter habilitado a modalidade e autorizado nossa instituição a consultar o saldo pelo aplicativo do FGTS.",
                     style: TextStyle(
                       fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'Raleway',
-                      color: Color(0xFF1E1E1E)
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Inter',
+                      color: Color(0xFF1E1E1E),
                     ),
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.left,
                   ),
                 ),
-                const SizedBox(height: 120),
+                const SizedBox(height: 40),
                 const PassaquiButton(
-                  label: "Veja como autorizar"
+                  label: "Habilitar Saque-Aniversário",
+                  textColor: Color.fromRGBO(18, 96, 73, 1),
+                  borderColor: Color.fromRGBO(18, 96, 73, 1),
+                  style: PassaquiButtonStyle.secondary,
                 ),
-                const Text("Ou"),
+                const SizedBox(height: 20),
                 PassaquiButton(
-                    label: "Habilitar Saque-Aniversário",
-                  onTap: (){
-                    DIService().inject<NavigationHandler>().navigate(WithdrawStepsScreen.route);
+                  style: PassaquiButtonStyle.primary,
+                  showArrow: true,
+                  label: "Veja como habilitar",
+                  borderColor: Colors.black,
+                  onTap: () {
+                    DIService()
+                        .inject<NavigationHandler>()
+                        .navigate(WithdrawStepsScreen.route);
                   },
                 ),
-        
               ],
             ),
           ),
-        ),
+        ],
       ),
     );
   }
 }
+
