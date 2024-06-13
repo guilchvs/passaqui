@@ -1,146 +1,247 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:passaqui/src/core/di/service_locator.dart';
-import 'package:passaqui/src/core/navigation/navigation_handler.dart';
-import 'package:passaqui/src/shared/widget/appbar.dart';
+import 'package:passaqui/src/services/auth_service.dart'; // Adjust the import path as per your project structure
 import 'package:passaqui/src/shared/widget/button.dart';
-import 'package:passaqui/src/shared/widget/link.dart';
 import 'package:passaqui/src/shared/widget/text_field.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   static const String route = "/create-account";
 
-  const CreateAccountScreen({super.key});
+  const CreateAccountScreen({Key? key}) : super(key: key);
 
   @override
   State<CreateAccountScreen> createState() => _CreateAccountScreenState();
 }
 
 class _CreateAccountScreenState extends State<CreateAccountScreen> {
+  late PageController _pageController;
+  int _currentPageIndex = 0;
 
-  late TextEditingController userInputController;
-  late TextEditingController cpfInputController;
-  late TextEditingController telInputController;
-  late TextEditingController emailInputController;
-  late TextEditingController cepInputController;
-  late TextEditingController logInputController;
-  late TextEditingController numInputController;
-  late TextEditingController complInputController;
+  late List<TextEditingController> controllers;
+  List<String> labels = [
+    "Bem vindo ao PassAqui!\n\nPara começar precisamos de algumas informações. Será rápido e fácil.",
+    "Informe seu e-mail",
+    "Agora nos informe sua senha:",
+    "Repita sua senha:",
+    "Insira seu CPF no campo abaixo:",
+    "Agora informe seu telefone:",
+    "Estamos quase finalizando.\nInforme seu e-mail no campo abaixo:",
+    "Agora precisamos do seu RG:",
+    "Agora entramos na etapa sobre sua residência.\n\nPedimos que insira seu CEP:",
+    "Insira abaixo o nome do logradouro, por favor:",
+    "Agora informe o número da sua residência:",
+    "Para terminar, informe (se necessário) o complemento da localização de sua residência:"
+  ];
+
+  List<String> placeholders = [
+    "Digite seu nome completo",
+    "Digite seu e-mail",
+    "Digite sua senha",
+    "Digite sua senha novamente",
+    "Digite seu CPF",
+    "Digite seu telefone",
+    "Digite seu e-mail",
+    "Digite seu RG",
+    "Digite seu CEP",
+    "Digite seu logradouro",
+    "Digite seu número",
+    "Digite o complemento",
+  ];
+
+  final AuthService _authService = AuthService(
+      'https://your-base-url.com'); // Replace with your actual base URL
 
   @override
   void initState() {
-    userInputController = TextEditingController();
-    cpfInputController = TextEditingController();
-    telInputController = TextEditingController();
-    emailInputController = TextEditingController();
-    cepInputController = TextEditingController();
-    logInputController = TextEditingController();
-    numInputController = TextEditingController();
-    complInputController = TextEditingController();
+    _pageController = PageController();
+    controllers =
+        List.generate(labels.length, (index) => TextEditingController());
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    controllers.forEach((controller) => controller.dispose());
+    super.dispose();
+  }
+
+  void nextPage() {
+    if (_currentPageIndex < labels.length - 1) {
+      _pageController.nextPage(
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+      setState(() {
+        _currentPageIndex++;
+      });
+    } else {
+      _registerAccount();
+    }
+  }
+
+  Future<void> _registerAccount() async {
+    try {
+      await _authService.register(
+        email: controllers[5].text.trim(),
+        name: controllers[0].text.trim(),
+        password: controllers[1].text.trim(),
+        confirmPassword: controllers[2].text.trim(),
+        cpf: controllers[3].text.trim(),
+        telefone: controllers[4].text.trim(),
+        cep: controllers[8].text.trim(),
+        logradouro: controllers[9].text.trim(),
+        numeroLogradouro: int.tryParse(controllers[10].text.trim()) ?? 0,
+        complemento: controllers[11].text.trim(),
+        dataNascimento: controllers[7].text.trim(),
+        rg: controllers[6].text.trim(),
+      );
+
+      // Handle navigation or success message after successful registration
+      // Example:
+      // Navigator.of(context).pushNamed(SuccessScreen.route);
+    } catch (e) {
+      // Handle error, show error message or retry logic
+      print('Failed to register account: $e');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const PassaquiAppBar(),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        automaticallyImplyLeading: false, // Hide back button
+      ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(
-            height: 24,
+          LinearProgressIndicator(
+            value: (_currentPageIndex + 1) / labels.length,
+            valueColor: AlwaysStoppedAnimation<Color>(const Color(0xFFA8CA4B)),
+            backgroundColor: Colors.white,
           ),
           Expanded(
             child: Container(
               width: double.infinity,
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(26),
-                    topRight: Radius.circular(26)),
-                color: Color(0xFFF0F0F0),
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const SizedBox(height: 64,),
-                    SvgPicture.asset("assets/images/create_account.svg"),
-                    const SizedBox(height: 20,),
-                    const Text(
-                      "Acessar minha conta",
-                      style: TextStyle(
-                          fontSize: 22,
-                          color: Color(0xFF136048),
-                          fontFamily: 'Raleway',
-                          fontWeight: FontWeight.w700),
-                    ),
-                    const SizedBox(height: 40,),
-                    PassaquiTextField(
-                      editingController: userInputController,
-                      label: "Nome completo",
-                    ),
-                    const SizedBox(height: 16,),
-                    PassaquiTextField(
-                      editingController: cpfInputController,
-                      label: "CPF",
-                    ),
-                    const SizedBox(height: 16,),
-                    PassaquiTextField(
-                      editingController: telInputController,
-                      label: "Telefone",
-                    ),
-                    const SizedBox(height: 16,),
-                    PassaquiTextField(
-                      editingController: emailInputController,
-                      label: "E-mail",
-                    ),
-                    const SizedBox(height: 16,),
-                    PassaquiTextField(
-                      editingController: cepInputController,
-                      label: "CEP",
-                    ),
-                    const SizedBox(height: 16,),
-                    PassaquiTextField(
-                      editingController: logInputController,
-                      label: "Logradouro",
-                    ),
-                    const SizedBox(height: 16,),
-                    PassaquiTextField(
-                      editingController: numInputController,
-                      label: "Numero",
-                    ),
-                    const SizedBox(height: 16,),
-                    PassaquiTextField(
-                      editingController: complInputController,
-                      label: "Complemento",
-                    ),
-                    const SizedBox(height: 56,),
-                    const PassaquiButton(
-                      label: "Continuar",
-                      minimumSize: Size(200, 40),
-                    ),
-                    const SizedBox(height: 16,),
-                    Container(
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 24.0,
-                      ),
-                      width: double.infinity,
-                      height: 1.4,
-                      color: const Color(0xFF4D5D71),
-                    ),
-                    const SizedBox(height: 16,),
-                     PassaquiLink(
-                      label: "Já tem conta? Faça login",
-                      onTap: (){
-                        DIService().inject<NavigationHandler>().pop();
-                      },
-                    ),
-                    SizedBox(
-                      height:MediaQuery.of(context).viewPadding.bottom + 16
-                    ),
-                  ],
+                  topLeft: Radius.circular(26),
+                  topRight: Radius.circular(26),
                 ),
+                color: Colors.white,
+              ),
+              child: PageView.builder(
+                controller: _pageController,
+                itemCount: labels.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 32),
+                        Text(
+                          labels[index],
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.black,
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        if (index == 5) // Check if it's the date of birth step
+                          GestureDetector(
+                            onTap: () async {
+                              final DateTime? picked = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime.now(),
+                                builder: (BuildContext context, Widget? child) {
+                                  return Theme(
+                                    data: ThemeData.light().copyWith(
+                                      colorScheme: ColorScheme.light(
+                                        primary: const Color(0xFFA8CA4B),
+                                        // Header background color
+                                        onPrimary: Colors.white,
+                                        // Header text color
+                                        surface: Colors.white,
+                                        // Background color
+                                        onSurface: Colors.black, // Text color
+                                      ),
+                                      dialogBackgroundColor:
+                                      Colors.white, // Background color
+                                    ),
+                                    child: child!,
+                                  );
+                                },
+                              );
+                              if (picked != null &&
+                                  picked != controllers[index].text) {
+                                setState(() {
+                                  controllers[index].text = picked.toString();
+                                });
+                              }
+                            },
+                            child: AbsorbPointer(
+                              absorbing: true,
+                              // Absorb gestures to prevent user input
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 12, horizontal: 10),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: Colors.grey, width: 1.0),
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  color: Colors.grey[200], // Placeholder color
+                                ),
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.calendar_today,
+                                        color: Colors.grey),
+                                    SizedBox(width: 10),
+                                    Text(
+                                      controllers[index].text.isEmpty
+                                          ? 'DD/MM/YYYY'
+                                          : controllers[index].text,
+                                      style: TextStyle(color: Colors.grey[600]),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        else // For other steps, show regular text field
+                          PassaquiTextField(
+                            editingController: controllers[index],
+                            placeholder: placeholders[index],
+                            textColor: Colors.black,
+                          ),
+                        const SizedBox(height: 40),
+                        const Spacer(),
+                        PassaquiButton(
+                          label: index == labels.length - 1
+                              ? "Continue"
+                              : "Continue",
+                          showArrow: true,
+                          minimumSize: Size(200, 40),
+                          onTap: nextPage,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                onPageChanged: (index) {
+                  setState(() {
+                    _currentPageIndex = index;
+                  });
+                },
               ),
             ),
-          )
+          ),
         ],
       ),
     );
