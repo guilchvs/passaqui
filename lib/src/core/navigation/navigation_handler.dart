@@ -3,6 +3,7 @@ import 'package:passaqui/src/modules/auth/create-account/create_account_screen.d
 import 'package:passaqui/src/modules/auth/forgot_password/forgot_password_screen.dart';
 import 'package:passaqui/src/modules/auth/forgot_password/success/forgot_password_success.dart';
 import 'package:passaqui/src/modules/auth/login/login_screen.dart';
+import 'package:passaqui/src/modules/auth/success/success_screen.dart';
 import 'package:passaqui/src/modules/hire/cpf/hire_cpf_screen.dart';
 import 'package:passaqui/src/modules/hire/installment/hire_installment_screen.dart';
 import 'package:passaqui/src/modules/hire/steps/hire_step_screen.dart';
@@ -26,6 +27,10 @@ class NavigationHandler {
       case LoginScreen.route:
         return MaterialPageRoute(
           builder: (context) => const LoginScreen(),
+        );
+      case SuccessScreen.route:
+        return MaterialPageRoute(
+            builder: (context) => SuccessScreen(),
         );
       case CreateAccountScreen.route:
         return MaterialPageRoute(

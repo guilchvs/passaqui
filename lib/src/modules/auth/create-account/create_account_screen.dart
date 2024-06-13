@@ -4,6 +4,10 @@ import 'package:passaqui/src/services/auth_service.dart'; // Adjust the import p
 import 'package:passaqui/src/shared/widget/button.dart';
 import 'package:passaqui/src/shared/widget/text_field.dart';
 
+import '../../../core/di/service_locator.dart';
+import '../../../core/navigation/navigation_handler.dart';
+import '../success/success_screen.dart';
+
 class CreateAccountScreen extends StatefulWidget {
   static const String route = "/create-account";
 
@@ -20,12 +24,12 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   late List<TextEditingController> controllers;
   List<String> labels = [
     "Bem vindo ao PassAqui!\n\nPara começar precisamos de algumas informações. Será rápido e fácil.",
-    "Informe seu e-mail",
     "Agora nos informe sua senha:",
-    "Repita sua senha:",
+    "Informe sua senha novamente:",
     "Insira seu CPF no campo abaixo:",
     "Agora informe seu telefone:",
-    "Estamos quase finalizando.\nInforme seu e-mail no campo abaixo:",
+    "Por favor, insira sua data de nascimento",
+    "Estamos quase finalizando.\n\nInforme seu e-mail no campo abaixo:",
     "Agora precisamos do seu RG:",
     "Agora entramos na etapa sobre sua residência.\n\nPedimos que insira seu CEP:",
     "Insira abaixo o nome do logradouro, por favor:",
@@ -35,11 +39,11 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
   List<String> placeholders = [
     "Digite seu nome completo",
-    "Digite seu e-mail",
     "Digite sua senha",
     "Digite sua senha novamente",
     "Digite seu CPF",
     "Digite seu telefone",
+    "Data nascimento",
     "Digite seu e-mail",
     "Digite seu RG",
     "Digite seu CEP",
@@ -48,8 +52,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     "Digite o complemento",
   ];
 
-  final AuthService _authService = AuthService(
-      'https://your-base-url.com'); // Replace with your actual base URL
+  final AuthService _authService = AuthService();
 
   @override
   void initState() {
@@ -82,8 +85,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
   Future<void> _registerAccount() async {
     try {
-      await _authService.register(
-        email: controllers[5].text.trim(),
+      final response = await _authService.register(
+        email: controllers[6].text.trim(),
         name: controllers[0].text.trim(),
         password: controllers[1].text.trim(),
         confirmPassword: controllers[2].text.trim(),
@@ -93,17 +96,56 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         logradouro: controllers[9].text.trim(),
         numeroLogradouro: int.tryParse(controllers[10].text.trim()) ?? 0,
         complemento: controllers[11].text.trim(),
-        dataNascimento: controllers[7].text.trim(),
-        rg: controllers[6].text.trim(),
+        dataNascimento: _formatDate(controllers[5].text.trim()),
+        rg: controllers[7].text.trim(),
       );
 
-      // Handle navigation or success message after successful registration
-      // Example:
-      // Navigator.of(context).pushNamed(SuccessScreen.route);
+      if (response.statusCode == 200) {
+        print('Account registered successfully');
+        DIService().inject<NavigationHandler>().navigate(SuccessScreen.route);
+      } else {
+        throw Exception('Failed to register account: ${response.body}');
+      }
     } catch (e) {
+      print('Error registering account: $e');
       // Handle error, show error message or retry logic
-      print('Failed to register account: $e');
     }
+  }
+
+
+  //Future<void> _registerAccount() async {
+  //  try {
+  //    await _authService.register(
+  //      email: controllers[6].text.trim(), // email
+  //      name: controllers[0].text.trim(), // name
+  //      password: controllers[1].text.trim(), // password
+  //      confirmPassword: controllers[2].text.trim(), // confirmPassword
+  //      cpf: controllers[3].text.trim(), // cpf
+  //      telefone: controllers[4].text.trim(), // telefone
+  //      cep: controllers[8].text.trim(), // cep
+  //      logradouro: controllers[9].text.trim(), // logradouro
+  //      numeroLogradouro: int.tryParse(controllers[10].text.trim()) ?? 0, // numeroLogradouro
+  //      complemento: controllers[11].text.trim(), // complemento
+  //      dataNascimento: _formatDate(controllers[5].text.trim()), // dataNascimento
+  //      rg: controllers[7].text.trim(), // rg
+  //    );
+  //    print('Registration');
+  //    // Handle navigation or success message after successful registration
+  //    // Example:
+  //    // Navigator.of(context).pushNamed(SuccessScreen.route);
+  //    NavigationHandler().navigate(SuccessScreen.route);
+
+  //  } catch (e) {
+  //    // Handle error, show error message or retry logic
+  //  }
+  //}
+
+  String _formatDate(String date) {
+    List<String> parts = date.split('/');
+    if (parts.length == 3) {
+      return '${parts[2]}-${parts[1]}-${parts[0]}';
+    }
+    return date; // Return original if format cannot be determined
   }
 
   @override
@@ -142,16 +184,89 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: 32),
-                        Text(
-                          labels[index],
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black,
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w500,
+                        // Use RichText to style specific substrings with bold font weight
+                        if (labels[index].startsWith("Bem vindo ao PassAqui!")) ...[
+                          RichText(
+                            text: TextSpan(
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w600,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: 'Bem vindo ao PassAqui!',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                                TextSpan(
+                                  text: labels[index].substring("Bem vindo ao PassAqui!".length),
+                                  style: TextStyle(fontWeight: FontWeight.w400),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 16),
+                        ] else if (labels[index].contains("Estamos quase finalizando.")) ...[
+                          RichText(
+                            text: TextSpan(
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w600,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: 'Estamos quase finalizando.',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                                TextSpan(
+                                  text: labels[index].substring("Estamos quase finalizando.".length),
+                                  style: TextStyle(fontWeight: FontWeight.w400),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ] else if (labels[index].contains("Agora entramos na etapa sobre sua residência.")) ...[
+                          RichText(
+                            text: TextSpan(
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w600,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: 'Agora entramos na etapa sobre sua residência.',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                                TextSpan(
+                                  text: labels[index].substring("Agora entramos na etapa sobre sua residência.".length),
+                                  style: TextStyle(fontWeight: FontWeight.w400),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ] else ...[
+                          RichText(
+                            text: TextSpan(
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w400,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: labels[index],
+                                  style: TextStyle(fontWeight: FontWeight.w400),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                        const SizedBox(height: 160),
                         if (index == 5) // Check if it's the date of birth step
                           GestureDetector(
                             onTap: () async {
@@ -165,11 +280,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                     data: ThemeData.light().copyWith(
                                       colorScheme: ColorScheme.light(
                                         primary: const Color(0xFFA8CA4B),
-                                        // Header background color
                                         onPrimary: Colors.white,
-                                        // Header text color
                                         surface: Colors.white,
-                                        // Background color
                                         onSurface: Colors.black, // Text color
                                       ),
                                       dialogBackgroundColor:
@@ -179,10 +291,10 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                   );
                                 },
                               );
-                              if (picked != null &&
-                                  picked != controllers[index].text) {
+                              if (picked != null) {
+                                String formattedDate = "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
                                 setState(() {
-                                  controllers[index].text = picked.toString();
+                                  controllers[index].text = formattedDate;
                                 });
                               }
                             },
@@ -230,6 +342,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                           minimumSize: Size(200, 40),
                           onTap: nextPage,
                         ),
+                        const SizedBox(height: 60),
                       ],
                     ),
                   );

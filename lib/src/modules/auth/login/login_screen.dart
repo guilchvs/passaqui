@@ -224,7 +224,7 @@ class _LoginScreenState extends State<LoginScreen> {
   late TextEditingController userInputController;
   late TextEditingController passwordInputController;
   final AuthService _authService =
-  AuthService('http://passcash-api-hml.us-east-1.elasticbeanstalk.com/api/Account');
+  AuthService();
 
   bool isPasswordVisible = false;
 
