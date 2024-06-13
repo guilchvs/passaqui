@@ -1,13 +1,16 @@
+// import 'dart:convert';
 // import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
+// import 'package:http/http.dart' as http;
 // import 'package:google_fonts/google_fonts.dart';
 // import 'package:passaqui/src/shared/widget/appbar.dart';
 // import 'package:passaqui/src/shared/widget/button.dart';
 // import 'package:passaqui/src/shared/widget/card.dart';
 //
+// import '../../../services/auth_service.dart'; // Import your AuthService
+//
 // class HireInstallmentScreen extends StatefulWidget {
 //   static const String route = "/hire-installment";
-//
 //   final String? cpf;
 //
 //   const HireInstallmentScreen({Key? key, this.cpf}) : super(key: key);
@@ -16,15 +19,84 @@
 //   State<HireInstallmentScreen> createState() => _HireInstallmentScreenState();
 // }
 //
-// class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
-//   final TextEditingController _amountController = TextEditingController();
-//   String _selectedPeriod = '1x'; // Default selected period
+// class _InstallmentOption {
+//   final int numberOfValues;
+//   final double VlrRepasse;
+//   final double VlrJuros;
+//
+//   _InstallmentOption({
+//     required this.numberOfValues,
+//     required this.VlrRepasse,
+//     required this.VlrJuros,
+//   });
 //
 //   @override
-//   void initState() {
-//     super.initState();
-//     // You can use widget.cpf here if needed
-//     print('CPF: ${widget.cpf}');
+//   String toString() {
+//     int displayValue = numberOfValues + 1;
+//     return '${displayValue}  x de R\$${VlrRepasse.toStringAsFixed(2)} - Juros de ${VlrJuros.toStringAsFixed(2)}%';
+//   }
+// }
+//
+// class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
+//   final TextEditingController _amountController = TextEditingController();
+//   String _selectedPeriod = ''; // Default selected period
+//   bool _isLoading = false;
+//   final AuthService _authService = AuthService(); // Instance of your AuthService
+//   List<_InstallmentOption> _installmentOptions = []; // List to store installment options
+//
+//   Future<void> _simulateApiCall(String cpf, double amount) async {
+//     setState(() {
+//       _isLoading = true; // Set loading state while waiting for API response
+//     });
+//
+//     final baseUrl = 'http://passcash-api-hml.us-east-1.elasticbeanstalk.com'; // Replace with your API base URL
+//     final token = await _authService.getToken(); // Retrieve JWT token
+//     final cpf = '01052320414';
+//     final url = Uri.parse('$baseUrl/api/ApiMaster/fazerSimulacaoFGTS?cpf=$cpf&vlrEmprestimo=$amount');
+//
+//     try {
+//       final response = await http.post(
+//         url,
+//         headers: <String, String>{
+//           'Content-Type': 'application/json; charset=UTF-8',
+//           'Authorization': 'Bearer $token', // Include Bearer token in headers
+//         },
+//       );
+//
+//       if (response.statusCode == 200) {
+//         // Handle successful API response here
+//         final jsonResponse = jsonDecode(response.body);
+//
+//         List<dynamic> simulacoes = jsonResponse['Simulacoes'] ?? [];
+//
+//         List<_InstallmentOption> options = [];
+//         for (var simulacao in simulacoes) {
+//           List<dynamic> simulacaoParcelas = simulacao['SimulacaoParcelas'] ?? [];
+//           for (var parcela in simulacaoParcelas) {
+//             options.add(_InstallmentOption(
+//               numberOfValues: parcela['Periodo'] ?? 0,
+//               VlrRepasse: (parcela['VlrRepasse'] ?? 0.0).toDouble(),
+//               VlrJuros: (parcela['VlrJuros'] ?? 0.0).toDouble(),
+//             ));
+//           }
+//         }
+//
+//         setState(() {
+//           _installmentOptions = options;
+//           _selectedPeriod = options.isNotEmpty ? options.first.toString() : '';
+//         });
+//       } else {
+//         // Handle other status codes here
+//         print('Failed to load data: ${response.statusCode}');
+//       }
+//     } catch (e) {
+//       // Handle exceptions
+//       print('Error: $e');
+//     } finally {
+//       setState(() {
+//         _isLoading = false; // Reset loading state
+//       });
+//     }
 //   }
 //
 //   @override
@@ -115,6 +187,16 @@
 //                                           fontWeight: FontWeight.bold,
 //                                         ),
 //                                       ),
+//                                       // Trigger API call on editing complete
+//                                       onEditingComplete: () {
+//                                         final amount = double.tryParse(_amountController.text.replaceAll(',', '.'));
+//                                         if (amount != null) {
+//                                           _simulateApiCall(widget.cpf ?? '', amount);
+//                                         } else {
+//                                           // Handle invalid input
+//                                           print('Invalid amount entered');
+//                                         }
+//                                       },
 //                                     ),
 //                                   ),
 //                                 ),
@@ -178,16 +260,11 @@
 //                                   _selectedPeriod = newValue!;
 //                                 });
 //                               },
-//                               items: <String>[
-//                                 '1x',
-//                                 '2x',
-//                                 '3x',
-//                                 '4x R\$ 1.125,00 (juros de 1,79% a.m.)'
-//                               ].map<DropdownMenuItem<String>>((String value) {
+//                               items: _installmentOptions.map((option) {
 //                                 return DropdownMenuItem<String>(
-//                                   value: value,
+//                                   value: option.toString(),
 //                                   child: Text(
-//                                     value,
+//                                     option.toString(),
 //                                     style: GoogleFonts.inter(
 //                                       color: Color(0xFF136048),
 //                                       fontSize: 16,
@@ -205,7 +282,13 @@
 //                               style: PassaquiButtonStyle.primary,
 //                               showArrow: true,
 //                               onTap: () {
-//                                 // Add your simulation logic here
+//                                 final amount = double.tryParse(_amountController.text.replaceAll(',', '.'));
+//                                 if (amount != null) {
+//                                   _simulateApiCall(widget.cpf ?? '', amount);
+//                                 } else {
+//                                   // Handle invalid input
+//                                   print('Invalid amount entered');
+//                                 }
 //                               },
 //                             ),
 //                           ),
@@ -214,6 +297,13 @@
 //                     ),
 //                   ),
 //                 ),
+//                 if (_isLoading)
+//                   Container(
+//                     color: Colors.black.withOpacity(0.5),
+//                     child: Center(
+//                       child: CircularProgressIndicator(),
+//                     ),
+//                   ),
 //               ],
 //             ),
 //           ),
@@ -222,7 +312,7 @@
 //     );
 //   }
 // }
-
+//
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -245,11 +335,30 @@ class HireInstallmentScreen extends StatefulWidget {
   State<HireInstallmentScreen> createState() => _HireInstallmentScreenState();
 }
 
+class _InstallmentOption {
+  final int numberOfValues;
+  final double VlrRepasse;
+  final double VlrJuros;
+
+  _InstallmentOption({
+    required this.numberOfValues,
+    required this.VlrRepasse,
+    required this.VlrJuros,
+  });
+
+  @override
+  String toString() {
+    int displayValue = numberOfValues + 1;
+    return '$displayValue x de ${VlrRepasse.toStringAsFixed(2)} - Juros de ${VlrJuros.toStringAsFixed(2)}%';
+  }
+}
+
 class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
   final TextEditingController _amountController = TextEditingController();
-  String _selectedPeriod = '1x'; // Default selected period
+  String _selectedPeriod = ''; // Default selected period
   bool _isLoading = false;
   final AuthService _authService = AuthService(); // Instance of your AuthService
+  List<_InstallmentOption> _installmentOptions = []; // List to store installment options
 
   Future<void> _simulateApiCall(String cpf, double amount) async {
     setState(() {
@@ -258,7 +367,6 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
 
     final baseUrl = 'http://passcash-api-hml.us-east-1.elasticbeanstalk.com'; // Replace with your API base URL
     final token = await _authService.getToken(); // Retrieve JWT token
-    print(token);
     final cpf = '01052320414';
     final url = Uri.parse('$baseUrl/api/ApiMaster/fazerSimulacaoFGTS?cpf=$cpf&vlrEmprestimo=$amount');
 
@@ -271,15 +379,28 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
         },
       );
 
-      print('Request Headers:');
-      response.request?.headers.forEach((key, value) {
-        print('$key: $value');
-      });
-
       if (response.statusCode == 200) {
         // Handle successful API response here
         final jsonResponse = jsonDecode(response.body);
-        print('API Response: $jsonResponse');
+
+        List<dynamic> simulacoes = jsonResponse['Simulacoes'] ?? [];
+
+        List<_InstallmentOption> options = [];
+        for (var simulacao in simulacoes) {
+          List<dynamic> simulacaoParcelas = simulacao['SimulacaoParcelas'] ?? [];
+          for (var parcela in simulacaoParcelas) {
+            options.add(_InstallmentOption(
+              numberOfValues: parcela['Periodo'] != null ? parcela['Periodo'] + 1 : 0, // Increment numberOfValues by 1
+              VlrRepasse: (parcela['VlrRepasse'] ?? 0.0).toDouble(),
+              VlrJuros: (parcela['VlrJuros'] ?? 0.0).toDouble(),
+            ));
+          }
+        }
+
+        setState(() {
+          _installmentOptions = options;
+          _selectedPeriod = options.isNotEmpty ? options.first.toString() : '';
+        });
       } else {
         // Handle other status codes here
         print('Failed to load data: ${response.statusCode}');
@@ -360,38 +481,43 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
                                 SizedBox(width: 4),
                                 Expanded(
                                   child: Center(
-                                    child: TextFormField(
-                                      controller: _amountController,
-                                      keyboardType: TextInputType.numberWithOptions(decimal: true),
-                                      inputFormatters: [
-                                        FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
-                                      ],
-                                      style: GoogleFonts.inter(
-                                        color: Color(0xFF136048),
-                                        fontSize: 26,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: '0,00',
-                                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                                        hintStyle: GoogleFonts.inter(
-                                          color: Color(0xFF136048).withOpacity(0.3),
+                                    child: FocusScope(
+                                      // Wrap with FocusScope
+                                      child: TextFormField(
+                                        controller: _amountController,
+                                        keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
+                                        ],
+                                        style: GoogleFonts.inter(
+                                          color: Color(0xFF136048),
                                           fontSize: 26,
-                                          fontWeight: FontWeight.bold,
+                                          fontWeight: FontWeight.w500,
                                         ),
+                                        textAlign: TextAlign.center,
+                                        decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: '0,00',
+                                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                                          hintStyle: GoogleFonts.inter(
+                                            color: Color(0xFF136048).withOpacity(0.3),
+                                            fontSize: 26,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        // Trigger API call on editing complete
+                                        onEditingComplete: () {
+                                          final amount = double.tryParse(_amountController.text.replaceAll(',', '.'));
+                                          if (amount != null) {
+                                            _simulateApiCall(widget.cpf ?? '', amount);
+                                            // Unfocus keyboard after API call
+                                            FocusScope.of(context).unfocus();
+                                          } else {
+                                            // Handle invalid input
+                                            print('Invalid amount entered');
+                                          }
+                                        },
                                       ),
-                                      // Trigger API call on editing complete
-                                      onEditingComplete: () {
-                                        final amount = double.tryParse(_amountController.text.replaceAll(',', '.'));
-                                        if (amount != null) {
-                                          _simulateApiCall(widget.cpf ?? '', amount);
-                                        } else {
-                                          // Handle invalid input
-                                          print('Invalid amount entered');
-                                        }
-                                      },
                                     ),
                                   ),
                                 ),
@@ -455,16 +581,11 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
                                   _selectedPeriod = newValue!;
                                 });
                               },
-                              items: <String>[
-                                '1x',
-                                '2x',
-                                '3x',
-                                '4x R\$ 1.125,00 (juros de 1,79% a.m.)'
-                              ].map<DropdownMenuItem<String>>((String value) {
+                              items: _installmentOptions.map((option) {
                                 return DropdownMenuItem<String>(
-                                  value: value,
+                                  value: option.toString(),
                                   child: Text(
-                                    value,
+                                    option.toString(),
                                     style: GoogleFonts.inter(
                                       color: Color(0xFF136048),
                                       fontSize: 16,
@@ -485,6 +606,8 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
                                 final amount = double.tryParse(_amountController.text.replaceAll(',', '.'));
                                 if (amount != null) {
                                   _simulateApiCall(widget.cpf ?? '', amount);
+                                  // Unfocus keyboard after API call
+                                  FocusScope.of(context).unfocus();
                                 } else {
                                   // Handle invalid input
                                   print('Invalid amount entered');
