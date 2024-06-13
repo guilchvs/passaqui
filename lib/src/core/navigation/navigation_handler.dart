@@ -65,8 +65,9 @@ class NavigationHandler {
           builder: (context) => const HireCpfScreen(),
         );
       case HireInstallmentScreen.route:
+        final args = settings.arguments as Map<String, String>?;
         return MaterialPageRoute(
-          builder: (context) => const HireInstallmentScreen(),
+          builder: (context) => HireInstallmentScreen(cpf: args?['cpf']),
         );
       case HireValueScreen.route:
         return MaterialPageRoute(
@@ -77,8 +78,8 @@ class NavigationHandler {
     return null;
   }
 
-  Future<void> navigate(String path) async {
-    _globalKey.currentState?.pushNamed(path
+  Future<void> navigate(String path, {Object? arguments}) async {
+    _globalKey.currentState?.pushNamed(path, arguments: arguments
     );
   }
 

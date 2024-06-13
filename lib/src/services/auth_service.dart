@@ -28,8 +28,6 @@ class AuthService {
     }
   }
 
-
-
   Future<http.Response> register({
     required String email,
     required String name,
@@ -60,8 +58,6 @@ class AuthService {
       'dataNascimento': dataNascimento,
       'rg': rg,
     });
-
-    print('Sending request with body: $body');
 
     final response = await http.post(
       url,

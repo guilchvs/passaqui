@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:passaqui/src/services/auth_service.dart'; // Adjust the import path as per your project structure
 import 'package:passaqui/src/shared/widget/button.dart';
@@ -111,34 +110,6 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       // Handle error, show error message or retry logic
     }
   }
-
-
-  //Future<void> _registerAccount() async {
-  //  try {
-  //    await _authService.register(
-  //      email: controllers[6].text.trim(), // email
-  //      name: controllers[0].text.trim(), // name
-  //      password: controllers[1].text.trim(), // password
-  //      confirmPassword: controllers[2].text.trim(), // confirmPassword
-  //      cpf: controllers[3].text.trim(), // cpf
-  //      telefone: controllers[4].text.trim(), // telefone
-  //      cep: controllers[8].text.trim(), // cep
-  //      logradouro: controllers[9].text.trim(), // logradouro
-  //      numeroLogradouro: int.tryParse(controllers[10].text.trim()) ?? 0, // numeroLogradouro
-  //      complemento: controllers[11].text.trim(), // complemento
-  //      dataNascimento: _formatDate(controllers[5].text.trim()), // dataNascimento
-  //      rg: controllers[7].text.trim(), // rg
-  //    );
-  //    print('Registration');
-  //    // Handle navigation or success message after successful registration
-  //    // Example:
-  //    // Navigator.of(context).pushNamed(SuccessScreen.route);
-  //    NavigationHandler().navigate(SuccessScreen.route);
-
-  //  } catch (e) {
-  //    // Handle error, show error message or retry logic
-  //  }
-  //}
 
   String _formatDate(String date) {
     List<String> parts = date.split('/');

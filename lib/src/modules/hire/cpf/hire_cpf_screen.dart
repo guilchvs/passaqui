@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:passaqui/src/core/di/service_locator.dart';
@@ -19,9 +20,14 @@ class HireCpfScreen extends StatefulWidget {
 }
 
 class _HireCpfScreenState extends State<HireCpfScreen> {
-  final cpfMaskFormatter = MaskTextInputFormatter(
-      mask: '###.###.###-##', filter: {"#": RegExp(r'[0-9]')});
   final TextEditingController cpfController = TextEditingController();
+
+  String _formatCpf(String cpf){
+    return cpf.replaceAll(RegExp(r'[^0-9]'), '');
+  }
+
+
+
 
   @override
   void initState() {
@@ -30,7 +36,6 @@ class _HireCpfScreenState extends State<HireCpfScreen> {
 
   void _logCpfInput() {
     final cpfInput = cpfController.text.replaceAll('.', '').replaceAll('-', '');
-    print('CPF Input: $cpfInput');
   }
 
   @override
@@ -105,7 +110,7 @@ class _HireCpfScreenState extends State<HireCpfScreen> {
                               _logCpfInput();
                               DIService()
                                   .inject<NavigationHandler>()
-                                  .navigate(HireInstallmentScreen.route);
+                                  .navigate(HireInstallmentScreen.route, arguments: {'cpf': _formatCpf(cpfController.text)});
                             },
                           )
                         ],
@@ -137,7 +142,7 @@ class _HireCpfScreenState extends State<HireCpfScreen> {
                             width: 200, // Adjust width as needed
                             child: TextFormField(
                               controller: cpfController,
-                              inputFormatters: [cpfMaskFormatter],
+                              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                               keyboardType: TextInputType.number,
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF136048),
