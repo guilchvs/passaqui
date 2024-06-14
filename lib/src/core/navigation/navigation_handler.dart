@@ -106,6 +106,7 @@ import 'package:passaqui/src/modules/home/home_page.dart';
 import 'package:passaqui/src/modules/welcome/welcome_screen.dart';
 import 'package:passaqui/src/modules/withdraw/steps/withdraw_step_screen.dart';
 import 'package:passaqui/src/modules/withdraw/welcome/withdraw_welcome_screen.dart';
+import 'package:passaqui/src/modules/hire/confirmCpf/confirm_cpf_screen.dart';
 
 class NavigationHandler {
   final GlobalKey<NavigatorState> _globalKey = GlobalKey();
@@ -158,7 +159,7 @@ class NavigationHandler {
           builder: (context) => const HireCpfScreen(),
         );
       case HireInstallmentScreen.route:
-        final args = settings.arguments as Map<String, dynamic>?;
+        final args = settings.arguments as Map<String, String>?;
         return MaterialPageRoute(
           builder: (context) => HireInstallmentScreen(
             cpf: args?['cpf'],
@@ -166,9 +167,18 @@ class NavigationHandler {
         );
       case HireValueScreen.route:
         final args = settings.arguments as Map<String, dynamic>?;
+        final String? cpf = args?['cpf'] as String?;
         return MaterialPageRoute(
           builder: (context) => HireValueScreen(
-            jsonResponse: args?['jsonResponse'],
+            jsonResponse: args?['jsonResponse'] as Map<String, dynamic>?,
+            cpf : cpf ?? '',
+          ),
+        );
+      case HireConfirmCpfScreen.route:
+        final args = settings.arguments as Map<String, String>?;
+        return MaterialPageRoute(
+          builder: (context) => HireConfirmCpfScreen(
+            cpf: args?['cpf'],
           ),
         );
     }

@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:passaqui/src/modules/hire/confirmCpf/confirm_cpf_screen.dart';
 import 'package:passaqui/src/shared/widget/appbar.dart';
 
+import '../../../core/di/service_locator.dart';
+import '../../../core/navigation/navigation_handler.dart';
 import '../../../shared/widget/button.dart'; // Import your PassaquiButton widget
 
 class HireValueScreen extends StatefulWidget {
   static const String route = "/hire-value";
   final Map<String, dynamic>? jsonResponse; // Accept jsonResponse as argument
+  final String cpf; // Accept jsonResponse as argument
 
-  const HireValueScreen({Key? key, this.jsonResponse}) : super(key: key);
+  const HireValueScreen({Key? key, this.jsonResponse, required this.cpf}) : super(key: key);
 
   @override
   State<HireValueScreen> createState() => _HireValueScreenState();
@@ -120,7 +124,10 @@ class _HireValueScreenState extends State<HireValueScreen> {
                   style: PassaquiButtonStyle.primary,
                   centerText: true,
                   onTap: () {
-                    // Handle 'Sim' button tap
+                    DIService().inject<NavigationHandler>().navigate(
+                      HireConfirmCpfScreen.route,
+                      arguments: {'cpf': widget.cpf},
+                    );
                   },
                 ),
                 SizedBox(height: 12),

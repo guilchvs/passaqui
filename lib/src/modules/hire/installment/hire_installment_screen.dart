@@ -305,7 +305,7 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
                                   if (_jsonResponse != null) {
                                     DIService().inject<NavigationHandler>().navigate(
                                       HireValueScreen.route,
-                                      arguments: {'jsonResponse': _jsonResponse},
+                                      arguments: {'jsonResponse': _jsonResponse, 'cpf': widget.cpf},
                                     );
                                   } else {
                                     print('No JSON response available');
