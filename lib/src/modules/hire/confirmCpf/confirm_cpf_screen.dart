@@ -22,7 +22,6 @@ class HireConfirmCpfScreen extends StatefulWidget {
 }
 
 class _HireConfirmCpfScreenState extends State<HireConfirmCpfScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -32,20 +31,46 @@ class _HireConfirmCpfScreenState extends State<HireConfirmCpfScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const PassaquiAppBar(showLogo: false, showBackButton: true,),
+      appBar: const PassaquiAppBar(
+        showLogo: false,
+        showBackButton: true,
+      ),
       backgroundColor: Color.fromRGBO(18, 96, 73, 1),
       body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 24.0, top: 16),
-            child: Text(
-              'Informações básicas',
-              style: GoogleFonts.roboto(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 24.0, top: 16),
+                child: Text(
+                  'Informações básicas',
+                  style: GoogleFonts.roboto(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ),
-            ),
+              SizedBox(height: 24),
+              Expanded(
+                  child: Container(
+                      color: Colors.white,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 16),
+                          Center(
+                              child: Text(
+                                  'Confirme os 3 primeiros dígitos do seu CPF:',
+                                  style: TextStyle(
+                                      fontFamily: 'Roboto',
+                                      fontWeight: FontWeight.w500,
+                                      color: Color(0xFF515151),
+                                      fontSize: 16))),
+                        ],
+                      )))
+            ],
           ),
         ],
       ),
