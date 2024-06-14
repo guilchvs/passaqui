@@ -319,10 +319,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
+import 'package:passaqui/src/modules/hire/value/hire_value_screen.dart';
 import 'package:passaqui/src/shared/widget/appbar.dart';
 import 'package:passaqui/src/shared/widget/button.dart';
 import 'package:passaqui/src/shared/widget/card.dart';
 
+import '../../../core/di/service_locator.dart';
+import '../../../core/navigation/navigation_handler.dart';
 import '../../../services/auth_service.dart'; // Import your AuthService
 
 class HireInstallmentScreen extends StatefulWidget {
@@ -359,6 +362,7 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
   bool _isLoading = false;
   final AuthService _authService = AuthService(); // Instance of your AuthService
   List<_InstallmentOption> _installmentOptions = []; // List to store installment options
+  Map<String, dynamic>? _jsonResponse;
 
   Future<void> _simulateApiCall(String cpf, double amount) async {
     setState(() {
@@ -382,6 +386,10 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
       if (response.statusCode == 200) {
         // Handle successful API response here
         final jsonResponse = jsonDecode(response.body);
+
+        setState(() {
+          _jsonResponse = jsonResponse; // Store the JSON response in _jsonResponse variable
+        });
 
         List<dynamic> simulacoes = jsonResponse['Simulacoes'] ?? [];
 
@@ -608,10 +616,22 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
                                   _simulateApiCall(widget.cpf ?? '', amount);
                                   // Unfocus keyboard after API call
                                   FocusScope.of(context).unfocus();
+
+                                  // Navigate to HireValueScreen with jsonResponse as argument
+                                  if (_jsonResponse != null) {
+                                    DIService().inject<NavigationHandler>().navigate(
+                                      HireValueScreen.route,
+                                      arguments: {'jsonResponse': _jsonResponse},
+                                    );
+                                  } else {
+                                    print('No JSON response available');
+                                    // Handle case where API response has not been received yet
+                                  }
                                 } else {
                                   // Handle invalid input
                                   print('Invalid amount entered');
                                 }
+
                               },
                             ),
                           ),

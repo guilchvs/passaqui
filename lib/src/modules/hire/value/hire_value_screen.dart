@@ -13,18 +13,23 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HireValueScreen extends StatefulWidget {
   static const String route = "/hire-value";
+  final Map<String, dynamic>? jsonResponse; // Accept jsonResponse as argument
 
-  const HireValueScreen({super.key});
+  const HireValueScreen({Key? key, this.jsonResponse}) : super(key: key);
 
   @override
   State<HireValueScreen> createState() => _HireValueScreenState();
 }
 
 class _HireValueScreenState extends State<HireValueScreen> {
-
   @override
   void initState() {
     super.initState();
+    // Example usage of jsonResponse in initState
+    if (widget.jsonResponse != null) {
+      print('HireValueScreen - Received jsonResponse: ${widget.jsonResponse}');
+      // Perform actions with jsonResponse if needed
+    }
   }
 
   @override
@@ -34,10 +39,9 @@ class _HireValueScreenState extends State<HireValueScreen> {
       backgroundColor: Color.fromRGBO(18, 96, 73, 1),
       body: Stack(
         children: [
-
+          // Implement your screen content here
         ],
       ),
     );
   }
 }
-
