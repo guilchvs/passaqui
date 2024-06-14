@@ -17,6 +17,7 @@ class PassaquiButton extends StatelessWidget {
   final Color? iconColor;
   final double? arrowSize; // Optional arrow size parameter
   final Color? borderColor; // Optional border color parameter
+  final double borderRadius; // Optional border radius parameter
 
   const PassaquiButton({
     required this.label,
@@ -33,6 +34,7 @@ class PassaquiButton extends StatelessWidget {
     this.iconColor,
     this.arrowSize, // Arrow size parameter
     this.borderColor, // Border color parameter
+    this.borderRadius = 10.0, // Optional border radius with default value
     Key? key,
   }) : super(key: key);
 
@@ -41,12 +43,12 @@ class PassaquiButton extends StatelessWidget {
       case PassaquiButtonStyle.primary:
         return ButtonStyle(
           backgroundColor:
-              MaterialStateProperty.all<Color>(const Color.fromRGBO(18, 96, 73, 1)),
+          MaterialStateProperty.all<Color>(const Color.fromRGBO(18, 96, 73, 1)),
           foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
           minimumSize: MaterialStateProperty.all<Size>(minimumSize ?? const Size(0, 0)),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
+              borderRadius: BorderRadius.circular(borderRadius),
             ),
           ),
         );
@@ -57,7 +59,7 @@ class PassaquiButton extends StatelessWidget {
           overlayColor: MaterialStateProperty.all<Color>(Colors.white.withOpacity(0.1)),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
+              borderRadius: BorderRadius.circular(borderRadius),
               side: BorderSide(
                 color: borderColor ?? const Color.fromRGBO(168, 202, 75, 1), // Use borderColor if provided, else default color
                 width: 2,
@@ -70,11 +72,11 @@ class PassaquiButton extends StatelessWidget {
           minimumSize: MaterialStateProperty.all<Size>(minimumSize ?? const Size(0, 0)),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
+              borderRadius: BorderRadius.circular(borderRadius),
             ),
           ),
           backgroundColor: MaterialStateProperty.resolveWith<Color>(
-            (Set<MaterialState> states) {
+                (Set<MaterialState> states) {
               if (states.contains(MaterialState.disabled)) {
                 return const Color(0xFFA8CA4B).withOpacity(0.25);
               } else {
@@ -89,11 +91,11 @@ class PassaquiButton extends StatelessWidget {
           minimumSize: MaterialStateProperty.all<Size>(minimumSize ?? const Size(0, 0)),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
+              borderRadius: BorderRadius.circular(borderRadius),
             ),
           ),
           backgroundColor: MaterialStateProperty.resolveWith<Color>(
-            (Set<MaterialState> states) {
+                (Set<MaterialState> states) {
               if (states.contains(MaterialState.disabled)) {
                 return const Color(0xFF136048).withOpacity(0.25);
               } else {
@@ -168,4 +170,3 @@ class PassaquiButton extends StatelessWidget {
     );
   }
 }
-
