@@ -123,28 +123,22 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey[50],
         elevation: 0,
         automaticallyImplyLeading: false, // Hide back button
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          LinearProgressIndicator(
-            value: (_currentPageIndex + 1) / labels.length,
-            valueColor: AlwaysStoppedAnimation<Color>(const Color(0xFFA8CA4B)),
-            backgroundColor: Colors.white,
-          ),
-          Expanded(
-            child: Container(
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(26),
-                  topRight: Radius.circular(26),
-                ),
-                color: Colors.white,
-              ),
+      resizeToAvoidBottomInset: true, // Ensure resizing when keyboard appears
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            LinearProgressIndicator(
+              value: (_currentPageIndex + 1) / labels.length,
+              valueColor: AlwaysStoppedAnimation<Color>(const Color(0xFFA8CA4B)),
+              backgroundColor: Colors.grey[50],
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height - kToolbarHeight - kBottomNavigationBarHeight,
               child: PageView.builder(
                 controller: _pageController,
                 itemCount: labels.length,
@@ -313,7 +307,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                           minimumSize: Size(200, 40),
                           onTap: nextPage,
                         ),
-                        const SizedBox(height: 60),
+                        const SizedBox(height: 200),
                       ],
                     ),
                   );
@@ -325,8 +319,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 },
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
