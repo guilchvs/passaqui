@@ -98,6 +98,7 @@ import 'package:passaqui/src/modules/auth/forgot_password/forgot_password_screen
 import 'package:passaqui/src/modules/auth/forgot_password/success/forgot_password_success.dart';
 import 'package:passaqui/src/modules/auth/login/login_screen.dart';
 import 'package:passaqui/src/modules/auth/success/success_screen.dart';
+import 'package:passaqui/src/modules/hire/confirmEmail/hire_confirm_email.dart';
 import 'package:passaqui/src/modules/hire/cpf/hire_cpf_screen.dart';
 import 'package:passaqui/src/modules/hire/installment/hire_installment_screen.dart';
 import 'package:passaqui/src/modules/hire/steps/hire_step_screen.dart';
@@ -179,6 +180,11 @@ class NavigationHandler {
         return MaterialPageRoute(
           builder: (context) => HireConfirmCpfScreen(
             cpf: args?['cpf'],
+          ),
+        );
+      case HireConfirmEmailScreen.route:
+        return MaterialPageRoute(
+          builder: (context) => HireConfirmEmailScreen(
           ),
         );
     }
