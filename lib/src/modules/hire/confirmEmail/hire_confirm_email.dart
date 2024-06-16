@@ -161,10 +161,15 @@
 //   }
 // }
 
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:passaqui/src/shared/widget/appbar.dart';
 import 'package:passaqui/src/shared/widget/button.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+import '../../../services/auth_service.dart';
+import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 class HireConfirmEmailScreen extends StatefulWidget {
   static const String route = "/hire-confirm-email";
@@ -178,6 +183,68 @@ class HireConfirmEmailScreen extends StatefulWidget {
 
 class _HireConfirmEmailScreenState extends State<HireConfirmEmailScreen> {
   bool useOtherEmail = false; // Track the state of the radio buttons
+  final AuthService _authService = AuthService();
+  bool _isLoading = false;
+  Map<String, dynamic>? _jsonResponse;
+
+Future<void> _simulateApiCall(String cpf) async {
+    setState(() {
+      _isLoading = true; // Set loading state while waiting for API response
+    });
+
+    final baseUrl = 'http://passcash-api-hml.us-east-1.elasticbeanstalk.com'; // Replace with your API base URL
+    final token = await _authService.getToken(); // Retrieve JWT token
+    // final cpf = '01052320414';
+    final url = Uri.parse('$baseUrl/api/ApiMaster/iniciarBiometria?cpf=$cpf');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token', // Include Bearer token in headers
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // Handle successful API response here
+        final _url = response.body;
+
+        
+          await launchUrlString(_url);
+        
+
+        
+
+        /*List<_InstallmentOption> options = [];
+        for (var simulacao in simulacoes) {
+          List<dynamic> simulacaoParcelas = simulacao['SimulacaoParcelas'] ?? [];
+          for (var parcela in simulacaoParcelas) {
+            options.add(_InstallmentOption(
+              numberOfValues: parcela['Periodo'] != null ? parcela['Periodo'] + 1 : 0, // Increment numberOfValues by 1
+              VlrRepasse: (parcela['VlrRepasse'] ?? 0.0).toDouble(),
+              VlrJuros: (parcela['VlrJuros'] ?? 0.0).toDouble(),
+            ));
+          }
+        }*/
+
+        setState(() {
+          //_installmentOptions = options;
+          //_selectedPeriod = options.isNotEmpty ? options.first.toString() : '';
+        });
+      } else {
+        // Handle other status codes here
+        print('Failed to load data: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle exceptions
+      print('Error: $e');
+    } finally {
+      setState(() {
+        _isLoading = false; // Reset loading state
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -240,6 +307,7 @@ class _HireConfirmEmailScreenState extends State<HireConfirmEmailScreen> {
                           borderRadius: 50,
                           style: PassaquiButtonStyle.primary,
                           onTap: () {
+                            _simulateApiCall('01052320414');
                             // Handle button tap
                           },
                         ),
