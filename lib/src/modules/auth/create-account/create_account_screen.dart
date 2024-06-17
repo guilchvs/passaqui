@@ -492,11 +492,14 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
           children: [
             LinearProgressIndicator(
               value: (_currentPageIndex + 1) / labels.length,
-              valueColor: AlwaysStoppedAnimation<Color>(const Color(0xFFA8CA4B)),
+              valueColor:
+                  AlwaysStoppedAnimation<Color>(const Color(0xFFA8CA4B)),
               backgroundColor: Colors.grey[50],
             ),
             Container(
-              height: MediaQuery.of(context).size.height - kToolbarHeight - kBottomNavigationBarHeight,
+              height: MediaQuery.of(context).size.height -
+                  kToolbarHeight -
+                  kBottomNavigationBarHeight,
               child: PageView.builder(
                 controller: _pageController,
                 itemCount: labels.length,
@@ -508,7 +511,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       children: [
                         SizedBox(height: 32),
                         // Use RichText to style specific substrings with bold font weight
-                        if (labels[index].startsWith("Bem vindo ao PassAqui!")) ...[
+                        if (labels[index]
+                            .startsWith("Bem vindo ao PassAqui!")) ...[
                           RichText(
                             text: TextSpan(
                               style: TextStyle(
@@ -523,13 +527,15 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                                 TextSpan(
-                                  text: labels[index].substring("Bem vindo ao PassAqui!".length),
+                                  text: labels[index].substring(
+                                      "Bem vindo ao PassAqui!".length),
                                   style: TextStyle(fontWeight: FontWeight.w400),
                                 ),
                               ],
                             ),
                           ),
-                        ] else if (labels[index].contains("Estamos quase finalizando.")) ...[
+                        ] else if (labels[index]
+                            .contains("Estamos quase finalizando.")) ...[
                           RichText(
                             text: TextSpan(
                               style: TextStyle(
@@ -544,13 +550,15 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                                 TextSpan(
-                                  text: labels[index].substring("Estamos quase finalizando.".length),
+                                  text: labels[index].substring(
+                                      "Estamos quase finalizando.".length),
                                   style: TextStyle(fontWeight: FontWeight.w400),
                                 ),
                               ],
                             ),
                           ),
-                        ] else if (labels[index].contains("Agora entramos na etapa sobre sua residência.")) ...[
+                        ] else if (labels[index].contains(
+                            "Agora entramos na etapa sobre sua residência.")) ...[
                           RichText(
                             text: TextSpan(
                               style: TextStyle(
@@ -561,11 +569,14 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                               ),
                               children: [
                                 TextSpan(
-                                  text: 'Agora entramos na etapa sobre sua residência.',
+                                  text:
+                                      'Agora entramos na etapa sobre sua residência.',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                                 TextSpan(
-                                  text: labels[index].substring("Agora entramos na etapa sobre sua residência.".length),
+                                  text: labels[index].substring(
+                                      "Agora entramos na etapa sobre sua residência."
+                                          .length),
                                   style: TextStyle(fontWeight: FontWeight.w400),
                                 ),
                               ],
@@ -608,14 +619,15 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                         onSurface: Colors.black, // Text color
                                       ),
                                       dialogBackgroundColor:
-                                      Colors.white, // Background color
+                                          Colors.white, // Background color
                                     ),
                                     child: child!,
                                   );
                                 },
                               );
                               if (picked != null) {
-                                String formattedDate = "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
+                                String formattedDate =
+                                    "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
                                 setState(() {
                                   controllers[index].text = formattedDate;
                                 });
@@ -650,11 +662,18 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                             ),
                           )
                         else // For other steps, show regular text field
-                          PassaquiTextField(
-                            editingController: controllers[index],
-                            placeholder: placeholders[index],
-                            textColor: Colors.black,
-                          ),
+                          ((index == 1 || index == 2))
+                              ? PassaquiTextField(
+                                  editingController: controllers[index],
+                                  placeholder: placeholders[index],
+                                  textColor: Colors.black,
+                                  isVisible: false)
+                              : PassaquiTextField(
+                                  editingController: controllers[index],
+                                  placeholder: placeholders[index],
+                                  textColor: Colors.black,
+                                  isVisible: true,
+                                ),
                         const SizedBox(height: 40),
                         const Spacer(),
                         PassaquiButton(
@@ -683,4 +702,3 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     );
   }
 }
-
