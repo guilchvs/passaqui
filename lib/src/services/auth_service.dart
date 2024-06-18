@@ -20,9 +20,16 @@ class AuthService {
 
     if (response.statusCode == 200) {
       final responseBody = jsonDecode(response.body);
+      print(response.body);
       final token = responseBody['jwtToken'];
+      final nome = responseBody['nome'];
+      final cpf = responseBody['cpf'];
+      final email = responseBody['email'];
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('jwt', token);
+      await prefs.setString('nome', nome);
+      await prefs.setString('cpf', cpf);
+      await prefs.setString('email', email);
     } else {
       throw Exception('Failed to login');
     }
@@ -74,8 +81,15 @@ class AuthService {
     return prefs.getString('jwt');
   }
 
+  Future<String?> getName() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('nome');
+  }
+
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('jwt');
   }
+
+
 }
