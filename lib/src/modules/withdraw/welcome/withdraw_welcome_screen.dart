@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:passaqui/src/core/di/service_locator.dart';
 import 'package:passaqui/src/core/navigation/navigation_handler.dart';
+import 'package:passaqui/src/modules/home/home_page.dart';
 import 'package:passaqui/src/modules/withdraw/steps/withdraw_step_screen.dart';
 import 'package:passaqui/src/shared/widget/button.dart';
 
@@ -107,6 +108,8 @@ class _WithdrawWelcomeScreenState extends State<WithdrawWelcomeScreen> {
                     textColor: Color.fromRGBO(18, 96, 73, 1),
                     borderColor: Color.fromRGBO(18, 96, 73, 1),
                     style: PassaquiButtonStyle.secondary,
+                    onTap: () {
+                    }
                   ),
                   SizedBox(height: 20),
                   PassaquiButton(
