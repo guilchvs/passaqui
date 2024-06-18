@@ -38,6 +38,7 @@ class _InstallmentOption {
     int displayValue = numberOfValues + 1;
     return '$displayValue x de ${VlrRepasse.toStringAsFixed(2)} - Juros de ${VlrJuros.toStringAsFixed(2)}%';
   }
+
 }
 
 class _HireInstallmentScreenState extends State<HireInstallmentScreen> {

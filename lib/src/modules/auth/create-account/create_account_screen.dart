@@ -471,7 +471,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       appBar: AppBar(
         backgroundColor: Colors.grey[50],
         elevation: 0,
-        automaticallyImplyLeading: false, // Hide back button
+        automaticallyImplyLeading: false,
+        // Hide back button
         leading: IconButton(
           icon: Icon(Icons.chevron_left),
           color: const Color(0xFFA8CA4B),
