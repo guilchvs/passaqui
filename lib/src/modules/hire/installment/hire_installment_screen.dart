@@ -47,9 +47,9 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
   bool _isLoading = false;
   final AuthService _authService = AuthService(); // Instance of your AuthService
   List<_InstallmentOption> _installmentOptions = []; // List to store installment options
-  Map<String, dynamic>? _jsonResponse;
+  dynamic _jsonResponse;
 
-  Future<void> _simulateApiCall(String cpf, double amount) async {
+  Future<void> _simulateApiCall(String cpf, double? amount) async {
     setState(() {
       _isLoading = true; // Set loading state while waiting for API response
     });
@@ -57,7 +57,11 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
     final baseUrl = 'http://passcash-api-hml.us-east-1.elasticbeanstalk.com'; // Replace with your API base URL
     final token = await _authService.getToken(); // Retrieve JWT token
     // final cpf = '01052320414';
-    final url = Uri.parse('$baseUrl/api/ApiMaster/fazerSimulacaoFGTS?cpf=$cpf&vlrEmprestimo=$amount');
+    Uri url; 
+    if(amount != null)
+      url = Uri.parse('$baseUrl/api/ApiMaster/fazerSimulacaoFGTS?cpf=$cpf&vlrEmprestimo=$amount');
+    else
+      url = Uri.parse('$baseUrl/api/ApiMaster/fazerSimulacaoFGTS?cpf=$cpf');
 
     try {
       final response = await http.post(
@@ -76,19 +80,15 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
           _jsonResponse = jsonResponse; // Store the JSON response in _jsonResponse variable
         });
 
-        List<dynamic> simulacoes = jsonResponse['Simulacoes'] ?? [];
-
         List<_InstallmentOption> options = [];
-        for (var simulacao in simulacoes) {
-          List<dynamic> simulacaoParcelas = simulacao['SimulacaoParcelas'] ?? [];
-          for (var parcela in simulacaoParcelas) {
+
+          for (var parcela in jsonResponse) {
             options.add(_InstallmentOption(
               numberOfValues: parcela['Periodo'] != null ? parcela['Periodo'] + 1 : 0, // Increment numberOfValues by 1
               VlrRepasse: (parcela['VlrRepasse'] ?? 0.0).toDouble(),
-              VlrJuros: (parcela['VlrJuros'] ?? 0.0).toDouble(),
+              VlrJuros: ((parcela['VlrJuros'] ?? 0.0).toDouble() / (parcela['VlrRepasse'] ?? 0.0).toDouble()) * 100,
             ));
           }
-        }
 
         setState(() {
           _installmentOptions = options;
@@ -297,7 +297,6 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
                               showArrow: true,
                               onTap: () {
                                 final amount = double.tryParse(_amountController.text.replaceAll(',', '.'));
-                                if (amount != null) {
                                   _simulateApiCall(widget.cpf ?? '', amount);
                                   // Unfocus keyboard after API call
                                   FocusScope.of(context).unfocus();
@@ -312,10 +311,6 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
                                     print('No JSON response available');
                                     // Handle case where API response has not been received yet
                                   }
-                                } else {
-                                  // Handle invalid input
-                                  print('Invalid amount entered');
-                                }
 
                               },
                             ),
