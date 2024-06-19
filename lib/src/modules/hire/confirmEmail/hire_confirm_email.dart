@@ -297,9 +297,7 @@ Future<void> _simulateApiCall(String cpf) async {
                       ),
                       SizedBox(height: 46),
                       _buildRadioOption('jo***se@email.com'),
-                      SizedBox(height: 26),
-                      _buildRadioOption('Usar outro email'),
-                      SizedBox(height: 34),
+                      SizedBox(height: 54),
                       Center(
                         child: PassaquiButton(
                           label: 'Confirmar',
@@ -312,6 +310,23 @@ Future<void> _simulateApiCall(String cpf) async {
                           },
                         ),
                       ),
+                      SizedBox(height: 28),
+                      Center(
+                        child: GestureDetector(
+                          onTap: (){
+                            //
+                          },
+                          child: Text(
+                            "Não é seu email? Clique aqui",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18,
+                              fontFamily: 'Roboto',
+                              color: Color(0xFF136048),
+                            )
+                          ),
+                        )
+                      )
                     ],
                   ),
                 ),
