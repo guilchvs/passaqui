@@ -81,13 +81,16 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
         });
 
         List<_InstallmentOption> options = [];
+        List<dynamic> simulacaoParcelas = _jsonResponse['SimulacaoParcelas'] ?? [];
+        int cont = 0;
 
-          for (var parcela in jsonResponse) {
+          for (var parcela in simulacaoParcelas) {
             options.add(_InstallmentOption(
-              numberOfValues: parcela['Periodo'] != null ? parcela['Periodo'] + 1 : 0, // Increment numberOfValues by 1
+              numberOfValues: cont, // Increment numberOfValues by 1
               VlrRepasse: (parcela['VlrRepasse'] ?? 0.0).toDouble(),
               VlrJuros: ((parcela['VlrJuros'] ?? 0.0).toDouble() / (parcela['VlrRepasse'] ?? 0.0).toDouble()) * 100,
             ));
+            cont++;
           }
 
         setState(() {
