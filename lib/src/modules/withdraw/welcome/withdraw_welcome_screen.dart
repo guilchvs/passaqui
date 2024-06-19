@@ -4,6 +4,8 @@ import 'package:passaqui/src/core/navigation/navigation_handler.dart';
 import 'package:passaqui/src/modules/withdraw/steps/withdraw_step_screen.dart';
 import 'package:passaqui/src/shared/widget/button.dart';
 
+import '../../home/home_page.dart';
+
 class WithdrawWelcomeScreen extends StatefulWidget {
   static const String route = "/withdraw";
 
@@ -107,6 +109,11 @@ class _WithdrawWelcomeScreenState extends State<WithdrawWelcomeScreen> {
                     textColor: Color.fromRGBO(18, 96, 73, 1),
                     borderColor: Color.fromRGBO(18, 96, 73, 1),
                     style: PassaquiButtonStyle.secondary,
+                    onTap: () {
+                      DIService()
+                          .inject<NavigationHandler>()
+                          .navigate(HomeScreen.route);
+                    }
                   ),
                   SizedBox(height: 20),
                   PassaquiButton(
