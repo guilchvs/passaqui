@@ -108,6 +108,7 @@ import 'package:passaqui/src/modules/welcome/welcome_screen.dart';
 import 'package:passaqui/src/modules/withdraw/steps/withdraw_step_screen.dart';
 import 'package:passaqui/src/modules/withdraw/welcome/withdraw_welcome_screen.dart';
 import 'package:passaqui/src/modules/hire/confirmCpf/confirm_cpf_screen.dart';
+import 'package:passaqui/src/modules/hire/wrongCpf/wrong_cpf_screen.dart';
 
 class NavigationHandler {
   final GlobalKey<NavigatorState> _globalKey = GlobalKey();
@@ -182,6 +183,8 @@ class NavigationHandler {
             cpf: args?['cpf'],
           ),
         );
+      case WrongCpfScreen.route:
+        return MaterialPageRoute(builder: (context) => const WrongCpfScreen());
       case HireConfirmEmailScreen.route:
         return MaterialPageRoute(
           builder: (context) => HireConfirmEmailScreen(

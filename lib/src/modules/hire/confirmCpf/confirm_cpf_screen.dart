@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:passaqui/src/modules/hire/wrongCpf/wrong_cpf_screen.dart';
 
 import '../../../core/di/service_locator.dart';
 import '../../../core/navigation/navigation_handler.dart';
@@ -52,8 +53,9 @@ class _HireConfirmCpfScreenState extends State<HireConfirmCpfScreen> {
     super.dispose();
   }
 
-  void _handleTextChange(TextEditingController controller, FocusNode currentFocus,
-      FocusNode? nextFocus, [FocusNode? previousFocus]) {
+  void _handleTextChange(TextEditingController controller,
+      FocusNode currentFocus, FocusNode? nextFocus,
+      [FocusNode? previousFocus]) {
     String text = controller.text;
     if (text.isNotEmpty && nextFocus != null) {
       // Move focus to the next field
@@ -162,7 +164,7 @@ class _HireConfirmCpfScreenState extends State<HireConfirmCpfScreen> {
                             child: Text(
                               errorMessage,
                               style: TextStyle(
-                                fontWeight: FontWeight.w500,
+                                  fontWeight: FontWeight.w500,
                                   color: Colors.red),
                             ),
                           ),
@@ -188,8 +190,8 @@ class _HireConfirmCpfScreenState extends State<HireConfirmCpfScreen> {
                             if (isMatch) {
                               // Navigate to the next screen on success
                               DIService().inject<NavigationHandler>().navigate(
-                                HireConfirmEmailScreen.route,
-                              );
+                                    HireConfirmEmailScreen.route,
+                                  );
                             } else {
                               // Update state to reflect validation failure
                               setState(() {
@@ -200,6 +202,23 @@ class _HireConfirmCpfScreenState extends State<HireConfirmCpfScreen> {
                           },
                         ),
                       ),
+                      SizedBox(height: 28),
+                      Center(
+                          child: GestureDetector(
+                              onTap: () {
+                                //
+                                DIService().inject<NavigationHandler>().navigate(
+                                  WrongCpfScreen.route,
+                                );
+                              },
+                              child: Text("Não é o meu CPF",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 18,
+                                    fontFamily: 'Roboto',
+                                    color: Color(0xFF136048),
+                                    decoration: TextDecoration.underline,
+                                  ))))
                     ],
                   ),
                 ),
@@ -239,14 +258,18 @@ class _HireConfirmCpfScreenState extends State<HireConfirmCpfScreen> {
         },
         style: GoogleFonts.roboto(
           fontWeight: FontWeight.w500,
-          color: cpfValid ? Colors.black : Colors.red, // Text color based on validation
+          color: cpfValid ? Colors.black : Colors.red,
+          // Text color based on validation
           fontSize: 24,
         ),
         decoration: InputDecoration(
           filled: true,
-          fillColor: cpfValid ? Color(0xFFF2F2F2) : Color.fromRGBO(255, 0, 0, 0.2), // Background color with opacity
+          fillColor:
+              cpfValid ? Color(0xFFF2F2F2) : Color.fromRGBO(255, 0, 0, 0.2),
+          // Background color with opacity
           counterText: "",
-          errorText: null, // Remove error text from here
+          errorText: null,
+          // Remove error text from here
           border: OutlineInputBorder(
             borderSide: BorderSide.none,
             borderRadius: BorderRadius.circular(8),
@@ -256,39 +279,37 @@ class _HireConfirmCpfScreenState extends State<HireConfirmCpfScreen> {
     );
   }
 
-
 // Widget _buildInputField(TextEditingController controller, FocusNode focusNode,
-  //     FocusNode? nextFocus,
-  //     [FocusNode? previousFocus]) {
-  //   return Container(
-  //     width: 50,
-  //     height: 60,
-  //     child: TextField(
-  //       controller: controller,
-  //       focusNode: focusNode,
-  //       textAlign: TextAlign.center,
-  //       keyboardType: TextInputType.number,
-  //       maxLength: 1,
-  //       onChanged: (_) {
-  //         _handleTextChange(controller, focusNode, nextFocus, previousFocus);
-  //       },
-  //       style: GoogleFonts.roboto(
-  //         fontWeight: FontWeight.w400,
-  //         color: cpfValid ? Colors.black : Colors.red, // Text color based on validation
-  //         fontSize: 24,
-  //       ),
-  //       decoration: InputDecoration(
-  //         filled: true,
-  //         fillColor: cpfValid ? Color(0xFFF2F2F2) : Color.fromRGBO(255, 0, 0, 0.2), // Background color with opacity
-  //         counterText: "",
-  //         errorText: null, // Remove error text from here
-  //         border: OutlineInputBorder(
-  //           borderSide: BorderSide.none,
-  //           borderRadius: BorderRadius.circular(8),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
+//     FocusNode? nextFocus,
+//     [FocusNode? previousFocus]) {
+//   return Container(
+//     width: 50,
+//     height: 60,
+//     child: TextField(
+//       controller: controller,
+//       focusNode: focusNode,
+//       textAlign: TextAlign.center,
+//       keyboardType: TextInputType.number,
+//       maxLength: 1,
+//       onChanged: (_) {
+//         _handleTextChange(controller, focusNode, nextFocus, previousFocus);
+//       },
+//       style: GoogleFonts.roboto(
+//         fontWeight: FontWeight.w400,
+//         color: cpfValid ? Colors.black : Colors.red, // Text color based on validation
+//         fontSize: 24,
+//       ),
+//       decoration: InputDecoration(
+//         filled: true,
+//         fillColor: cpfValid ? Color(0xFFF2F2F2) : Color.fromRGBO(255, 0, 0, 0.2), // Background color with opacity
+//         counterText: "",
+//         errorText: null, // Remove error text from here
+//         border: OutlineInputBorder(
+//           borderSide: BorderSide.none,
+//           borderRadius: BorderRadius.circular(8),
+//         ),
+//       ),
+//     ),
+//   );
+// }
 }
-

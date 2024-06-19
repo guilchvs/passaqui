@@ -245,14 +245,12 @@
 // }
 //
 
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 import 'package:passaqui/src/shared/widget/appbar.dart';
 import 'package:passaqui/src/shared/widget/button.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../services/auth_service.dart';
 
@@ -262,8 +260,7 @@ class HireConfirmEmailScreen extends StatefulWidget {
   const HireConfirmEmailScreen({Key? key}) : super(key: key);
 
   @override
-  State<HireConfirmEmailScreen> createState() =>
-      _HireConfirmEmailScreenState();
+  State<HireConfirmEmailScreen> createState() => _HireConfirmEmailScreenState();
 }
 
 class _HireConfirmEmailScreenState extends State<HireConfirmEmailScreen> {
@@ -357,7 +354,8 @@ class _HireConfirmEmailScreenState extends State<HireConfirmEmailScreen> {
                     children: [
                       SizedBox(height: 16),
                       Padding(
-                        padding: const EdgeInsets.only(left: 16.0), // Adjust left padding as needed
+                        padding: const EdgeInsets.only(left: 16.0),
+                        // Adjust left padding as needed
                         child: Text(
                           'Email atual',
                           style: GoogleFonts.roboto(
@@ -368,7 +366,8 @@ class _HireConfirmEmailScreenState extends State<HireConfirmEmailScreen> {
                         ),
                       ),
                       SizedBox(height: 46),
-                      _buildRadioOption(userEmail ?? ''), // Display user's masked email
+                      _buildRadioOption(userEmail ?? ''),
+                      // Display user's masked email
                       SizedBox(height: 54),
                       Center(
                         child: PassaquiButton(
@@ -452,7 +451,8 @@ class _HireConfirmEmailScreenState extends State<HireConfirmEmailScreen> {
     // Split the email into parts before and after '@'
     List<String> emailParts = email.split('@');
     if (emailParts.length != 2) {
-      return SizedBox.shrink(); // If email format is invalid, return an empty SizedBox
+      return SizedBox
+          .shrink(); // If email format is invalid, return an empty SizedBox
     }
 
     String maskedEmail =
