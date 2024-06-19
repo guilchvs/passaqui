@@ -56,7 +56,9 @@ class PassaquiButton extends StatelessWidget {
         return ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
           foregroundColor: MaterialStateProperty.all<Color>(textColor ?? Colors.white), // Use textColor if provided, else default to white
-          overlayColor: MaterialStateProperty.all<Color>(Colors.white.withOpacity(0.1)),
+          overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
+          splashFactory: NoSplash.splashFactory,
+          shadowColor: MaterialStateProperty.all<Color>(Colors.transparent),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(borderRadius),
