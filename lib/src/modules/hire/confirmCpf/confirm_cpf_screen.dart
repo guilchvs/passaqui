@@ -26,6 +26,9 @@ class _HireConfirmCpfScreenState extends State<HireConfirmCpfScreen> {
   late FocusNode _secondFocusNode;
   late FocusNode _thirdFocusNode;
 
+  bool cpfValid = true; // Initial validation state
+  String errorMessage = ''; // Error message to display
+
   @override
   void initState() {
     super.initState();
@@ -49,7 +52,8 @@ class _HireConfirmCpfScreenState extends State<HireConfirmCpfScreen> {
     super.dispose();
   }
 
-  void _handleTextChange(TextEditingController controller, FocusNode currentFocus, FocusNode? nextFocus, [FocusNode? previousFocus]) {
+  void _handleTextChange(TextEditingController controller, FocusNode currentFocus,
+      FocusNode? nextFocus, [FocusNode? previousFocus]) {
     String text = controller.text;
     if (text.isNotEmpty && nextFocus != null) {
       // Move focus to the next field
@@ -58,6 +62,21 @@ class _HireConfirmCpfScreenState extends State<HireConfirmCpfScreen> {
       // Move focus to the previous field when text is deleted
       FocusScope.of(context).requestFocus(previousFocus);
     }
+    // Reset validation state and error message on input change
+    setState(() {
+      cpfValid = true;
+      errorMessage = '';
+    });
+  }
+
+  bool compareFirstThreeCharacters(
+      String firstValue, String secondValue, String thirdValue, String? cpf) {
+    if (cpf != null && cpf.length >= 3) {
+      String cpfFirstThree = cpf.substring(0, 3);
+      String concatenatedValue = '$firstValue$secondValue$thirdValue';
+      return concatenatedValue == cpfFirstThree;
+    }
+    return false;
   }
 
   @override
@@ -107,20 +126,48 @@ class _HireConfirmCpfScreenState extends State<HireConfirmCpfScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          _buildInputField(_firstPartController, _firstFocusNode, _secondFocusNode),
+                          _buildInputField(_firstPartController,
+                              _firstFocusNode, _secondFocusNode),
                           SizedBox(width: 2),
-                          _buildInputField(_secondPartController, _secondFocusNode, _thirdFocusNode, _firstFocusNode),
+                          _buildInputField(
+                              _secondPartController,
+                              _secondFocusNode,
+                              _thirdFocusNode,
+                              _firstFocusNode),
                           SizedBox(width: 2),
-                          _buildInputField(_thirdPartController, _thirdFocusNode, null, _secondFocusNode),
+                          _buildInputField(_thirdPartController,
+                              _thirdFocusNode, null, _secondFocusNode),
                           SizedBox(width: 2),
-                          _buildNumberText(widget.cpf != null && widget.cpf!.length >= 6 ? '.${widget.cpf!.substring(3, 6)}' : '.'),
+                          _buildNumberText(
+                              widget.cpf != null && widget.cpf!.length >= 6
+                                  ? '.${widget.cpf!.substring(3, 6)}'
+                                  : '.'),
                           SizedBox(width: 2),
-                          _buildNumberText(widget.cpf != null && widget.cpf!.length >= 9 ? '.${widget.cpf!.substring(6, 9)}' : '.'),
+                          _buildNumberText(
+                              widget.cpf != null && widget.cpf!.length >= 9
+                                  ? '.${widget.cpf!.substring(6, 9)}'
+                                  : '.'),
                           SizedBox(width: 2),
-                          _buildNumberText(widget.cpf != null && widget.cpf!.length >= 11 ? '-${widget.cpf!.substring(9)}' : '-'),
+                          _buildNumberText(
+                              widget.cpf != null && widget.cpf!.length >= 11
+                                  ? '-${widget.cpf!.substring(9)}'
+                                  : '-'),
                         ],
                       ),
-                      SizedBox(height: 48),
+                      SizedBox(height: 12),
+                      if (!cpfValid && errorMessage.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Center(
+                            child: Text(
+                              errorMessage,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                  color: Colors.red),
+                            ),
+                          ),
+                        ),
+                      SizedBox(height: 12),
                       Center(
                         child: PassaquiButton(
                           label: 'Confirmar',
@@ -128,9 +175,28 @@ class _HireConfirmCpfScreenState extends State<HireConfirmCpfScreen> {
                           borderRadius: 50,
                           style: PassaquiButtonStyle.primary,
                           onTap: () {
-                            DIService().inject<NavigationHandler>().navigate(
-                              HireConfirmEmailScreen.route,
-                            );
+                            String firstValue = _firstPartController.text;
+                            String secondValue = _secondPartController.text;
+                            String thirdValue = _thirdPartController.text;
+
+                            bool isMatch = compareFirstThreeCharacters(
+                                firstValue,
+                                secondValue,
+                                thirdValue,
+                                widget.cpf);
+
+                            if (isMatch) {
+                              // Navigate to the next screen on success
+                              DIService().inject<NavigationHandler>().navigate(
+                                HireConfirmEmailScreen.route,
+                              );
+                            } else {
+                              // Update state to reflect validation failure
+                              setState(() {
+                                cpfValid = false;
+                                errorMessage = 'O CPF informado não é válido';
+                              });
+                            }
                           },
                         ),
                       ),
@@ -156,7 +222,9 @@ class _HireConfirmCpfScreenState extends State<HireConfirmCpfScreen> {
     );
   }
 
-  Widget _buildInputField(TextEditingController controller, FocusNode focusNode, FocusNode? nextFocus, [FocusNode? previousFocus]) {
+  Widget _buildInputField(TextEditingController controller, FocusNode focusNode,
+      FocusNode? nextFocus,
+      [FocusNode? previousFocus]) {
     return Container(
       width: 50,
       height: 60,
@@ -170,14 +238,15 @@ class _HireConfirmCpfScreenState extends State<HireConfirmCpfScreen> {
           _handleTextChange(controller, focusNode, nextFocus, previousFocus);
         },
         style: GoogleFonts.roboto(
-          fontWeight: FontWeight.w400,
-          color: Colors.black,
+          fontWeight: FontWeight.w500,
+          color: cpfValid ? Colors.black : Colors.red, // Text color based on validation
           fontSize: 24,
         ),
         decoration: InputDecoration(
           filled: true,
-          fillColor: Color(0xFFF2F2F2),
+          fillColor: cpfValid ? Color(0xFFF2F2F2) : Color.fromRGBO(255, 0, 0, 0.2), // Background color with opacity
           counterText: "",
+          errorText: null, // Remove error text from here
           border: OutlineInputBorder(
             borderSide: BorderSide.none,
             borderRadius: BorderRadius.circular(8),
@@ -186,4 +255,40 @@ class _HireConfirmCpfScreenState extends State<HireConfirmCpfScreen> {
       ),
     );
   }
+
+
+// Widget _buildInputField(TextEditingController controller, FocusNode focusNode,
+  //     FocusNode? nextFocus,
+  //     [FocusNode? previousFocus]) {
+  //   return Container(
+  //     width: 50,
+  //     height: 60,
+  //     child: TextField(
+  //       controller: controller,
+  //       focusNode: focusNode,
+  //       textAlign: TextAlign.center,
+  //       keyboardType: TextInputType.number,
+  //       maxLength: 1,
+  //       onChanged: (_) {
+  //         _handleTextChange(controller, focusNode, nextFocus, previousFocus);
+  //       },
+  //       style: GoogleFonts.roboto(
+  //         fontWeight: FontWeight.w400,
+  //         color: cpfValid ? Colors.black : Colors.red, // Text color based on validation
+  //         fontSize: 24,
+  //       ),
+  //       decoration: InputDecoration(
+  //         filled: true,
+  //         fillColor: cpfValid ? Color(0xFFF2F2F2) : Color.fromRGBO(255, 0, 0, 0.2), // Background color with opacity
+  //         counterText: "",
+  //         errorText: null, // Remove error text from here
+  //         border: OutlineInputBorder(
+  //           borderSide: BorderSide.none,
+  //           borderRadius: BorderRadius.circular(8),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 }
+
