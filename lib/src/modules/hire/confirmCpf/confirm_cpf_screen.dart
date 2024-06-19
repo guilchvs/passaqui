@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:passaqui/src/modules/hire/wrongCpf/wrong_cpf_screen.dart';
 
 import '../../../core/di/service_locator.dart';
 import '../../../core/navigation/navigation_handler.dart';
 import '../../../shared/widget/appbar.dart';
 import '../../../shared/widget/button.dart';
 import '../confirmEmail/hire_confirm_email.dart';
+import '../wrongInfo/wrong_cpf_screen.dart';
 
 class HireConfirmCpfScreen extends StatefulWidget {
   static const String route = "/hire-confirm-cpf";
@@ -208,7 +208,7 @@ class _HireConfirmCpfScreenState extends State<HireConfirmCpfScreen> {
                               onTap: () {
                                 //
                                 DIService().inject<NavigationHandler>().navigate(
-                                  WrongCpfScreen.route,
+                                  WrongPersonalInfoScreen.route,
                                 );
                               },
                               child: Text("Não é o meu CPF",

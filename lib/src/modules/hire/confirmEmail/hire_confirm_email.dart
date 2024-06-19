@@ -8,7 +8,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../../core/di/service_locator.dart';
 import '../../../core/navigation/navigation_handler.dart';
 import '../../../services/auth_service.dart';
-import '../wrongCpf/wrong_cpf_screen.dart';
+import '../wrongInfo/wrong_cpf_screen.dart';
 
 class HireConfirmEmailScreen extends StatefulWidget {
   static const String route = "/hire-confirm-email";
@@ -142,7 +142,7 @@ class _HireConfirmEmailScreenState extends State<HireConfirmEmailScreen> {
                           child: GestureDetector(
                               onTap: () {
                                 DIService().inject<NavigationHandler>().navigate(
-                                  WrongCpfScreen.route,
+                                  WrongPersonalInfoScreen.route,
                                   arguments: {'isEmail': true},
                                 );
                               },
