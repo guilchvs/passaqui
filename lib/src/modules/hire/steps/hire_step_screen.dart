@@ -41,14 +41,13 @@ class _HireStepsScreenState extends State<HireStepsScreen> {
     const HireStepItem(
       title: "Simule o quanto você precisa de forma rápida e fácil",
       image: "assets/images/simulation.svg",
-      description:
-          "Simule o valor que precisa e a melhor forma de pagamento para o seu bolso",
+      description: "",
       showButton: false,
     ),
     const HireStepItem(
-      title: "Receba o crédito pessoal em sua conta ",
+      title: "Dinheiro no seu bolso e sem burocracias",
       image: "assets/images/receive-money.svg",
-      description: "Dinheiro no seu bolso e sem burocracias",
+      description: "",
       showButton: true,
     ),
   ];
