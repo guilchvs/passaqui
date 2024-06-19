@@ -5,6 +5,7 @@ import 'package:passaqui/src/modules/hire/steps/hire_step_screen.dart';
 import 'package:passaqui/src/shared/widget/button.dart';
 import 'package:passaqui/src/shared/widget/card.dart';
 import 'package:passaqui/src/shared/widget/card_product.dart';
+import 'package:passaqui/src/services/auth_service.dart'; // Import AuthService
 
 class HomeScreen extends StatefulWidget {
   static const String route = "/home";
@@ -16,6 +17,26 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String userName = ''; // Variable to hold the user's name
+  final AuthService _authService = DIService().inject<AuthService>(); // Get AuthService instance
+
+  @override
+  void initState() {
+    super.initState();
+    loadUserName();
+  }
+
+  Future<void> loadUserName() async {
+    try {
+      final name = await _authService.getName();
+      setState(() {
+        userName = name ?? ''; // Update the userName variable
+      });
+    } catch (e) {
+      print('Failed to load user name: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             const SizedBox(width: 10),
                             RichText(
-                              text: const TextSpan(
+                              text: TextSpan(
                                 style: TextStyle(
                                   fontFamily: 'Inter',
                                   fontSize: 24,
@@ -54,13 +75,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                                 children: [
                                   TextSpan(
-                                    text: 'Olá,',
+                                    text: 'Olá, ',
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                   TextSpan(
-                                    text: ' nome',
+                                    text: userName,
                                     style: TextStyle(
                                       fontWeight: FontWeight.w400,
                                     ),
@@ -181,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           imagePath: "assets/images/money_bag.png",
                           title: "Crédito Consignado Privado",
                           description:
-                              "Empréstimos com as melhores taxas e desconto direto em folha.",
+                          "Empréstimos com as melhores taxas e desconto direto em folha.",
                           onPressed: () {
                             // Handle button press for product 1
                           },
@@ -194,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           imagePath: "assets/images/dollar_round.png",
                           title: "Grande Sacado",
                           description:
-                              "Antecipe recebíveis sem burocracia. Mais agilidade para pagamentos, com atendimento personalizado de acordo com a necessidade da sua empresa.",
+                          "Antecipe recebíveis sem burocracia. Mais agilidade para pagamentos, com atendimento personalizado de acordo com a necessidade da sua empresa.",
                           onPressed: () {
                             // Handle button press for product 2
                           },
@@ -269,4 +290,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
