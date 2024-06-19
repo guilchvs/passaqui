@@ -22,13 +22,13 @@ class _HireValueScreenState extends State<HireValueScreen> {
   @override
   Widget build(BuildContext context) {
     // Extract values from jsonResponse
-    double? valorDesejado = widget.jsonResponse?['Simulacoes'][0]['VlrLiberado'];
-    double? valorIOF = widget.jsonResponse?['Simulacoes'][0]['VlrIOF'];
-    double? valorFinanciado = widget.jsonResponse?['Simulacoes'][0]['VlrEmprestimoCliente'];
-    double? valorJuros = widget.jsonResponse?['Simulacoes'][0]['VlrJuros'];
-    double? cetMensal = widget.jsonResponse?['Simulacoes'][0]['TaxaCETMensal'];
-    double? cetAnual = widget.jsonResponse?['Simulacoes'][0]['TaxaCETAnual'];
-    double? valorTotal = widget.jsonResponse?['Simulacoes'][0]['VlrOperacao'];
+    double? valorDesejado = widget.jsonResponse?['VlrLiberado'];
+    double? valorIOF = widget.jsonResponse?['VlrIOF'];
+    double? valorFinanciado = widget.jsonResponse?['VlrEmprestimoCliente'];
+    double? valorJuros = widget.jsonResponse?['VlrJuros'];
+    double? cetMensal = widget.jsonResponse?['TaxaCETMensal'];
+    double? cetAnual = widget.jsonResponse?['TaxaCETAnual'];
+    double? valorTotal = widget.jsonResponse?['VlrOperacao'];
 
     return Scaffold(
       appBar: const PassaquiAppBar(showLogo: false, showBackButton: true),
