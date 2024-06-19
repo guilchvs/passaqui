@@ -184,7 +184,10 @@ class NavigationHandler {
           ),
         );
       case WrongCpfScreen.route:
-        return MaterialPageRoute(builder: (context) => const WrongCpfScreen());
+        final args = settings.arguments as Map<String, dynamic>?;
+        return MaterialPageRoute(builder: (context) => WrongCpfScreen(
+          isEmail: args?['isEmail'] ?? false,
+        ));
       case HireConfirmEmailScreen.route:
         return MaterialPageRoute(
           builder: (context) => HireConfirmEmailScreen(
