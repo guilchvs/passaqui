@@ -717,7 +717,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     _currentPageIndex = index;
                   });
                   }
-                  else {
+                  else if (index == 4){
                     previousPage();
                   };
                 },
