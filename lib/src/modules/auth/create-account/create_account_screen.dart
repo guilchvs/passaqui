@@ -479,6 +479,10 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       print('entrou na funcao');      
       return CPFValidator.isValid(controllers[3].text.trim());
     }
+    else if((_currentPageIndex == 4) && (CPFValidator.isValid(controllers[3].text.trim()) is false)){
+      previousPage();
+      return false;
+    }
     else return true;
     }
 
