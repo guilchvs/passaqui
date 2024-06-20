@@ -477,6 +477,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       return CPFValidator.isValid(controllers[3].text.trim);
     }
     else return true;
+    }
 
   @override
   Widget build(BuildContext context) {
