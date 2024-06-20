@@ -716,7 +716,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     setState(() {
                     _currentPageIndex = index;
                   });
-                  },
+                  };
                 },
               ),
             ),
