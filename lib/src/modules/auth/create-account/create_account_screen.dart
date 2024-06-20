@@ -1,3 +1,4 @@
+import 'package:cpf_cnpj_validator/cpf_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:passaqui/src/modules/welcome/welcome_screen.dart';
@@ -72,6 +73,13 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
   void nextPage() {
     if (_currentPageIndex < labels.length - 1) {
+//      chamar funcao de validar cpf aqui
+      if(_isFieldValid()) {
+        print('CPF Valido');
+      }else {
+        print('CPF invalido');
+        return;
+      }
       _pageController.nextPage(
         duration: Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -95,6 +103,33 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       });
     }
   }
+
+
+  // void nextPage() {
+  //   if (_currentPageIndex < labels.length - 1) {
+  //     _pageController.nextPage(
+  //       duration: Duration(milliseconds: 300),
+  //       curve: Curves.easeInOut,
+  //     );
+  //     setState(() {
+  //       _currentPageIndex++;
+  //     });
+  //   } else {
+  //     _registerAccount();
+  //   }
+  // }
+
+  // void previousPage() {
+  //   if (_currentPageIndex > 0) {
+  //     _pageController.previousPage(
+  //       duration: Duration(milliseconds: 300),
+  //       curve: Curves.easeInOut,
+  //     );
+  //     setState(() {
+  //       _currentPageIndex--;
+  //     });
+  //   }
+  // }
 
   void navigateToWelcomeScreen() {
     DIService().inject<NavigationHandler>().navigate(WelcomeScreen.route);
@@ -136,6 +171,18 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       print('Error formatting date: $e');
       return date; // Return original if format cannot be determined
     }
+  }
+
+  bool _isFieldValid() {
+    if (_currentPageIndex == 3) {
+      print('entrou na funcao');
+      return CPFValidator.isValid(controllers[3].text.trim());
+    }
+    else if((_currentPageIndex == 4) && (CPFValidator.isValid(controllers[3].text.trim()) != true )){
+      previousPage();
+      return false;
+    }
+    else return true;
   }
 
   @override
@@ -360,9 +407,14 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   );
                 },
                 onPageChanged: (index) {
-                  setState(() {
-                    _currentPageIndex = index;
-                  });
+                  if (_isFieldValid()) {
+                    setState(() {
+                      _currentPageIndex = index;
+                    });
+                  }
+                  else if (index == 4){
+                    previousPage();
+                  };
                 },
               ),
             ),
