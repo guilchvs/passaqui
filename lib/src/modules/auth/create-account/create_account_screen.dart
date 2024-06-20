@@ -404,7 +404,10 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 //      chamar funcao de validar cpf aqui
       if(_isFieldValid()) {
         print('CPF Valido');
-      }else print('CPF invalido');
+      }else {
+        print('CPF invalido');
+        return;
+      }
       _pageController.nextPage(
         duration: Duration(milliseconds: 300),
         curve: Curves.easeInOut,
