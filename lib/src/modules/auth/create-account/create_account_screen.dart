@@ -712,7 +712,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   );
                 },
                 onPageChanged: (index) {
-                  if (_isFieldValid) {
+                  if (_isFieldValid()) {
                     setState(() {
                     _currentPageIndex = index;
                   });
