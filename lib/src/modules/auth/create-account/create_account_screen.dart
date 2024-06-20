@@ -332,6 +332,7 @@ import 'package:passaqui/src/modules/welcome/welcome_screen.dart';
 import 'package:passaqui/src/services/auth_service.dart'; // Adjust the import path as per your project structure
 import 'package:passaqui/src/shared/widget/button.dart';
 import 'package:passaqui/src/shared/widget/text_field.dart';
+import 'package:cpf_cnpj_validator/cpf_validator.dart';
 
 import '../../../core/di/service_locator.dart';
 import '../../../core/navigation/navigation_handler.dart';
