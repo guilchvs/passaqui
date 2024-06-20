@@ -401,6 +401,10 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
   void nextPage() {
     if (_currentPageIndex < labels.length - 1) {
+//      chamar funcao de validar cpf aqui
+      if (!_isFieldValid) {
+        exit();
+      }
       _pageController.nextPage(
         duration: Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -465,6 +469,13 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     }
     return date; // Return original if format cannot be determined
   }
+  
+// colocar validacoes de campos aqui, cpf, email, senha  
+  bool _isFieldValid() {
+    if (_currentPageIndex == 3) {
+      return CPFValidatos.isValid(controllers[3].text.trim);
+    }
+    else return true;
 
   @override
   Widget build(BuildContext context) {
