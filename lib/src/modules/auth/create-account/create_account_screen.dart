@@ -1,3 +1,4 @@
+import 'package:search_cep/search_cep.dart';
 import 'package:cpf_cnpj_validator/cpf_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -184,6 +185,13 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     }
     else return true;
   }
+
+  void _findCEPandFillAddress(){
+    if (_currentPageIndex == 8 && controllers[8].toString().isNotEmpty){
+      //preencher rua, se encontrar pelo cep      
+    }
+  }
+  
 
   @override
   Widget build(BuildContext context) {
