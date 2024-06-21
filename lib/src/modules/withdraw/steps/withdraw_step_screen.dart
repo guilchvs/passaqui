@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:passaqui/src/modules/withdraw/welcome/withdraw_welcome_screen.dart';
 
 import '../../../core/di/service_locator.dart';
 import '../../../core/navigation/navigation_handler.dart';
@@ -91,8 +92,6 @@ class _WithdrawStepsScreenState extends State<WithdrawStepsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool isLargeScreen = MediaQuery.of(context).size.width > 600;
-
     return Scaffold(
       backgroundColor: Color(0xFFF2F2F2),
       body: Column(
@@ -103,8 +102,15 @@ class _WithdrawStepsScreenState extends State<WithdrawStepsScreen> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(right: 5.0),
-                child: const Icon(Icons.chevron_left,
-                    color: Color(0xFFA8CA4B), size: 34),
+                child: GestureDetector(
+                  onTap: (){
+                    DIService()
+                        .inject<NavigationHandler>()
+                        .navigate(WithdrawWelcomeScreen.route);
+                  },
+                  child: const Icon(Icons.chevron_left,
+                      color: Color(0xFFA8CA4B), size: 34),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 16.0),
@@ -142,7 +148,7 @@ class _WithdrawStepsScreenState extends State<WithdrawStepsScreen> {
                     label: "Anterior",
                     textColor: Color(0xFF1E1E1E),
                     arrowColor: Color(0xFF126049),
-                    fontSize: isLargeScreen ? 14 : 12,
+                    fontSize: 14,
                     onTap: () {
                       if (_pageController.page?.toInt() != 0) {
                         _pageController.previousPage(
@@ -155,12 +161,13 @@ class _WithdrawStepsScreenState extends State<WithdrawStepsScreen> {
                   PassaquiTextButton(
                     label: "Próxima",
                     textColor: Color(0xFF1E1E1E),
-                    fontSize: isLargeScreen ? 22 : 18,
+                    fontSize: 22,
                     fontWeight: FontWeight.w500,
                     arrowColor: Color(0xFF126049),
                     onTap: () {
                       int? lastPage = _pageController.page?.toInt();
                       if (lastPage == steps.length - 1) {
+                        // Navigate to home screen when on the last step
                         DIService()
                             .inject<NavigationHandler>()
                             .navigate(HomeScreen.route);
@@ -202,8 +209,6 @@ class WithdrawStepItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isLargeScreen = MediaQuery.of(context).size.width > 600;
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 40),
       child: Column(
@@ -211,8 +216,8 @@ class WithdrawStepItem extends StatelessWidget {
         children: [
           Text(
             title,
-            style: TextStyle(
-              fontSize: isLargeScreen ? 20 : 14,
+            style: const TextStyle(
+              fontSize: 20,
               color: Colors.black,
               fontFamily: 'Inter',
               fontWeight: FontWeight.w400,
@@ -221,26 +226,29 @@ class WithdrawStepItem extends StatelessWidget {
           const SizedBox(height: 32),
           Stack(
             children: [
+              // Background image
               SvgPicture.asset(
-                backgroundImage,
-                height: isLargeScreen ? 360 : 220,
-                color: Colors.white,
+                  backgroundImage,
+                  height: 360,
+                  color: Colors.white
               ),
+              // Main image
               Positioned.fill(
                 child: Image.asset(
                   image,
-                  height: isLargeScreen ? 330 : 50,
+                  height: 330,
                   width: double.infinity,
                   fit: BoxFit.contain,
                 ),
               ),
+              // Number image positioned to the right of the main image
               Positioned(
-                right: isLargeScreen ? 12 : 9,
-                top: isLargeScreen ? 44 : 12,
+                right: 12,
+                top: 44,
                 child: Image.asset(
                   number,
-                  height: isLargeScreen ? 60 : 45,
-                  width: isLargeScreen ? 60 : 45,
+                  height: 60,
+                  width: 60,
                   fit: BoxFit.contain,
                 ),
               ),
@@ -250,8 +258,8 @@ class WithdrawStepItem extends StatelessWidget {
           Center(
             child: RichText(
               text: TextSpan(
-                style: TextStyle(
-                  fontSize: isLargeScreen ? 14 : 12,
+                style: const TextStyle(
+                  fontSize: 14,
                   color: Color(0xFF1E1E1E),
                   fontFamily: 'Inter',
                   height: 1.4,
