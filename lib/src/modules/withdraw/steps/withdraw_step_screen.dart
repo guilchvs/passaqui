@@ -103,7 +103,7 @@ class _WithdrawStepsScreenState extends State<WithdrawStepsScreen> {
               Padding(
                 padding: const EdgeInsets.only(right: 5.0),
                 child: GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     DIService()
                         .inject<NavigationHandler>()
                         .navigate(WithdrawWelcomeScreen.route);
