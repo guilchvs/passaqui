@@ -91,6 +91,11 @@ class AuthService {
     return prefs.getString('email');
   }
 
+  Future<String?> getCpf() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('cpf');
+  }
+
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('jwt');
