@@ -55,6 +55,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   ];
 
   final AuthService _authService = AuthService();
+  bool cpfHasError = false;
+  bool emailHasError = false;
 
   @override
   void initState() {
@@ -76,8 +78,14 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 //      chamar funcao de validar cpf aqui
       if(_isFieldValid()) {
         print('CPF Valido');
+        setState(() {
+          cpfHasError = false;
+        });
       }else {
         print('CPF invalido');
+        setState(() {
+          cpfHasError = true;
+        });
         return;
       }
       _pageController.nextPage(
@@ -175,7 +183,6 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
   bool _isFieldValid() {
     if (_currentPageIndex == 3) {
-      print('entrou na funcao');
       return CPFValidator.isValid(controllers[3].text.trim());
     }
     else if((_currentPageIndex == 4) && (CPFValidator.isValid(controllers[3].text.trim()) != true )){
@@ -388,9 +395,31 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                               : PassaquiTextField(
                             editingController: controllers[index],
                             placeholder: placeholders[index],
-                            textColor: Colors.black,
+                            textColor: cpfHasError ? Colors.red : Colors.black,
                             isVisible: true,
                           ),
+                        if (index == 3 && cpfHasError) Padding(
+                          padding: const EdgeInsets.only(top: 14, left: 22.0),
+                          child: Text(
+                              "Esse número de CPF é inválido!",
+                              style: TextStyle(
+                                fontFamily: "Inter",
+                                fontSize: 14,
+                                color: Colors.red,
+                              )
+                          ),
+                        ),
+                        if (index == 6 && cpfHasError) Padding(
+                          padding: const EdgeInsets.only(top: 14, left: 22.0),
+                          child: Text(
+                              "Esse número de CPF é inválido!",
+                              style: TextStyle(
+                                fontFamily: "Inter",
+                                fontSize: 14,
+                                color: Colors.red,
+                              )
+                          ),
+                        ),
                         const SizedBox(height: 40),
                         const Spacer(),
                         PassaquiButton(
