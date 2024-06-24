@@ -191,6 +191,7 @@ class _HireConfirmCpfScreenState extends State<HireConfirmCpfScreen> {
                               // Navigate to the next screen on success
                               DIService().inject<NavigationHandler>().navigate(
                                     HireConfirmEmailScreen.route,
+                                    arguments: {'cpf': widget.cpf},
                                   );
                             } else {
                               // Update state to reflect validation failure

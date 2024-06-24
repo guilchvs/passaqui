@@ -96,8 +96,10 @@ class NavigationHandler {
           isEmail: args?['isEmail'] ?? false,
         ));
       case HireConfirmEmailScreen.route:
+        final args = settings.arguments as Map<String, String?>?;
         return MaterialPageRoute(
           builder: (context) => HireConfirmEmailScreen(
+            cpf: args?['cpf']
           ),
         );
     }

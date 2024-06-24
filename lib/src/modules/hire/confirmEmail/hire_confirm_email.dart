@@ -12,8 +12,9 @@ import '../wrongInfo/wrong_cpf_screen.dart';
 
 class HireConfirmEmailScreen extends StatefulWidget {
   static const String route = "/hire-confirm-email";
+  final String? cpf;
 
-  const HireConfirmEmailScreen({Key? key}) : super(key: key);
+  const HireConfirmEmailScreen({Key? key, this.cpf}) : super(key: key);
 
   @override
   State<HireConfirmEmailScreen> createState() => _HireConfirmEmailScreenState();
@@ -40,7 +41,7 @@ class _HireConfirmEmailScreenState extends State<HireConfirmEmailScreen> {
     });
   }
 
-  Future<void> _simulateApiCall(String cpf) async {
+  Future<void> _simulateApiCall(String? cpf) async {
     setState(() {
       _isLoading = true; // Set loading state while waiting for API response
     });
@@ -132,7 +133,7 @@ class _HireConfirmEmailScreenState extends State<HireConfirmEmailScreen> {
                           borderRadius: 50,
                           style: PassaquiButtonStyle.primary,
                           onTap: () {
-                            _simulateApiCall('01052320414');
+                            _simulateApiCall(widget.cpf);
                             // Handle button tap
                           },
                         ),
