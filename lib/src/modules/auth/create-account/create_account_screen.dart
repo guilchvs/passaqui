@@ -56,13 +56,15 @@
 //   ];
 //
 //   final AuthService _authService = AuthService();
-//   bool showError = false;
+//   bool showCpfError = false;
+//
 //
 //   @override
 //   void initState() {
 //     _pageController = PageController();
 //     controllers =
 //         List.generate(labels.length, (index) => TextEditingController());
+//     showCpfError = false;
 //     super.initState();
 //   }
 //
@@ -77,14 +79,14 @@
 //     if (_currentPageIndex < labels.length - 1) {
 // //      chamar funcao de validar cpf aqui
 //       if(_isFieldValid()) {
-//         print('CPF Valido');
 //         setState(() {
-//           showError = false;
+//           showCpfError = false;
 //         });
+//
 //       }else {
 //         print('CPF invalido');
 //         setState(() {
-//           showError = true;
+//           showCpfError = true;
 //         });
 //         return;
 //       }
@@ -181,16 +183,54 @@
 //     }
 //   }
 //
+//   // bool _isFieldValid() {
+//   //   if (_currentPageIndex == 3) {
+//   //     bool isCpfValid = CPFValidator.isValid(controllers[3].text.trim());
+//   //     if (!isCpfValid) setState(() {
+//   //       showError = false;
+//   //     });
+//   //     return isCpfValid;
+//   //   }
+//   //   else return true;
+//   // }
+//
 //   bool _isFieldValid() {
 //     if (_currentPageIndex == 3) {
-//       print('entrou na funcao');
-//       return CPFValidator.isValid(controllers[3].text.trim());
+//       bool isCpfValid = CPFValidator.isValid(controllers[3].text.trim());
+//       if (isCpfValid) setState(() {
+//         showCpfError = !isCpfValid;
+//       });
+//       return isCpfValid;
 //     }
 //     else if((_currentPageIndex == 4) && (CPFValidator.isValid(controllers[3].text.trim()) != true )){
 //       previousPage();
 //       return false;
 //     }
+//     else if(_currentPageIndex == 8 && controllers[8].toString().isNotEmpty){
+//       _findCEPandFillAddress();
+//       return true;
+//     }
 //     else return true;
+//   }
+//
+//   Future<void> _findCEPandFillAddress() async {
+//     String _cepAtual = controllers[8].text.trim();
+//     final viaCepSearchCep = ViaCepSearchCep();
+//     final infoCepJSON = await viaCepSearchCep.searchInfoByCep(cep: _cepAtual);
+//     String parsedjson = infoCepJSON.toString();
+//     if(parsedjson.contains('Right')){
+//       final values = parsedjson.split(",").map((x) => x.trim()).where((element) => element.isNotEmpty).toList();
+//       final logradouro = values[1].replaceFirst('logradouro: ', '');
+//       controllers[9].text = logradouro;
+//       // quando existir colocar bairro: Super Quadra Morumbi, localidade: São Paulo, uf: SP,
+//       // 1 logradouro, 3 bairro, 4 localidade, 5 uf
+//       //final logradouro = values[3].replaceFirst('bairro: ', '');
+//       //controllers[9].text = logradouro;
+//       //final logradouro = values[4].replaceFirst('localidade: ', '');
+//       //controllers[9].text = logradouro;
+//       //final logradouro = values[5].replaceFirst('uf: ', '');
+//       //controllers[9].text = logradouro;
+//     }
 //   }
 //
 //   @override
@@ -396,10 +436,10 @@
 //                               : PassaquiTextField(
 //                             editingController: controllers[index],
 //                             placeholder: placeholders[index],
-//                             textColor: showError ? Colors.red : Colors.black,
+//                             textColor: showCpfError ? Colors.red : Colors.black,
 //                             isVisible: true,
 //                           ),
-//                         if (index == 3 && showError) Padding(
+//                         if (index == 3 && showCpfError) Padding(
 //                           padding: const EdgeInsets.only(top: 14, left: 22.0),
 //                           child: Text(
 //                               "Esse número de CPF é inválido!",
