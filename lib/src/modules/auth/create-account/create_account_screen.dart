@@ -716,6 +716,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       //controllers[9].text = logradouro;
       //final logradouro = values[5].replaceFirst('uf: ', '');
       //controllers[9].text = logradouro;
+    } else {
+      controllers[9].text = "";
     }
   }
 
