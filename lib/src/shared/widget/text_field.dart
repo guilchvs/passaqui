@@ -8,6 +8,8 @@ class PassaquiTextField extends StatelessWidget {
   final VoidCallback? toggleVisibility;
   final TextEditingController editingController;
   final Function(String)? onChange;
+  final Color? placeholderColor; // Optional placeholder color
+  final Color? textColor; // Optional text color
 
   const PassaquiTextField({
     this.label,
@@ -17,6 +19,8 @@ class PassaquiTextField extends StatelessWidget {
     this.isVisible = true,
     this.toggleVisibility,
     this.onChange,
+    this.placeholderColor,
+    this.textColor, // Accept text color as parameter
     Key? key,
   }) : super(key: key);
 
@@ -42,9 +46,9 @@ class PassaquiTextField extends StatelessWidget {
             controller: editingController,
             onChanged: onChange,
             obscureText: !isVisible,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 16,
-              color: Colors.white,
+              color: textColor ?? Colors.white, // Use provided text color or default white
               fontFamily: 'Inter',
               fontWeight: FontWeight.w400,
             ),
@@ -52,14 +56,14 @@ class PassaquiTextField extends StatelessWidget {
               suffixIcon: !showVisibility
                   ? const SizedBox()
                   : GestureDetector(
-                      onTap: toggleVisibility,
-                      child: Icon(
-                        isVisible
-                            ? Icons.visibility_outlined
-                            : Icons.visibility_off_outlined,
-                        color: Colors.white,
-                      ),
-                    ),
+                onTap: toggleVisibility,
+                child: Icon(
+                  isVisible
+                      ? Icons.visibility_outlined
+                      : Icons.visibility_off_outlined,
+                  color: Colors.white,
+                ),
+              ),
               enabledBorder: const UnderlineInputBorder(
                 borderSide: BorderSide(
                   color: Color(0xFFA8CA4B),
@@ -73,12 +77,12 @@ class PassaquiTextField extends StatelessWidget {
                 ),
               ),
               filled: false,
-              hintStyle: const TextStyle(
+              hintStyle: TextStyle(
                 fontFamily: 'Inter',
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
-                height: 60.51 / 50,
-                color: Colors.white,
+                height: 1.5,
+                color: placeholderColor ?? Colors.grey, // Use provided color or default grey
               ),
               hintText: placeholder,
             ),
@@ -88,4 +92,3 @@ class PassaquiTextField extends StatelessWidget {
     );
   }
 }
-

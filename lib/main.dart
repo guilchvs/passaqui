@@ -1,24 +1,21 @@
-import 'dart:async';
-
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:passaqui/src/app.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:passaqui/src/core/app_theme.dart';
 import 'package:passaqui/src/core/di/service_locator.dart';
+import 'package:passaqui/src/core/navigation/navigation_handler.dart';
+import 'package:passaqui/src/modules/welcome/welcome_screen.dart';
 
 void main() {
+  DIService().init();
 
-  runZonedGuarded(() async {
-
-    WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp();
-    DIService().init();
-
-    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-    runApp(const PassaquiApp());
-
-  }, (error, stack) {
-    FirebaseCrashlytics.instance.recordError(error, stack);
-  });
+  runApp(MaterialApp(
+    theme: AppTheme.appTheme,
+    navigatorKey: DIService().inject<NavigationHandler>().getGlobalKey(),
+    onGenerateRoute: DIService().inject<NavigationHandler>().routes,
+    initialRoute: WelcomeScreen.route,
+    localizationsDelegates: [GlobalMaterialLocalizations.delegate],
+    supportedLocales: [
+      const Locale('pt', 'BR'),
+    ],
+  ));
 }
-
