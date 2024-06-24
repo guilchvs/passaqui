@@ -183,15 +183,34 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       previousPage();
       return false;
     }
+    else if(_currentPageIndex == 8 && controllers[8].toString().isNotEmpty){
+      _findCEPandFillAddress();
+      return true;
+    }
     else return true;
   }
 
-  void _findCEPandFillAddress(){
-    if (_currentPageIndex == 8 && controllers[8].toString().isNotEmpty){
-      //preencher rua, se encontrar pelo cep      
-    }
+  Future<void> _findCEPandFillAddress() async {
+      //preencher rua, se encontrar pelo cep 
+      String _cepAtual = controllers[8].text.trim();
+      final viaCepSearchCep = ViaCepSearchCep();
+      final infoCepJSON = await viaCepSearchCep.searchInfoByCep(cep: _cepAtual);  
+      String parsedjson = infoCepJSON.toString();
+      if(parsedjson.contains('Right')){
+        final values = parsedjson.split(",").map((x) => x.trim()).where((element) => element.isNotEmpty).toList();
+        final logradouro = values[1].replaceFirst('logradouro: ', '');
+        controllers[9].text = logradouro;
+      // quando existir colocar bairro: Super Quadra Morumbi, localidade: São Paulo, uf: SP,
+      // 1 logradouro, 3 bairro, 4 localidade, 5 uf 
+        //final logradouro = values[3].replaceFirst('bairro: ', '');
+        //controllers[9].text = logradouro;
+        //final logradouro = values[4].replaceFirst('localidade: ', '');
+        //controllers[9].text = logradouro;
+        //final logradouro = values[5].replaceFirst('uf: ', '');
+        //controllers[9].text = logradouro;
+      }
   }
-  
+
 
   @override
   Widget build(BuildContext context) {
