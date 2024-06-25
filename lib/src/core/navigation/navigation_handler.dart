@@ -16,6 +16,9 @@ import 'package:passaqui/src/modules/withdraw/welcome/withdraw_welcome_screen.da
 import 'package:passaqui/src/modules/hire/confirmCpf/confirm_cpf_screen.dart';
 
 import '../../modules/hire/wrongInfo/wrong_cpf_screen.dart';
+import '../../modules/biometria/biometria_sucess/biometria_sucess_screen.dart';
+import '../../modules/biometria/biometria_error/biometria_error_screen.dart';
+import '../../modules/biometria/biometria_wait/biometria_wait_screen.dart';
 
 class NavigationHandler {
   final GlobalKey<NavigatorState> _globalKey = GlobalKey();
@@ -98,6 +101,21 @@ class NavigationHandler {
       case HireConfirmEmailScreen.route:
         return MaterialPageRoute(
           builder: (context) => HireConfirmEmailScreen(
+          ),
+        );
+    case BiometriaSucessScreen.route:
+        return MaterialPageRoute(
+          builder: (context) => BiometriaSucessScreen(
+          ),
+        );
+    case BiometriaErrorScreen.route:
+        return MaterialPageRoute(
+          builder: (context) => BiometriaErrorScreen(
+          ),
+        );
+    case BiometriaWaitScreen.route:
+        return MaterialPageRoute(
+          builder: (context) => BiometriaWaitScreen(
           ),
         );
     }

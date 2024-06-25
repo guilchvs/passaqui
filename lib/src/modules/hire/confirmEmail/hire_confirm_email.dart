@@ -9,6 +9,7 @@ import '../../../core/di/service_locator.dart';
 import '../../../core/navigation/navigation_handler.dart';
 import '../../../services/auth_service.dart';
 import '../wrongInfo/wrong_cpf_screen.dart';
+import 'package:passaqui/src/modules/biometria/biometria_sucess/biometria_sucess_screen.dart';
 
 class HireConfirmEmailScreen extends StatefulWidget {
   static const String route = "/hire-confirm-email";
@@ -132,7 +133,10 @@ class _HireConfirmEmailScreenState extends State<HireConfirmEmailScreen> {
                           borderRadius: 50,
                           style: PassaquiButtonStyle.primary,
                           onTap: () {
-                            _simulateApiCall('01052320414');
+                            DIService().inject<NavigationHandler>().navigate(
+                      BiometriaSucessScreen.route);
+                    
+                            //_simulateApiCall('01052320414');
                             // Handle button tap
                           },
                         ),
