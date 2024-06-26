@@ -37,7 +37,10 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     "Agora entramos na etapa sobre sua residência.\n\nPedimos que insira seu CEP:",
     "Insira abaixo o nome do logradouro, por favor:",
     "Agora informe o número da sua residência:",
-    "Para terminar, informe (se necessário) o complemento da localização de sua residência:"
+    "Informe (caso exista) o complemento da localização de sua residência:",
+    "Por favor confira ou informe o bairro:",
+    "Caso nao esteja preenchida nos informe sua Cidade abaixo:",
+    "E por ultimo por favor confira ou informe o Estado de sua residencia:"
   ];
 
   List<String> placeholders = [
@@ -53,6 +56,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     "Digite seu logradouro",
     "Digite seu número",
     "Digite o complemento",
+    "Digite o bairro", 
+    "Digite a Cidade",
+    "Digite o Estado",
   ];
 
   final AuthService _authService = AuthService();
@@ -140,6 +146,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         complemento: controllers[11].text.trim(),
         dataNascimento: _formatDateForSaving(controllers[5].text.trim()),
         rg: controllers[7].text.trim(),
+        //bairro: controllers[12].text.trim()
+        //cidade: controllers[13].text.trim()
+        //estado: controllers[14].text.trim()
       );
 
       if (response.statusCode == 200) {
@@ -162,64 +171,6 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       return date; // Return original if format cannot be determined
     }
   }
-
-  // bool _isFieldValid() {
-  //   if (_currentPageIndex == 1) {
-  //     String password = controllers[1].text.trim();
-  //     // Verifica se a senha tem pelo menos 8 caracteres e contém letras e números
-  //     if (password.isNotEmpty &&
-  //         password.length >= 8 &&
-  //         _containsLettersAndNumbers(password)) {
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   } else if (_currentPageIndex == 2) {
-  //     String password = controllers[1].text.trim();
-  //     String confirmPassword = controllers[2].text.trim();
-  //     // Verifica se ambos os campos de senha estão preenchidos
-  //     if (password.isNotEmpty && confirmPassword.isNotEmpty) {
-  //       // Verifica se as senhas são iguais
-  //       if (password == confirmPassword) {
-  //         return true;
-  //       } else {
-  //         return false;
-  //       }
-  //     } else {
-  //       return false;
-  //     }
-  //   } else if (_currentPageIndex == 3) {
-  //     bool isCpfValid = CPFValidator.isValid(controllers[3].text.trim());
-  //     if (!isCpfValid) {
-  //       setState(() {
-  //         showCpfError = true;
-  //       });
-  //       return false;
-  //     }
-  //     return true;
-  //   } else if (_currentPageIndex == 6) {
-  //     bool isEmailValid = RegExp(
-  //         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-  //         .hasMatch(controllers[6].text.trim());
-  //     if (!isEmailValid) {
-  //       setState(() {
-  //         showEmailError = true;
-  //       });
-  //       return false;
-  //     }
-  //     return true;
-  //   } else if (_currentPageIndex == 8 && controllers[8].text.isNotEmpty) {
-  //     _findCEPandFillAddress();
-  //   } else {
-  //     // Verifica se o campo está vazio em outras etapas
-  //     if (controllers[_currentPageIndex].text.isNotEmpty) {
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   }
-  //   return true;
-  // }
 
   bool _isFieldValid() {
     if (_currentPageIndex == 1) {
@@ -279,7 +230,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       return true;
     } else if (_currentPageIndex == 8 && controllers[8].text.isNotEmpty) {
       _findCEPandFillAddress();
-    } else {
+    } else if(_currentPageIndex != 11){
       // Verifica se o campo está vazio em outras etapas
       if (controllers[_currentPageIndex].text.isNotEmpty) {
         return true;
@@ -319,11 +270,23 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
           .toList();
       final logradouro = values[1].replaceFirst('logradouro: ', '');
       controllers[9].text = logradouro;
+
+      // quando existir colocar bairro: Super Quadra Morumbi, localidade: São Paulo, uf: SP,
+      // 1 logradouro, 3 bairro, 4 localidade, 5 uf 
+        final bairro = values[3].replaceFirst('bairro: ', '');
+        controllers[12].text = bairro;
+        final cidade = values[4].replaceFirst('localidade: ', '');
+        controllers[13].text = cidade;
+        final uf = values[5].replaceFirst('uf: ', '');
+        controllers[14].text = uf;
     } else {
       setState(() {
         showCepError = true;
       });
       controllers[9].text = "";
+      controllers[12].text = "";
+      controllers[13].text = "";
+      controllers[14].text = "";
     }
   }
 
