@@ -16,6 +16,7 @@ dependencies:
   cpf_cnpj_validator: ^2.0.0
   search_cep: ^4.0.2
   webview_flutter: ^3.0.4
+  permission_handler: ^8.1.4
 
 
   http: ^1.2.1

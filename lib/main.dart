@@ -6,6 +6,7 @@ import 'package:passaqui/src/core/navigation/navigation_handler.dart';
 import 'package:passaqui/src/modules/welcome/welcome_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   DIService().init();
 
   runApp(MaterialApp(
