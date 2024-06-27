@@ -14,6 +14,7 @@ import 'package:passaqui/src/modules/welcome/welcome_screen.dart';
 import 'package:passaqui/src/modules/withdraw/steps/withdraw_step_screen.dart';
 import 'package:passaqui/src/modules/withdraw/welcome/withdraw_welcome_screen.dart';
 import 'package:passaqui/src/modules/hire/confirmCpf/confirm_cpf_screen.dart';
+import 'package:passaqui/src/modules/hire/biometria/hire_biometria_screen.dart';
 
 import '../../modules/hire/wrongInfo/wrong_cpf_screen.dart';
 
@@ -100,6 +101,13 @@ class NavigationHandler {
         return MaterialPageRoute(
           builder: (context) => HireConfirmEmailScreen(
             cpf: args?['cpf']
+          ),
+        );
+      case HireBiometriaScreen.route:
+        final args = settings.arguments as Map<String, String?>?;
+        return MaterialPageRoute(
+          builder: (context) => HireBiometriaScreen(
+              cpf: args?['cpf']
           ),
         );
     }
