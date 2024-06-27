@@ -1,12 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:passaqui/src/shared/widget/appbar.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:passaqui/src/shared/widget/appbar.dart';
 
 class HireBiometriaScreen extends StatefulWidget {
   static const String route = "/hire-biometria";
-  final String? url;
+  final String url;
 
   const HireBiometriaScreen({required this.url, Key? key}) : super(key: key);
 
@@ -15,28 +14,31 @@ class HireBiometriaScreen extends StatefulWidget {
 }
 
 class _HireBiometriaScreenState extends State<HireBiometriaScreen> {
-  late final WebViewController controller;
+  InAppWebViewController? _webViewController;
+  bool _cameraPermissionGranted = false;
 
   @override
   void initState() {
     super.initState();
-    _requestCameraPermission();
-    controller = WebViewController()
-    ..setNavigationDelegate(NavigationDelegate(
-      onPageStarted: (url) {
-      }
-    ))
-      ..loadRequest(
-        Uri.parse('${widget.url}')
-      )
-    ..setJavaScriptMode(JavaScriptMode.unrestricted);
+    _requestCameraPermission().then((granted) {
+      setState(() {
+        _cameraPermissionGranted = granted;
+      });
+    });
   }
 
-  Future<void> _requestCameraPermission() async {
-    if (await Permission.camera.request().isGranted) {
-      print("Camera permission granted");
+  Future<bool> _requestCameraPermission() async {
+    var status = await Permission.camera.request();
+    return status.isGranted;
+  }
+
+  void _loadWebView() {
+    if (_webViewController != null && widget.url.isNotEmpty) {
+      _webViewController!.loadUrl(
+        urlRequest: URLRequest(url: WebUri(widget.url)),
+      );
     } else {
-      print("Camera permission not granted");
+      print("WebViewController or URL is null/empty");
     }
   }
 
@@ -44,16 +46,42 @@ class _HireBiometriaScreenState extends State<HireBiometriaScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PassaquiAppBar(
-        title:'Retornar para o app',
-        showBackButton: true,
+        title: 'Voltar para o app',
         showLogo: false,
+        showBackButton: true,
       ),
-      body: WebViewWidget(
-        controller: controller,
-      ),
+      body: _cameraPermissionGranted
+          ? InAppWebView(
+        initialUrlRequest: URLRequest(
+          url: WebUri(widget.url),
+        ),
+        initialOptions: InAppWebViewGroupOptions(
+          crossPlatform: InAppWebViewOptions(
+            javaScriptEnabled: true,
+          ),
+        ),
+        onWebViewCreated: (controller) {
+          _webViewController = controller;
+          _loadWebView(); // Load the WebView after it is created
+        },
+        onLoadStart: (controller, url) {
+          print("WebView is loading: $url");
+        },
+        onLoadStop: (controller, url) {
+          print("WebView loaded: $url");
+        },
+        onLoadError: (controller, url, code, message) {
+          print("WebView error - URL: $url, Error: $message");
+        },
+        androidOnPermissionRequest: (controller, origin, resources) async {
+          print("Permission request for resources: $resources");
+          return PermissionRequestResponse(
+            resources: resources,
+            action: PermissionRequestResponseAction.GRANT,
+          );
+        },
+      )
+          : Center(child: Text('Camera permission not granted.')),
     );
   }
 }
-
-
-

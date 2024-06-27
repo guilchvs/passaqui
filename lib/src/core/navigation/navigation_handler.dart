@@ -104,10 +104,10 @@ class NavigationHandler {
           ),
         );
       case HireBiometriaScreen.route:
-        final args = settings.arguments as Map<String, String?>;
+        final args = settings.arguments as Map<String, String>?;
         return MaterialPageRoute(
           builder: (context) => HireBiometriaScreen(
-              url: args['url']
+              url: args?['url'] ?? ''
           ),
         );
     }
