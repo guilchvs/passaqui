@@ -1931,15 +1931,12 @@
 //   }
 // }
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 import 'package:passaqui/src/shared/widget/appbar.dart';
 import 'package:passaqui/src/shared/widget/button.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:http/http.dart' as http;
 
 import '../../../core/di/service_locator.dart';
 import '../../../core/navigation/navigation_handler.dart';
@@ -1960,17 +1957,12 @@ class _HireConfirmEmailScreenState extends State<HireConfirmEmailScreen> {
   bool useOtherEmail = false;
   final AuthService _authService = AuthService();
   bool _isLoading = false;
-  Map<String, dynamic>? _jsonResponse;
   String? userEmail;
 
   @override
   void initState() {
     super.initState();
     _fetchUserEmail();
-    // For webview initialization on Android
-    if (Platform.isAndroid) {
-      WebView.platform = SurfaceAndroidWebView();
-    }
   }
 
   Future<void> _fetchUserEmail() async {
@@ -2025,13 +2017,14 @@ class _HireConfirmEmailScreenState extends State<HireConfirmEmailScreen> {
 
     if (!status.isGranted) {
       print('Camera permission denied');
+      // Handle denied permission case
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const PassaquiAppBar(
+      appBar: PassaquiAppBar(
         showLogo: false,
         showBackButton: true,
       ),
@@ -2045,7 +2038,7 @@ class _HireConfirmEmailScreenState extends State<HireConfirmEmailScreen> {
                 padding: const EdgeInsets.only(left: 24.0, top: 16),
                 child: Text(
                   'Informações de contato',
-                  style: GoogleFonts.roboto(
+                  style: TextStyle(
                     color: Colors.white,
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
@@ -2065,7 +2058,7 @@ class _HireConfirmEmailScreenState extends State<HireConfirmEmailScreen> {
                         padding: const EdgeInsets.only(left: 16.0),
                         child: Text(
                           'Email atual',
-                          style: GoogleFonts.roboto(
+                          style: TextStyle(
                             fontWeight: FontWeight.w600,
                             color: Color(0xFF515151),
                             fontSize: 18,
@@ -2118,44 +2111,6 @@ class _HireConfirmEmailScreenState extends State<HireConfirmEmailScreen> {
     );
   }
 
-  Widget _buildNumberText(String text) {
-    return Text(
-      text,
-      style: GoogleFonts.roboto(
-        fontWeight: FontWeight.w400,
-        color: Color(0xFF515151),
-        fontSize: 40,
-      ),
-    );
-  }
-
-  Widget _buildInputField(TextEditingController controller) {
-    return Container(
-      width: 26,
-      height: 40,
-      child: TextField(
-        controller: controller,
-        textAlign: TextAlign.center,
-        keyboardType: TextInputType.number,
-        maxLength: 1,
-        style: GoogleFonts.roboto(
-          fontWeight: FontWeight.w400,
-          color: Color(0xFF515151),
-          fontSize: 16,
-        ),
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Color(0xFFF2F2F2),
-          counterText: "",
-          border: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildRadioOption(String email) {
     if (email.isEmpty) {
       return SizedBox.shrink();
@@ -2188,7 +2143,7 @@ class _HireConfirmEmailScreenState extends State<HireConfirmEmailScreen> {
           ),
           Text(
             maskedEmail,
-            style: GoogleFonts.roboto(
+            style: TextStyle(
               fontWeight: FontWeight.w500,
               color: Color(0xFF515151),
               fontSize: 16,
@@ -2210,14 +2165,38 @@ class WebViewScreen extends StatefulWidget {
 }
 
 class _WebViewScreenState extends State<WebViewScreen> {
-  late WebViewController _controller;
+  late final WebViewController _webViewController;
 
   @override
   void initState() {
     super.initState();
-    if (Platform.isAndroid) {
-      WebView.platform = SurfaceAndroidWebView();
-    }
+    _webViewController = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0x00000000))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onProgress: (int progress) {
+            // Update loading bar.
+          },
+          onPageStarted: (String url) {
+            print('Page started loading: $url');
+          },
+          onPageFinished: (String url) {
+            print('Page finished loading: $url');
+          },
+          onWebResourceError: (WebResourceError error) {
+            print('''
+            Page resource error:
+            code: ${error.errorCode}
+            description: ${error.description}
+            errorType: ${error.errorType}
+            isForMainFrame: ${error.isForMainFrame}
+            ''');
+          },
+        ),
+      )
+      ..loadRequest(Uri.parse(widget.url));
+
     _handleCameraPermission();
   }
 
@@ -2229,7 +2208,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
 
     if (!status.isGranted) {
       print('Camera permission denied');
-      // You might want to handle this case and show a message to the user.
+      // Handle denied permission case
     }
   }
 
@@ -2239,30 +2218,8 @@ class _WebViewScreenState extends State<WebViewScreen> {
       appBar: AppBar(
         title: Text("Biometria"),
       ),
-      body: WebView(
-        initialUrl: widget.url,
-        javascriptMode: JavascriptMode.unrestricted,
-        onWebViewCreated: (WebViewController webViewController) {
-          _controller = webViewController;
-        },
-        navigationDelegate: (NavigationRequest request) async {
-          if (request.url.startsWith('webrtc:')) {
-            await _handleCameraPermission();
-            return NavigationDecision.navigate;
-          }
-          return NavigationDecision.navigate;
-        },
-        onPageStarted: (String url) async {
-          if (await Permission.camera.isGranted) {
-            _controller.runJavascript('navigator.mediaDevices.getUserMedia({ video: true })');
-          }
-        },
-        onPermissionRequest: (InAppWebViewPermissionRequest request) async {
-          return InAppWebViewPermissionResponse(
-            resources: request.resources,
-            action: InAppWebViewPermissionResponseAction.GRANT,
-          );
-        },
+      body: WebViewWidget(
+        controller: _webViewController,
       ),
     );
   }
