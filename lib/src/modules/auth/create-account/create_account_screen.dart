@@ -146,9 +146,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         complemento: controllers[11].text.trim(),
         dataNascimento: _formatDateForSaving(controllers[5].text.trim()),
         rg: controllers[7].text.trim(),
-        //bairro: controllers[12].text.trim()
-        //cidade: controllers[13].text.trim()
-        //estado: controllers[14].text.trim()
+        bairro: controllers[12].text.trim(),
+        cidade: controllers[13].text.trim(),
+        estado: controllers[14].text.trim(),
       );
 
       if (response.statusCode == 200) {
