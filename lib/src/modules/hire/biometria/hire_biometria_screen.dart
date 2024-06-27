@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:passaqui/src/shared/widget/appbar.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class HireBiometriaScreen extends StatefulWidget {
   static const String route = "/hire-biometria";
-  final String? cpf;
+  final String? url;
 
-  const HireBiometriaScreen({required this.cpf, Key? key}) : super(key: key);
+  const HireBiometriaScreen({required this.url, Key? key}) : super(key: key);
 
   @override
   State<HireBiometriaScreen> createState() => _HireBiometriaScreenState();
@@ -15,23 +16,35 @@ class HireBiometriaScreen extends StatefulWidget {
 
 class _HireBiometriaScreenState extends State<HireBiometriaScreen> {
   late final WebViewController controller;
-  final String baseUrl =
-      'http://passcash-api-hml.us-east-1.elasticbeanstalk.com';
 
   @override
   void initState() {
     super.initState();
+    _requestCameraPermission();
     controller = WebViewController()
+    ..setNavigationDelegate(NavigationDelegate(
+      onPageStarted: (url) {
+      }
+    ))
       ..loadRequest(
-          Uri.parse('$baseUrl/api/ApiMaster/iniciarBiometria?cpf=${widget.cpf}')
-      );
+        Uri.parse('${widget.url}')
+      )
+    ..setJavaScriptMode(JavaScriptMode.unrestricted);
+  }
+
+  Future<void> _requestCameraPermission() async {
+    if (await Permission.camera.request().isGranted) {
+      print("Camera permission granted");
+    } else {
+      print("Camera permission not granted");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PassaquiAppBar(
-        title:'Flutter WebView',
+        title:'Retornar para o app',
         showBackButton: true,
         showLogo: false,
       ),
@@ -41,3 +54,6 @@ class _HireBiometriaScreenState extends State<HireBiometriaScreen> {
     );
   }
 }
+
+
+

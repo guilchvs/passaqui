@@ -317,7 +317,11 @@ class _HireConfirmEmailScreenState extends State<HireConfirmEmailScreen> {
 
       if (response.statusCode == 200) {
         final _url = response.body;
-        await launchUrlString(_url);
+        DIService().inject<NavigationHandler>().navigate(
+          HireBiometriaScreen.route,
+          arguments: {'url': _url},
+        );
+        //await launchUrlString(_url);
       } else {
         // Handle other status codes here
         print('Failed to load data: ${response.statusCode}');
@@ -388,11 +392,7 @@ class _HireConfirmEmailScreenState extends State<HireConfirmEmailScreen> {
                           borderRadius: 50,
                           style: PassaquiButtonStyle.primary,
                           onTap: () {
-                            DIService().inject<NavigationHandler>().navigate(
-                              HireBiometriaScreen.route,
-                              arguments: {'cpf': widget.cpf },
-
-                            );
+                            _simulateApiCall(widget.cpf);
                           },
                         ),
                       ),
