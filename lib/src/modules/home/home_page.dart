@@ -1,8 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:passaqui/src/core/di/service_locator.dart';
 import 'package:passaqui/src/core/navigation/navigation_handler.dart';
 import 'package:passaqui/src/modules/hire/steps/hire_step_screen.dart';
+import 'package:passaqui/src/modules/profile/profile_screen.dart';
 import 'package:passaqui/src/shared/widget/button.dart';
 import 'package:passaqui/src/shared/widget/card.dart';
 import 'package:passaqui/src/shared/widget/card_product.dart';
@@ -19,7 +19,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String userName = ''; // Variable to hold the user's name
-  final AuthService _authService = DIService().inject<AuthService>(); // Get AuthService instance
+  final AuthService _authService =
+      DIService().inject<AuthService>(); // Get AuthService instance
 
   @override
   void initState() {
@@ -61,21 +62,29 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Image.asset(
-                              "assets/images/ellipse.png",
-                              height: 40,
-                              width: 40,
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).pop();
+                                DIService()
+                                    .inject<NavigationHandler>()
+                                    .navigate(ProfileScreen.route);
+                              },
+                              child: Image.asset(
+                                "assets/images/ellipse.png",
+                                height: 40,
+                                width: 40,
+                              ),
                             ),
                             const SizedBox(width: 10),
                             RichText(
                               text: TextSpan(
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontFamily: 'Inter',
                                   fontSize: 24,
                                   color: Colors.white,
                                 ),
                                 children: [
-                                  TextSpan(
+                                  const TextSpan(
                                     text: 'Olá, ',
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,
@@ -83,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   TextSpan(
                                     text: userName,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontWeight: FontWeight.w400,
                                     ),
                                   ),
@@ -203,7 +212,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           imagePath: "assets/images/money_bag.png",
                           title: "Crédito Consignado Privado",
                           description:
-                          "Empréstimos com as melhores taxas e desconto direto em folha.",
+                              "Empréstimos com as melhores taxas e desconto direto em folha.",
                           onPressed: () {
                             // Handle button press for product 1
                           },
@@ -216,7 +225,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           imagePath: "assets/images/dollar_round.png",
                           title: "Grande Sacado",
                           description:
-                          "Antecipe recebíveis sem burocracia. Mais agilidade para pagamentos, com atendimento personalizado de acordo com a necessidade da sua empresa.",
+                              "Antecipe recebíveis sem burocracia. Mais agilidade para pagamentos, com atendimento personalizado de acordo com a necessidade da sua empresa.",
                           onPressed: () {
                             // Handle button press for product 2
                           },

@@ -33,6 +33,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  brazilian_banks:
+    dependency: "direct main"
+    description:
+      name: brazilian_banks
+      sha256: "61ed8d66c3265b78fa3f1b646241a5e1f8aaeb17836dd06c0c219f381e05f15a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.6.0"
   characters:
     dependency: transitive
     description:

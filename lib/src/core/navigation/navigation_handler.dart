@@ -10,6 +10,8 @@ import 'package:passaqui/src/modules/hire/installment/hire_installment_screen.da
 import 'package:passaqui/src/modules/hire/steps/hire_step_screen.dart';
 import 'package:passaqui/src/modules/hire/value/hire_value_screen.dart';
 import 'package:passaqui/src/modules/home/home_page.dart';
+import 'package:passaqui/src/modules/profile/profile_screen.dart';
+import 'package:passaqui/src/modules/profile/update-bank-account/update_profile_screen.dart';
 import 'package:passaqui/src/modules/welcome/welcome_screen.dart';
 import 'package:passaqui/src/modules/withdraw/steps/withdraw_step_screen.dart';
 import 'package:passaqui/src/modules/withdraw/welcome/withdraw_welcome_screen.dart';
@@ -30,6 +32,14 @@ class NavigationHandler {
       case LoginScreen.route:
         return MaterialPageRoute(
           builder: (context) => const LoginScreen(),
+        );
+      case ProfileScreen.route:
+        return MaterialPageRoute(
+          builder: (context) => ProfileScreen(),
+        );
+      case UpdateBankProfileScreen.route:
+        return MaterialPageRoute(
+          builder: (context) => const UpdateBankProfileScreen(),
         );
       case SuccessScreen.route:
         return MaterialPageRoute(
@@ -80,7 +90,7 @@ class NavigationHandler {
         return MaterialPageRoute(
           builder: (context) => HireValueScreen(
             jsonResponse: args?['jsonResponse'] as Map<String, dynamic>?,
-            cpf : cpf ?? '',
+            cpf: cpf ?? '',
           ),
         );
       case HireConfirmCpfScreen.route:
@@ -92,15 +102,14 @@ class NavigationHandler {
         );
       case WrongPersonalInfoScreen.route:
         final args = settings.arguments as Map<String, dynamic>?;
-        return MaterialPageRoute(builder: (context) => WrongPersonalInfoScreen(
-          isEmail: args?['isEmail'] ?? false,
-        ));
+        return MaterialPageRoute(
+            builder: (context) => WrongPersonalInfoScreen(
+                  isEmail: args?['isEmail'] ?? false,
+                ));
       case HireConfirmEmailScreen.route:
         final args = settings.arguments as Map<String, String?>?;
         return MaterialPageRoute(
-          builder: (context) => HireConfirmEmailScreen(
-            cpf: args?['cpf']
-          ),
+          builder: (context) => HireConfirmEmailScreen(cpf: args?['cpf']),
         );
     }
     return null;
