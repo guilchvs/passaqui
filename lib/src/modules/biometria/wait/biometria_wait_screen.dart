@@ -29,7 +29,6 @@ class _BiometriaWaitScreenState extends State<BiometriaWaitScreen> {
   void initState() {
     super.initState();
 
-    // Start calling fetchBiometriaData() every 5 seconds
     _timer = Timer.periodic(Duration(seconds: 5), (timer) {
       print("Fetching API every 5 seconds!");
       fetchBiometriaData();

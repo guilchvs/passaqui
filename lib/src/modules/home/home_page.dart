@@ -900,6 +900,7 @@ import 'package:passaqui/src/core/di/service_locator.dart';
 import 'package:passaqui/src/core/navigation/navigation_handler.dart';
 import 'package:passaqui/src/modules/biometria/biometria_error_screen.dart';
 import 'package:passaqui/src/modules/biometria/biometria_success_screen.dart';
+import 'package:passaqui/src/modules/biometria/wait/biometria_wait_screen.dart';
 import 'package:passaqui/src/services/auth_service.dart'; // Import AuthService
 import 'package:passaqui/src/shared/widget/button.dart';
 import 'package:passaqui/src/shared/widget/card.dart';
@@ -947,11 +948,10 @@ class _HomeScreenState extends State<HomeScreen> {
       final int biometriaStatus = await _biometriaService.fetchBiometriaData();
       switch (biometriaStatus) {
         case 0:
-        // Navigate to default route
           print('Navigating to default route');
           DIService()
               .inject<NavigationHandler>()
-              .navigate(HireStepsScreen.route);
+              .navigate(BiometriaWaitScreen.route);
           break;
         case 1:
           print('Navigating to BiometriaErrorScreen');
@@ -968,6 +968,9 @@ class _HomeScreenState extends State<HomeScreen> {
           break;
         default:
           print('Unknown biometria status: $biometriaStatus');
+          DIService()
+              .inject<NavigationHandler>()
+              .navigate(HireStepsScreen.route);
           break;
       }
     } catch (e) {

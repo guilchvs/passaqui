@@ -109,7 +109,7 @@ class BiometriaService {
         final responseData = int.parse(response.body);
         return responseData;
       } else {
-        return 0;
+        return 100;
       }
     } catch (e) {
       print('Error fetching biometria data: $e');
