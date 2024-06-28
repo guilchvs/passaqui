@@ -20,6 +20,8 @@ import '../../modules/biometria/biometria_error_screen.dart';
 import '../../modules/biometria/biometria_success_screen.dart';
 import '../../modules/biometria/wait/biometria_wait_screen.dart';
 import '../../modules/hire/wrongInfo/wrong_cpf_screen.dart';
+import '../../modules/profile/profile_screen.dart';
+import '../../modules/profile/update-bank-account/update_profile_screen.dart';
 
 class NavigationHandler {
   final GlobalKey<NavigatorState> _globalKey = GlobalKey();
@@ -50,6 +52,14 @@ class NavigationHandler {
       case ForgotPasswordSuccessScreen.route:
         return MaterialPageRoute(
           builder: (context) => const ForgotPasswordSuccessScreen(),
+        );
+      case ProfileScreen.route:
+        return MaterialPageRoute(
+          builder: (context) => ProfileScreen(),
+        );
+      case UpdateBankProfileScreen.route:
+        return MaterialPageRoute(
+          builder: (context) => const UpdateBankProfileScreen(),
         );
       case WithdrawStepsScreen.route:
         return MaterialPageRoute(

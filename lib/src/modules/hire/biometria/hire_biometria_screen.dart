@@ -3,6 +3,9 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:passaqui/src/shared/widget/appbar.dart';
 
+import '../../../core/di/service_locator.dart';
+import '../../../core/navigation/navigation_handler.dart';
+
 class HireBiometriaScreen extends StatefulWidget {
   static const String route = "/hire-biometria";
   final String url;
@@ -16,6 +19,7 @@ class HireBiometriaScreen extends StatefulWidget {
 class _HireBiometriaScreenState extends State<HireBiometriaScreen> {
   InAppWebViewController? _webViewController;
   bool _cameraPermissionGranted = false;
+  final NavigationHandler? navigationHandler = DIService().inject<NavigationHandler>(); // Replace with your DI service logic
 
   @override
   void initState() {
@@ -49,6 +53,8 @@ class _HireBiometriaScreenState extends State<HireBiometriaScreen> {
         title: 'Voltar para o app',
         showLogo: false,
         showBackButton: true,
+        navigationHandler: navigationHandler,
+
       ),
       body: _cameraPermissionGranted
           ? InAppWebView(

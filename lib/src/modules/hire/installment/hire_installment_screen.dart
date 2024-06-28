@@ -49,6 +49,15 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
   List<_InstallmentOption> _installmentOptions = []; // List to store installment options
   dynamic _jsonResponse;
 
+
+  @override
+  void initState() {
+    super.initState();
+    print('CPF received: ${widget.cpf}');
+    // Other initialization code here
+  }
+
+
   Future<void> _simulateApiCall(String cpf, double? amount) async {
     setState(() {
       _isLoading = true; // Set loading state while waiting for API response
@@ -301,7 +310,6 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
                               onTap: () {
                                 final amount = double.tryParse(_amountController.text.replaceAll(',', '.'));
                                   _simulateApiCall(widget.cpf ?? '', amount);
-                                  // Unfocus keyboard after API call
                                   FocusScope.of(context).unfocus();
 
                                   // Navigate to HireValueScreen with jsonResponse as argument

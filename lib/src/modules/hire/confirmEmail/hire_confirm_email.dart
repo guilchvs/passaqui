@@ -409,6 +409,7 @@ class _HireConfirmEmailScreenState extends State<HireConfirmEmailScreen>
 
     try {
       int biometriaStatus = await _biometriaService.fetchBiometriaData();
+      print("STATUS DA BIOMETRIA: $biometriaStatus");
       _navigateToScreen(biometriaStatus);
     } catch (e) {
       print('Error fetching biometria data: $e');
@@ -431,13 +432,13 @@ class _HireConfirmEmailScreenState extends State<HireConfirmEmailScreen>
   void _navigateToScreen(int biometriaStatus) {
     switch (biometriaStatus) {
       case 0:
-        DIService().inject<NavigationHandler>().navigate(BiometriaWaitScreen.route);
+        //DIService().inject<NavigationHandler>().navigate(BiometriaWaitScreen.route);
         break;
       case 1:
-        DIService().inject<NavigationHandler>().navigate(BiometriaSucessScreen.route);
+        DIService().inject<NavigationHandler>().navigate(BiometriaErrorScreen.route);
         break;
       case 2:
-        DIService().inject<NavigationHandler>().navigate(BiometriaErrorScreen.route);
+        DIService().inject<NavigationHandler>().navigate(BiometriaSucessScreen.route);
         break;
       case 3:
       // Do nothing or stay on the current screen

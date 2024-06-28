@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:passaqui/src/modules/profile/profile_screen.dart';
 import 'package:passaqui/src/shared/widget/appbar.dart';
 import 'package:passaqui/src/shared/widget/button.dart';
 
@@ -50,23 +51,24 @@ class _BiometriaSucessScreenState extends State<BiometriaSucessScreen> {
             ),
             const SizedBox(height: 26),
             Text(
-              'Seu dinheiro já se encontra em sua conta PassAqui e abaixo você pode ver seu comprovante.',
+              // 'Seu dinheiro já se encontra em sua conta PassAqui e abaixo você pode ver seu comprovante.',
+              'Para continuarmos nosso processo, informe seus dados bancários clicando no botão abaixo',
               style: GoogleFonts.roboto(
                 color: Colors.white,
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.w400,
               ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 32),
             PassaquiButton(
-              label: 'Ver contrato',
+              label: 'Adicionar dados bancários',
               centerText: true,
               borderRadius: 50,
               style: PassaquiButtonStyle.invertedPrimary,
               onTap: () {
                 DIService().inject<NavigationHandler>().navigate(
-                  BiometriaErrorScreen.route,
+                  ProfileScreen.route,
                 );
               },
             ),
