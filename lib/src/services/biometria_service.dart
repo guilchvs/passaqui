@@ -109,7 +109,7 @@ class BiometriaService {
         final responseData = int.parse(response.body);
         return responseData;
       } else {
-        throw Exception('Failed to load biometria data: ${response.statusCode}');
+        return 0;
       }
     } catch (e) {
       print('Error fetching biometria data: $e');
