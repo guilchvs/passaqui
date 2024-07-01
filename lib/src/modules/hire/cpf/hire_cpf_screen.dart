@@ -37,7 +37,6 @@ class _HireCpfScreenState extends State<HireCpfScreen> {
 
   void _initializeCpf() async{
     cpf = await _authService.getCpf();
-    print(cpf);
     setState(() {
     });
   }
@@ -59,7 +58,10 @@ class _HireCpfScreenState extends State<HireCpfScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text("CPF não cadastrado"),
-        content: Text("O CPF informado não corresponde com o CPF cadastrado."),
+        content: Text(
+            "O CPF informado não corresponde ao CPF cadastrado.",
+          style: TextStyle(color: Colors.red),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),

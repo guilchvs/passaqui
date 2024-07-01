@@ -52,7 +52,6 @@ class _BiometriaSucessScreenState extends State<BiometriaSucessScreen> {
             ),
             const SizedBox(height: 26),
             Text(
-              // 'Seu dinheiro já se encontra em sua conta PassAqui e abaixo você pode ver seu comprovante.',
               'Para continuarmos nosso processo, informe seus dados bancários clicando no botão abaixo',
               style: GoogleFonts.roboto(
                 color: Colors.white,

@@ -20,12 +20,12 @@ class AuthService {
 
     if (response.statusCode == 200) {
       final responseBody = jsonDecode(response.body);
-      print(response.body);
       final token = responseBody['jwtToken'];
       final nome = responseBody['nome'];
       final cpf = responseBody['cpf'];
       final email = responseBody['email'];
       final prefs = await SharedPreferences.getInstance();
+
       await prefs.setString('jwt', token);
       await prefs.setString('nome', nome);
       await prefs.setString('cpf', cpf);
@@ -80,7 +80,7 @@ class AuthService {
       body: body,
     );
 
-    return response; // Return the HTTP response object
+    return response;
   }
   Future<String?> getToken() async {
     final prefs = await SharedPreferences.getInstance();

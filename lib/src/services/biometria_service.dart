@@ -80,7 +80,7 @@
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:passaqui/src/services/auth_service.dart'; // Import your AuthService
+import 'package:passaqui/src/services/auth_service.dart';
 
 class BiometriaService {
   final String baseUrl =
