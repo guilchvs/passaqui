@@ -37,6 +37,7 @@ class _HireCpfScreenState extends State<HireCpfScreen> {
 
   void _initializeCpf() async{
     cpf = await _authService.getCpf();
+    print(cpf);
     setState(() {
     });
   }
@@ -179,7 +180,7 @@ class _HireCpfScreenState extends State<HireCpfScreen> {
                             width: 200, // Adjust width as needed
                             child: TextFormField(
                               controller: cpfController,
-                              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                              inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(11)],
                               keyboardType: TextInputType.number,
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF136048),
