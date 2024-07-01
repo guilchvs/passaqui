@@ -54,7 +54,7 @@ class _BiometriaErrorScreenState extends State<BiometriaErrorScreen> {
             ),
             const SizedBox(height: 26),
             Text(
-              'Infelizmente não conseguimos validar seus dados e seu crédito não foi aprovado. Mas fique tranquilo, você poderá tentar novamente.',
+              'Infelizmente não conseguimos validar seus documentos. Mas fique tranquilo, você poderá tentar novamente.',
               style: GoogleFonts.roboto(
                 color: Colors.white,
                 fontSize: 20,

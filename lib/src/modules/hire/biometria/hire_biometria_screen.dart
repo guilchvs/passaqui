@@ -50,7 +50,7 @@ class _HireBiometriaScreenState extends State<HireBiometriaScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PassaquiAppBar(
-        title: 'Voltar para o app',
+        title: 'Voltar',
         showLogo: false,
         showBackButton: true,
         navigationHandler: navigationHandler,
