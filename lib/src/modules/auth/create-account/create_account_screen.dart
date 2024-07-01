@@ -219,7 +219,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       }
     } else if (_currentPageIndex == 6) {
       bool isEmailValid = RegExp(
-          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
           .hasMatch(controllers[6].text.trim());
       if (!isEmailValid) {
         setState(() {
@@ -230,7 +230,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       return true;
     } else if (_currentPageIndex == 8 && controllers[8].text.isNotEmpty) {
       _findCEPandFillAddress();
-    } else if(_currentPageIndex != 11){
+    } else if (_currentPageIndex != 11) {
       // Verifica se o campo está vazio em outras etapas
       if (controllers[_currentPageIndex].text.isNotEmpty) {
         return true;
@@ -240,7 +240,6 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     }
     return true;
   }
-
 
   bool _containsLettersAndNumbers(String value) {
     bool hasLetters = false;
@@ -318,7 +317,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
             LinearProgressIndicator(
               value: (_currentPageIndex + 1) / labels.length,
               valueColor:
-              AlwaysStoppedAnimation<Color>(const Color(0xFFA8CA4B)),
+                  AlwaysStoppedAnimation<Color>(const Color(0xFFA8CA4B)),
               backgroundColor: Colors.grey[50],
             ),
             Container(
@@ -351,8 +350,10 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
                                 TextSpan(
-                                  text: '\n\nPara começar precisamos de algumas informações. Será rápido e fácil.',
-                                  style: TextStyle(fontWeight: FontWeight.normal),
+                                  text:
+                                      '\n\nPara começar precisamos de algumas informações. Será rápido e fácil.',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.normal),
                                 ),
                               ],
                             ),
@@ -387,6 +388,13 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                           PassaquiTextField(
                             placeholder: placeholders[index],
                             editingController: controllers[index],
+                            keyBoardType: index == 3 ||
+                                    index == 4 ||
+                                    index == 7 ||
+                                    index == 8 ||
+                                    index == 10
+                                ? TextInputType.number
+                                : TextInputType.text,
                             isVisible: index != 1 && index != 2,
                             showVisibility: index == 1 || index == 2,
                             placeholderColor: Colors.grey,
@@ -439,7 +447,11 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                 ),
                               ),
                             ),
-                          if (index == 2 && showError && controllers[1].text.isNotEmpty && controllers[2].text.isNotEmpty && controllers[1].text != controllers[2].text)
+                          if (index == 2 &&
+                              showError &&
+                              controllers[1].text.isNotEmpty &&
+                              controllers[2].text.isNotEmpty &&
+                              controllers[1].text != controllers[2].text)
                             Padding(
                               padding: const EdgeInsets.only(left: 16.0),
                               child: Text(
@@ -461,7 +473,10 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                 ),
                               ),
                             ),
-                          if (index == 4 && showError && controllers[4].text.isNotEmpty && controllers[4].text.length != 11)
+                          if (index == 4 &&
+                              showError &&
+                              controllers[4].text.isNotEmpty &&
+                              controllers[4].text.length != 11)
                             Padding(
                               padding: const EdgeInsets.only(left: 16.0),
                               child: Text(
@@ -510,15 +525,14 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
           ),
           hintText: 'dd-mm-yyyy',
           border: OutlineInputBorder(
-              borderSide: BorderSide(color: const Color(0xFFA8CA4B), width: 2.0)
-          ),
+              borderSide:
+                  BorderSide(color: const Color(0xFFA8CA4B), width: 2.0)),
           focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: const Color(0xFFA8CA4B), width: 2.0)
-          ),
+              borderSide:
+                  BorderSide(color: const Color(0xFFA8CA4B), width: 2.0)),
           hintStyle: TextStyle(
             color: const Color(0xFFA8CA4B),
-          )
-      ),
+          )),
       readOnly: true,
       onTap: () async {
         DateTime? picked = await showDatePicker(
