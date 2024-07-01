@@ -9,6 +9,7 @@ import 'package:passaqui/src/shared/widget/button.dart';
 
 import '../../../core/di/service_locator.dart';
 import '../../../core/navigation/navigation_handler.dart';
+import '../../../services/biometria_service.dart';
 import '../biometria_error_screen.dart';
 import '../biometria_success_screen.dart';
 
@@ -23,7 +24,9 @@ class BiometriaWaitScreen extends StatefulWidget {
 
 class _BiometriaWaitScreenState extends State<BiometriaWaitScreen> {
   late Timer _timer;
-  int? _biometriaResult; // Variable to store fetched result, assuming it's an integer
+  int? _biometriaResult;
+  final BiometriaService _biometriaService = DIService().inject<BiometriaService>();
+
 
   @override
   void initState() {
@@ -42,10 +45,8 @@ class _BiometriaWaitScreenState extends State<BiometriaWaitScreen> {
     super.dispose();
   }
 
-  void fetchBiometriaData() {
-    // Replace with your actual API call logic to fetch biometria data
-    // Simulating a result for demonstration
-    _biometriaResult = 0; // Replace with your actual fetched result (0, 1, or 2)
+  void fetchBiometriaData() async {
+    _biometriaResult = await _biometriaService.fetchBiometriaData();
 
     print('Biometria Result: $_biometriaResult'); // Print the fetched result
 
