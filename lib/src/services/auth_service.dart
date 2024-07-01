@@ -48,6 +48,9 @@ class AuthService {
     required String complemento,
     required String dataNascimento,
     required String rg,
+    required String bairro,
+    required String cidade,
+    required String estado,
   }) async {
     final url = Uri.parse('$baseUrl/Account/register');
     final body = jsonEncode({
@@ -64,6 +67,9 @@ class AuthService {
       'complemento': complemento,
       'dataNascimento': dataNascimento,
       'rg': rg,
+      'bairro': bairro,
+      'cidade': cidade,
+      'uf': estado,
     });
 
     final response = await http.post(

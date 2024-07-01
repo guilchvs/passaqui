@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:passaqui/src/core/di/service_locator.dart';
 import 'package:passaqui/src/core/navigation/navigation_handler.dart';
 import 'package:passaqui/src/modules/hire/installment/hire_installment_screen.dart';
+import 'package:passaqui/src/services/auth_service.dart';
 import 'package:passaqui/src/shared/widget/appbar.dart';
 import 'package:passaqui/src/shared/widget/button.dart';
 import 'package:passaqui/src/shared/widget/card.dart';
@@ -21,18 +22,53 @@ class HireCpfScreen extends StatefulWidget {
 
 class _HireCpfScreenState extends State<HireCpfScreen> {
   final TextEditingController cpfController = TextEditingController();
+  final AuthService _authService = DIService().inject<AuthService>();
+  late String? cpf;
 
   String _formatCpf(String cpf){
     return cpf.replaceAll(RegExp(r'[^0-9]'), '');
   }
 
-
-
-
   @override
   void initState() {
     super.initState();
+    _initializeCpf();
   }
+
+  void _initializeCpf() async{
+    cpf = await _authService.getCpf();
+    setState(() {
+    });
+  }
+
+  void _checkAndNavigate() {
+    _logCpfInput();
+    final enteredCpf = _formatCpf(cpfController.text);
+    if (cpf == enteredCpf) {
+      DIService()
+          .inject<NavigationHandler>()
+          .navigate(HireInstallmentScreen.route, arguments: {'cpf': enteredCpf});
+    } else {
+      _showCpfMismatchDialog();
+    }
+  }
+
+  void _showCpfMismatchDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("CPF não cadastrado"),
+        content: Text("O CPF informado não corresponde com o CPF cadastrado."),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text("OK"),
+          ),
+        ],
+      ),
+    );
+  }
+
 
   void _logCpfInput() {
     final cpfInput = cpfController.text.replaceAll('.', '').replaceAll('-', '');
@@ -107,10 +143,11 @@ class _HireCpfScreenState extends State<HireCpfScreen> {
                             label: "Realizar consulta",
                             showArrow: true,
                             onTap: () {
-                              _logCpfInput();
-                              DIService()
-                                  .inject<NavigationHandler>()
-                                  .navigate(HireInstallmentScreen.route, arguments: {'cpf': _formatCpf(cpfController.text)});
+                              // _logCpfInput();
+                              // DIService()
+                              //     .inject<NavigationHandler>()
+                              //     .navigate(HireInstallmentScreen.route, arguments: {'cpf': _formatCpf(cpfController.text)});
+                              _checkAndNavigate();
                             },
                           )
                         ],

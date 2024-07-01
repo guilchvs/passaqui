@@ -14,8 +14,14 @@ import 'package:passaqui/src/modules/welcome/welcome_screen.dart';
 import 'package:passaqui/src/modules/withdraw/steps/withdraw_step_screen.dart';
 import 'package:passaqui/src/modules/withdraw/welcome/withdraw_welcome_screen.dart';
 import 'package:passaqui/src/modules/hire/confirmCpf/confirm_cpf_screen.dart';
+import 'package:passaqui/src/modules/hire/biometria/hire_biometria_screen.dart';
 
+import '../../modules/biometria/biometria_error_screen.dart';
+import '../../modules/biometria/biometria_success_screen.dart';
+import '../../modules/biometria/wait/biometria_wait_screen.dart';
 import '../../modules/hire/wrongInfo/wrong_cpf_screen.dart';
+import '../../modules/profile/profile_screen.dart';
+import '../../modules/profile/update-bank-account/update_profile_screen.dart';
 
 class NavigationHandler {
   final GlobalKey<NavigatorState> _globalKey = GlobalKey();
@@ -46,6 +52,14 @@ class NavigationHandler {
       case ForgotPasswordSuccessScreen.route:
         return MaterialPageRoute(
           builder: (context) => const ForgotPasswordSuccessScreen(),
+        );
+      case ProfileScreen.route:
+        return MaterialPageRoute(
+          builder: (context) => ProfileScreen(),
+        );
+      case UpdateBankProfileScreen.route:
+        return MaterialPageRoute(
+          builder: (context) => const UpdateBankProfileScreen(),
         );
       case WithdrawStepsScreen.route:
         return MaterialPageRoute(
@@ -100,6 +114,28 @@ class NavigationHandler {
         return MaterialPageRoute(
           builder: (context) => HireConfirmEmailScreen(
             cpf: args?['cpf']
+          ),
+        );
+      case HireBiometriaScreen.route:
+        final args = settings.arguments as Map<String, String>?;
+        return MaterialPageRoute(
+          builder: (context) => HireBiometriaScreen(
+              url: args?['url'] ?? ''
+          ),
+        );
+      case BiometriaSucessScreen.route:
+        return MaterialPageRoute(
+          builder: (context) => BiometriaSucessScreen(
+          ),
+        );
+      case BiometriaErrorScreen.route:
+        return MaterialPageRoute(
+          builder: (context) => BiometriaErrorScreen(
+          ),
+        );
+      case BiometriaWaitScreen.route:
+        return MaterialPageRoute(
+          builder: (context) => BiometriaWaitScreen(
           ),
         );
     }
