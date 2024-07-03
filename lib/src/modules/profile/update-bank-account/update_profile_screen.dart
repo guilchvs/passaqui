@@ -1,3 +1,4 @@
+import 'package:brazilian_banks/brazilian_banks.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:passaqui/src/modules/home/home_page.dart';
@@ -27,6 +28,7 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
   final AuthService _authService = DIService().inject<AuthService>();
   final AccountService _accountService = DIService().inject<AccountService>();
   late String? cpf;
+  late List<BrasilApiBanks> banks = [];
 
   late TextEditingController bankInputController;
   late TextEditingController agencyInputController;
@@ -51,6 +53,7 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
     bankAccountInputController = TextEditingController();
     bankAccountDigitInputController = TextEditingController();
     _initializeCpf();
+    _fetchBanks();
   }
 
   @override
@@ -66,6 +69,11 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
   void _initializeCpf() async {
     cpf = await _authService.getCpf();
     setState(() {});
+  }
+
+  void _fetchBanks() async{
+    banks = await _accountService.getBrazilianBanksList();
+    setState((){});
   }
 
   @override
@@ -252,8 +260,8 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
                                         ),
                                         Text(
                                           bankAccountDigitInputController.text.isEmpty
-                                          ? '${bankAccountInputController.text}'
-                                          : '${bankAccountInputController.text}-${bankAccountDigitInputController.text}',
+                                              ? '${bankAccountInputController.text}'
+                                              : '${bankAccountInputController.text}-${bankAccountDigitInputController.text}',
                                           style: const TextStyle(
                                               color: Colors.white),
                                         ),
