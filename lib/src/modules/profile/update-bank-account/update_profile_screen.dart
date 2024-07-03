@@ -1,6 +1,6 @@
 import 'package:brazilian_banks/brazilian_banks.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:passaqui/src/modules/home/home_page.dart';
 import 'package:passaqui/src/modules/profile/profile_service.dart';
 import 'package:passaqui/src/modules/profile/update-bank-account/update_bank_account_controller.dart';
@@ -36,7 +36,9 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
   late TextEditingController bankAccountInputController;
   late TextEditingController bankAccountDigitInputController;
 
-  bool isFormValid() {
+  final FocusNode bankInputFocusNode = FocusNode();
+
+  bool _isFormValid() {
     return bankInputController.text.isNotEmpty &&
         agencyInputController.text.isNotEmpty &&
         agencyDigitInputController.text.isNotEmpty &&
@@ -63,6 +65,7 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
     agencyDigitInputController.dispose();
     bankAccountInputController.dispose();
     bankAccountDigitInputController.dispose();
+    bankInputFocusNode.dispose();
     super.dispose();
   }
 
@@ -71,9 +74,16 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
     setState(() {});
   }
 
-  void _fetchBanks() async{
-    banks = await _accountService.getBrazilianBanksList();
-    setState((){});
+  void _fetchBanks() async {
+    try {
+      List<BrasilApiBanks> fetchedBanks =
+          await _accountService.getBrazilianBanksList();
+      setState(() {
+        banks = fetchedBanks.where((bank) => bank.code != null).toList();
+      });
+    } catch (e) {
+      //
+    }
   }
 
   @override
@@ -111,10 +121,70 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  PassaquiTextField(
-                    keyBoardType: TextInputType.number,
-                    editingController: bankInputController,
-                    placeholder: "Digite seu Banco",
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 22.0),
+                    child: TypeAheadFormField<BrasilApiBanks>(
+                      textFieldConfiguration: TextFieldConfiguration(
+                          controller: bankInputController,
+                          focusNode: bankInputFocusNode,
+                          keyboardType: TextInputType.text,
+                          decoration: InputDecoration(
+                              hintText: "Digite seu Banco",
+                              filled: true,
+                              fillColor: Colors.transparent,
+                              border: InputBorder.none,
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0xFFA8CA4B),
+                                  width: 2.0,
+                                ),
+                              ),
+                              hintStyle: TextStyle(
+                                fontFamily: 'Inter',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                height: 1.5,
+                                color: Colors.grey,
+                              ),
+                              contentPadding: EdgeInsets.zero),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Inter',
+                            fontSize: 16,
+                          ),
+                          onTap: () {
+                            bankInputController.selection = TextSelection(
+                              baseOffset: 0,
+                              extentOffset: bankInputController.text.length,
+                            );
+                          }),
+                      suggestionsCallback: (pattern) {
+                        return banks.where((bank) =>
+                            (bank.fullName
+                                    ?.toLowerCase()
+                                    .contains(pattern.toLowerCase()) ??
+                                false) ||
+                            bank.code.toString().contains(pattern));
+                      },
+                      itemBuilder: (context, bank) {
+                        return ListTile(
+                            title: Text('${bank.code} - ${bank.fullName}',
+                                style: TextStyle(
+                                  fontFamily: 'Inter',
+                                )));
+                      },
+                      onSuggestionSelected: (bank) {
+                        bankInputController.text =
+                            '${bank.code} - ${bank.fullName}';
+                      },
+                      noItemsFoundBuilder: (context) => const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'Nenhum banco encontrado.',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 16),
                   Row(
@@ -165,7 +235,7 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
             Expanded(
               child: Container(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: SizedBox(
@@ -186,7 +256,8 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
                               builder: (BuildContext context) {
                                 return AlertDialog(
                                   title: const Text("Erro"),
-                                  content: const Text("Todos os campos são obrigatórios."),
+                                  content: const Text(
+                                      "Todos os campos são obrigatórios."),
                                   actions: <Widget>[
                                     TextButton(
                                       child: const Text("OK"),
@@ -207,7 +278,8 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
                               ),
                               builder: (context) => CustomBottomSheet(
                                 title: 'Confirme os dados',
-                                buttonStyle: PassaquiButtonStyle.invertedPrimary,
+                                buttonStyle:
+                                    PassaquiButtonStyle.invertedPrimary,
                                 background: PassaquiBottomSheetStyle.primary,
                                 content: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -222,10 +294,14 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        Text(
-                                          bankInputController.text,
-                                          style: const TextStyle(
-                                              color: Colors.white),
+                                        Flexible(
+                                          child: Text(
+                                            bankInputController.text,
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                            overflow: TextOverflow.ellipsis,
+                                          
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -240,7 +316,8 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
                                               fontWeight: FontWeight.bold),
                                         ),
                                         Text(
-                                          agencyDigitInputController.text.isEmpty
+                                          agencyDigitInputController
+                                                  .text.isEmpty
                                               ? '${agencyInputController.text}'
                                               : '${agencyInputController.text}-${agencyDigitInputController.text}',
                                           style: const TextStyle(
@@ -259,7 +336,8 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
                                               fontWeight: FontWeight.bold),
                                         ),
                                         Text(
-                                          bankAccountDigitInputController.text.isEmpty
+                                          bankAccountDigitInputController
+                                                  .text.isEmpty
                                               ? '${bankAccountInputController.text}'
                                               : '${bankAccountInputController.text}-${bankAccountDigitInputController.text}',
                                           style: const TextStyle(
@@ -272,19 +350,27 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
                                 ),
                                 onTap: () async {
                                   try {
-                                    int bankCode = int.parse(bankInputController.text);
+                                    int bankCode = int.tryParse(
+                                            bankInputController.text
+                                                .split(' - ')[0]
+                                                .trim()) ??
+                                        0;
                                     String agency = agencyInputController.text;
-                                    String agencyDigit = agencyDigitInputController.text;
-                                    String bankAccount = bankAccountInputController.text;
-                                    String bankAccountDigit = bankAccountDigitInputController.text;
+                                    String agencyDigit =
+                                        agencyDigitInputController.text;
+                                    String bankAccount =
+                                        bankAccountInputController.text;
+                                    String bankAccountDigit =
+                                        bankAccountDigitInputController.text;
 
-                                    if (agency.isEmpty || bankAccount.isEmpty ) {
+                                    if (agency.isEmpty || bankAccount.isEmpty) {
                                       showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
                                           return AlertDialog(
                                             title: const Text("Erro"),
-                                            content: const Text("Os campos agência e banco são obrigatórios."),
+                                            content: const Text(
+                                                "Os campos agência e banco são obrigatórios."),
                                             actions: <Widget>[
                                               TextButton(
                                                 child: const Text("OK"),
@@ -304,10 +390,12 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
                                     print('Agency: $agency');
                                     print('Agency Digit: $agencyDigit');
                                     print('Bank Account: $bankAccount');
-                                    print('Bank Account Digit: $bankAccountDigit');
+                                    print(
+                                        'Bank Account Digit: $bankAccountDigit');
                                     print('CPF: $cpf');
 
-                                    var response = await _accountService.saveBankAccount(
+                                    var response =
+                                        await _accountService.saveBankAccount(
                                       bankCode: bankCode,
                                       bankAccount: bankAccount,
                                       bankAccountDigit: bankAccountDigit,
@@ -317,14 +405,17 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
                                     );
 
                                     if (response.statusCode == 200) {
-                                      DIService().inject<NavigationHandler>().navigate(SendProposalScreen.route);
+                                      DIService()
+                                          .inject<NavigationHandler>()
+                                          .navigate(SendProposalScreen.route);
                                     } else {
                                       showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
                                           return AlertDialog(
                                             title: const Text("Erro"),
-                                            content: const Text("Não foi possível cadastrar os dados bancários. Tente novamente"),
+                                            content: const Text(
+                                                "Não foi possível cadastrar os dados bancários. Tente novamente"),
                                             actions: <Widget>[
                                               TextButton(
                                                 child: const Text("OK"),
@@ -344,7 +435,8 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
                                       builder: (BuildContext context) {
                                         return AlertDialog(
                                           title: const Text("Erro"),
-                                          content: const Text("Ocorreu um erro ao processar os dados. Por favor, verifique os campos e tente novamente."),
+                                          content: const Text(
+                                              "Ocorreu um erro ao processar os dados. Por favor, verifique os campos e tente novamente."),
                                           actions: <Widget>[
                                             TextButton(
                                               child: const Text("OK"),
@@ -358,7 +450,7 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
                                     );
                                   }
                                 },
-                                textOnTap: 'Salvar e continuar',
+                                textOnTap: 'Salvar e continuar'
                               ),
                             );
                           }

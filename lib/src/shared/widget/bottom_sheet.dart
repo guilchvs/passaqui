@@ -63,6 +63,7 @@ class CustomBottomSheet extends StatelessWidget {
             content is Widget ? content : Text(content.toString()),
             const SizedBox(height: 20),
             PassaquiButton(
+              showArrow: true,
               style: buttonStyle,
               onTap: onTap,
               label: textOnTap,
