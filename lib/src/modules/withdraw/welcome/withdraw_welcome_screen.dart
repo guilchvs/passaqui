@@ -105,7 +105,7 @@ class _WithdrawWelcomeScreenState extends State<WithdrawWelcomeScreen> {
                   ),
                   SizedBox(height: 40),
                   PassaquiButton(
-                    label: "Habilitar Saque-Aniversário",
+                    label: "Antecipar Saque-Aniversário",
                     textColor: Color.fromRGBO(18, 96, 73, 1),
                     borderColor: Color.fromRGBO(18, 96, 73, 1),
                     style: PassaquiButtonStyle.secondary,
