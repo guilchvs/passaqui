@@ -1,10 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:passaqui/src/modules/auth/login/login_screen.dart';
 import 'package:passaqui/src/modules/home/home_page.dart';
+import 'package:passaqui/src/modules/profile/profile_screen.dart';
 import 'package:passaqui/src/modules/profile/profile_service.dart';
 import 'package:passaqui/src/modules/profile/update-bank-account/update_bank_account_controller.dart';
 import 'package:passaqui/src/modules/proposal/send_proposal.dart';
+import 'package:passaqui/src/modules/withdraw/welcome/withdraw_welcome_screen.dart';
 import 'package:passaqui/src/services/auth_service.dart';
+import 'package:passaqui/src/shared/widget/appbar.dart';
 import 'package:passaqui/src/shared/widget/bottom_sheet.dart';
 import 'package:passaqui/src/shared/widget/button.dart';
 import 'package:passaqui/src/shared/widget/text_field.dart';
@@ -35,6 +39,7 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
   late TextEditingController bankAccountDigitInputController;
 
   bool isFormValid() {
+    // Validar se os campos estão preenchidos corretamente
     return bankInputController.text.isNotEmpty &&
         agencyInputController.text.isNotEmpty &&
         agencyDigitInputController.text.isNotEmpty &&
@@ -50,7 +55,7 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
     agencyDigitInputController = TextEditingController();
     bankAccountInputController = TextEditingController();
     bankAccountDigitInputController = TextEditingController();
-    _initializeCpf();
+    // isFormValid();
   }
 
   @override
@@ -71,6 +76,7 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // appBar: const PassaquiAppBar(showBackButton: true, showLogo: false),
       backgroundColor: const Color.fromRGBO(18, 96, 73, 1),
       body: SafeArea(
         child: Column(
@@ -157,7 +163,7 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
             Expanded(
               child: Container(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: SizedBox(
@@ -170,190 +176,81 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
                         showArrow: true,
                         minimumSize: const Size(200, 40),
                         onTap: () {
-                          if (bankInputController.text.isEmpty ||
-                              agencyInputController.text.isEmpty ||
-                              bankAccountInputController.text.isEmpty) {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text("Erro"),
-                                  content: const Text("Todos os campos são obrigatórios."),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      child: const Text("OK"),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ],
-                                );
+                          showModalBottomSheet(
+                            context: context,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(20)),
+                            ),
+                            builder: (context) => CustomBottomSheet(
+                              title: 'Confirme os dados',
+                              buttonStyle: PassaquiButtonStyle.invertedPrimary,
+                              background: PassaquiBottomSheetStyle.primary,
+                              content: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const SizedBox(height: 8),
+                                  Row(
+                                    children: [
+                                      const Text(
+                                        'Banco: ',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        bankInputController.text,
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Row(
+                                    children: [
+                                      const Text(
+                                        'Agência: ',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        '${agencyInputController.text}-${agencyDigitInputController.text}',
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Row(
+                                    children: [
+                                      const Text(
+                                        'Conta: ',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        '${bankAccountInputController.text}-${bankAccountDigitInputController.text}',
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 44),
+                                ],
+                              ),
+                              onTap: () {
+                                DIService()
+                                    .inject<NavigationHandler>()
+                                    .navigate(SendProposalScreen.route);
                               },
-                            );
-                          } else {
-                            showModalBottomSheet(
-                              context: context,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(20)),
-                              ),
-                              builder: (context) => CustomBottomSheet(
-                                title: 'Confirme os dados',
-                                buttonStyle: PassaquiButtonStyle.invertedPrimary,
-                                background: PassaquiBottomSheetStyle.primary,
-                                content: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const SizedBox(height: 8),
-                                    Row(
-                                      children: [
-                                        const Text(
-                                          'Banco: ',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                          bankInputController.text,
-                                          style: const TextStyle(
-                                              color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Row(
-                                      children: [
-                                        const Text(
-                                          'Agência: ',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                          agencyDigitInputController.text.isEmpty
-                                              ? '${agencyInputController.text}'
-                                              : '${agencyInputController.text}-${agencyDigitInputController.text}',
-                                          style: const TextStyle(
-                                              color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Row(
-                                      children: [
-                                        const Text(
-                                          'Conta: ',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                          bankAccountDigitInputController.text.isEmpty
-                                          ? '${bankAccountInputController.text}'
-                                          : '${bankAccountInputController.text}-${bankAccountDigitInputController.text}',
-                                          style: const TextStyle(
-                                              color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 44),
-                                  ],
-                                ),
-                                onTap: () async {
-                                  try {
-                                    int bankCode = int.parse(bankInputController.text);
-                                    String agency = agencyInputController.text;
-                                    String agencyDigit = agencyDigitInputController.text;
-                                    String bankAccount = bankAccountInputController.text;
-                                    String bankAccountDigit = bankAccountDigitInputController.text;
-
-                                    if (agency.isEmpty || bankAccount.isEmpty ) {
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: const Text("Erro"),
-                                            content: const Text("Os campos agência e banco são obrigatórios."),
-                                            actions: <Widget>[
-                                              TextButton(
-                                                child: const Text("OK"),
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                                      return;
-                                    }
-
-                                    // Print inputs for debugging
-                                    print('Bank Code: $bankCode');
-                                    print('Agency: $agency');
-                                    print('Agency Digit: $agencyDigit');
-                                    print('Bank Account: $bankAccount');
-                                    print('Bank Account Digit: $bankAccountDigit');
-                                    print('CPF: $cpf');
-
-                                    var response = await _accountService.saveBankAccount(
-                                      bankCode: bankCode,
-                                      bankAccount: bankAccount,
-                                      bankAccountDigit: bankAccountDigit,
-                                      agency: agency,
-                                      agencyDigit: agencyDigit,
-                                      cpf: cpf as String,
-                                    );
-
-                                    if (response.statusCode == 200) {
-                                      DIService().inject<NavigationHandler>().navigate(SendProposalScreen.route);
-                                    } else {
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: const Text("Erro"),
-                                            content: const Text("Não foi possível cadastrar os dados bancários. Tente novamente"),
-                                            actions: <Widget>[
-                                              TextButton(
-                                                child: const Text("OK"),
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                                    }
-                                  } catch (e) {
-                                    print('Exception caught: $e');
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: const Text("Erro"),
-                                          content: const Text("Ocorreu um erro ao processar os dados. Por favor, verifique os campos e tente novamente."),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              child: const Text("OK"),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                  }
-                                },
-                                textOnTap: 'Salvar e continuar',
-                              ),
-                            );
-                          }
+                              textOnTap: 'Salvar e continuar',
+                            ),
+                          );
                         },
                       ),
                     ),
