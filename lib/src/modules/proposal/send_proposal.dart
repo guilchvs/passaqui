@@ -68,13 +68,16 @@ class _SendProposalScreenState extends State<SendProposalScreen> {
                 height: 300, // Adjust the height as needed
               ),
             ),
-            const Text(
-              "Oba! Para solicitar a proposta,\n basta clicar em enviar proposta!",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: const Text(
+                "Oba! Para dar prosseguimento no processo, basta clicar em enviar proposta!",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
             ),
             Expanded(
