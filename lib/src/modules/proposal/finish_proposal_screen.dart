@@ -5,7 +5,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:passaqui/src/core/di/service_locator.dart';
 import 'package:passaqui/src/core/navigation/navigation_handler.dart';
 import 'package:passaqui/src/modules/home/home_page.dart';
-import 'package:passaqui/src/modules/profile/profile_service.dart';
 import 'package:passaqui/src/modules/proposal/controller/proposal_controller.dart';
 import 'package:passaqui/src/services/account/account_service.dart';
 import 'package:passaqui/src/shared/widget/button.dart';
@@ -20,26 +19,13 @@ class FinishProposalScreen extends StatefulWidget {
 }
 
 class FinishProposalScreenState extends State<FinishProposalScreen> {
-  late Timer _timer;
-  final ProposalController _controller = ProposalController();
-  late bool isLoading;
-  static const String itemReturn = "teste";
-
-  late final AccountService _accountService =
-      DIService().inject<AccountService>();
-
   @override
   void initState() {
     super.initState();
-    isLoading = _controller.isLoading;
-    // TODO: descomentar assim que a API estiver OK
-    // _accountService.consultProposal(
-    //     codigoProposta: 'codigoProposta', codigoOperacao: 'codigoOperacao');
   }
 
   @override
   void dispose() {
-    _timer.cancel();
     super.dispose();
   }
 
@@ -68,16 +54,15 @@ class FinishProposalScreenState extends State<FinishProposalScreen> {
                 ),
               ],
             ),
-            Expanded(
-              child: _controller.getWidgetBasedOnItemReturn(itemReturn),
-            ),
-            const Text(
-              "Oba! Para solicitar a proposta,\n basta clicar em enviar proposta!",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+            const Expanded(
+              child: Text(
+                "FINIHSHED!!!",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
             ),
             Expanded(
@@ -91,7 +76,7 @@ class FinishProposalScreenState extends State<FinishProposalScreen> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 0),
                         child: PassaquiButton(
-                          label: "Consultar Proposta",
+                          label: "Finalizar Proposta",
                           showArrow: true,
                           minimumSize: const Size(200, 40),
                           onTap: () {

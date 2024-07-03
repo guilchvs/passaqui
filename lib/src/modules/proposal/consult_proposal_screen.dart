@@ -5,8 +5,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:passaqui/src/core/di/service_locator.dart';
 import 'package:passaqui/src/core/navigation/navigation_handler.dart';
 import 'package:passaqui/src/modules/home/home_page.dart';
-import 'package:passaqui/src/modules/profile/profile_service.dart';
 import 'package:passaqui/src/modules/proposal/controller/proposal_controller.dart';
+import 'package:passaqui/src/modules/proposal/finish_proposal_screen.dart';
 import 'package:passaqui/src/services/account/account_service.dart';
 import 'package:passaqui/src/shared/widget/button.dart';
 
@@ -20,18 +20,84 @@ class ConsultProposalScreen extends StatefulWidget {
 }
 
 class ConsultProposalScreenState extends State<ConsultProposalScreen> {
-  // late Timer _timer;
+  late Timer _timer;
   final ProposalController _controller = ProposalController();
   late bool isLoading;
-  static const String itemReturn = "teste";
+  ValueNotifier<String> itemReturn = ValueNotifier('success');
+
+  void setTimer15Seconds() {
+    _timer = Timer.periodic(const Duration(seconds: 2), (timer) {
+      print(itemReturn.value);
+      setState(() {
+        itemReturn = ValueNotifier('');
+      });
+      print(itemReturn.value);
+      timer.cancel();
+    });
+  }
 
   late final AccountService _accountService =
       DIService().inject<AccountService>();
+
+  void fetching() {
+    // print(itemReturn.value);
+    // setState(() {
+    //   itemReturn.value = 'loading';
+    // });
+    // setTimer15Seconds();
+    DIService()
+        .inject<NavigationHandler>()
+        .navigate(ConsultProposalScreen.route);
+  }
+
+  void setSuccess() {
+    // print(itemReturn.value);
+    // setState(() {
+    //   itemReturn.value = 'success';
+    // });
+    DIService()
+        .inject<NavigationHandler>()
+        .navigate(FinishProposalScreen.route);
+    setTimer15Seconds();
+  }
+
+  void setError() {
+    // print(itemReturn.value);
+    // setState(() {
+    //   itemReturn.value = 'error';
+    // });
+    DIService()
+        .inject<NavigationHandler>()
+        .navigate(ConsultProposalScreen.route);
+    setTimer15Seconds();
+  }
 
   @override
   void initState() {
     super.initState();
     isLoading = _controller.isLoading;
+    itemReturn.value = itemReturn.value;
+    if (itemReturn.value == 'loading') {
+      setTimer15Seconds();
+    }
+    itemReturn.addListener(() {
+      setState(() {
+        switch (itemReturn.value) {
+          case 'loading':
+            itemReturn.value = itemReturn.value;
+            break;
+          case 'success':
+            itemReturn.value = 'success';
+            break;
+          case 'error':
+            itemReturn.value = 'error';
+            break;
+          default:
+            itemReturn.value = '';
+            break;
+        }
+      });
+    });
     // TODO: descomentar assim que a API estiver OK
     // _accountService.consultProposal(
     //     codigoProposta: 'codigoProposta', codigoOperacao: 'codigoOperacao');
@@ -40,6 +106,7 @@ class ConsultProposalScreenState extends State<ConsultProposalScreen> {
   @override
   void dispose() {
     // _timer.cancel();
+    itemReturn.removeListener(() {});
     super.dispose();
   }
 
@@ -69,31 +136,11 @@ class ConsultProposalScreenState extends State<ConsultProposalScreen> {
               ],
             ),
             Expanded(
-              child: _controller.getWidgetBasedOnItemReturn(itemReturn),
-            ),
-            Expanded(
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 0),
-                        child: PassaquiButton(
-                          label: "Consultar Proposta",
-                          showArrow: true,
-                          minimumSize: const Size(200, 40),
-                          onTap: () {
-                            DIService()
-                                .inject<NavigationHandler>()
-                                .navigate(HomeScreen.route);
-                          },
-                        ),
-                      ),
-                    )),
-              ),
+              child: _controller.getWidgetBasedOnItemReturn(
+                  itemReturn: itemReturn.value,
+                  fetching: fetching,
+                  setSuccess: setSuccess,
+                  setError: setError),
             ),
           ],
         ),

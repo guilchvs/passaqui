@@ -1,22 +1,33 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:passaqui/src/shared/widget/button.dart';
 
 class ProposalController {
-  bool isLoading = false;
+  bool isLoading = true;
+  late Timer _timer;
 
   void setIsLoading(bool value) {
     isLoading = value;
   }
 
-  Widget getWidgetBasedOnItemReturn(String itemReturn) {
+  Widget getWidgetBasedOnItemReturn({
+    required String itemReturn,
+    required Function? fetching,
+    required Function? setSuccess,
+    required Function? setError,
+  }) {
     switch (itemReturn) {
-      case 'teste':
-        setIsLoading(true);
+      case 'loading':
         return const Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Padding(
+              padding: EdgeInsets.all(20),
+              child: CircularProgressIndicator(
+                color: Colors.white,
+              ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -24,29 +35,145 @@ class ProposalController {
                   'Aguarde enquanto\n consultamos sua proposta!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      letterSpacing: .8),
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: .8,
+                  ),
                 ),
               ],
             ),
-            Padding(
-              padding: EdgeInsets.all(20),
-              child: CircularProgressIndicator(
-                color: Colors.white,
+          ],
+        );
+      case 'success':
+        return Column(
+          children: [
+            const Expanded(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  'Sua Proposta foi criada com sucesso!\n Baixe o documento e leia atentamente! \n \n Após ler, clique em FInalizar Proposta',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: .8,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            )),
+            Expanded(
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 0),
+                      child: PassaquiButton(
+                        label: "Finalizar Proposta",
+                        showArrow: true,
+                        onTap: () {
+                          setSuccess!();
+                        },
+                      ),
+                    ),
+                  ),
+                ),
               ),
             )
           ],
         );
-      case 'resultado 2':
-        setIsLoading(false);
-        return const Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [],
+      case 'error':
+        return Column(
+          children: [
+            const Expanded(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  'Houve algum erro,\n tente novamente!',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: .8,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            )),
+            Expanded(
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 0),
+                      child: PassaquiButton(
+                        label: "Tentar Novamente",
+                        showArrow: true,
+                        onTap: () {
+                          setError!();
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            )
+          ],
         );
       default:
-        return Container(); // Otro widget para el caso por defecto
+        return Column(
+          children: [
+            const Expanded(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  'Não conseguimos encontrar \n sua proposta, Clique em \nconsultar novamente!',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: .8,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            )),
+            Expanded(
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 0),
+                      child: PassaquiButton(
+                        label: "Consultar Novamente",
+                        showArrow: true,
+                        onTap: () {
+                          setError!();
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            )
+          ],
+        );
     }
   }
 }
