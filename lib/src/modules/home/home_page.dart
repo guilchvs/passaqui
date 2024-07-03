@@ -5,6 +5,7 @@ import 'package:passaqui/src/modules/biometria/biometria_error_screen.dart';
 import 'package:passaqui/src/modules/biometria/biometria_success_screen.dart';
 import 'package:passaqui/src/modules/biometria/wait/biometria_wait_screen.dart';
 import 'package:passaqui/src/modules/profile/update-bank-account/update_profile_screen.dart';
+import 'package:passaqui/src/modules/proposal/consult_proposal_screen.dart';
 import 'package:passaqui/src/services/auth_service.dart'; // Import AuthService
 import 'package:passaqui/src/shared/widget/button.dart';
 import 'package:passaqui/src/shared/widget/card.dart';
@@ -120,13 +121,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               const SizedBox(width: 10),
                               RichText(
                                 text: TextSpan(
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontFamily: 'Inter',
                                     fontSize: 24,
                                     color: Colors.white,
                                   ),
                                   children: [
-                                    TextSpan(
+                                    const TextSpan(
                                       text: 'Olá, ',
                                       style: TextStyle(
                                         fontWeight: FontWeight.w600,
@@ -134,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                     TextSpan(
                                       text: userName,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontWeight: FontWeight.w400,
                                       ),
                                     ),
@@ -142,13 +143,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                               const Spacer(),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 28.0),
-                                child: Image.asset(
-                                  "assets/images/notification_bell.png",
-                                  height: 34,
-                                  width: 34,
+                              GestureDetector(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(right: 28.0),
+                                  child: Image.asset(
+                                    "assets/images/notification_bell.png",
+                                    height: 34,
+                                    width: 34,
+                                  ),
                                 ),
+                                onTap: () {
+                                  Navigator.of(context).pop();
+                                  DIService()
+                                      .inject<NavigationHandler>()
+                                      .navigate(ConsultProposalScreen.route);
+                                },
                               ),
                             ],
                           ),
@@ -157,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 80),
+                const SizedBox(height: 80),
                 // Adjust this height to match the card's height + margin
                 const Padding(
                   padding: EdgeInsets.only(left: 16.0),
@@ -335,7 +344,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   // Handle navigation based on biometria status if needed
                                   // For now, it just navigates to HireStepsScreen directly
                                 },
-                                child: PassaquiButton(
+                                child: const PassaquiButton(
                                   label: "Solicite agora",
                                   showArrow: true,
                                   style: PassaquiButtonStyle.primary,

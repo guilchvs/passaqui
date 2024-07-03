@@ -10,6 +10,8 @@ import 'package:passaqui/src/modules/hire/installment/hire_installment_screen.da
 import 'package:passaqui/src/modules/hire/steps/hire_step_screen.dart';
 import 'package:passaqui/src/modules/hire/value/hire_value_screen.dart';
 import 'package:passaqui/src/modules/home/home_page.dart';
+import 'package:passaqui/src/modules/proposal/consult_proposal_screen.dart';
+import 'package:passaqui/src/modules/proposal/finish_proposal_screen.dart';
 import 'package:passaqui/src/modules/proposal/send_proposal.dart';
 import 'package:passaqui/src/modules/welcome/welcome_screen.dart';
 import 'package:passaqui/src/modules/withdraw/steps/withdraw_step_screen.dart';
@@ -65,6 +67,14 @@ class NavigationHandler {
       case SendProposalScreen.route:
         return MaterialPageRoute(
           builder: (context) => const SendProposalScreen(),
+        );
+      case ConsultProposalScreen.route:
+        return MaterialPageRoute(
+          builder: (context) => const ConsultProposalScreen(),
+        );
+      case FinishProposalScreen.route:
+        return MaterialPageRoute(
+          builder: (context) => const FinishProposalScreen(),
         );
       case WithdrawStepsScreen.route:
         return MaterialPageRoute(
