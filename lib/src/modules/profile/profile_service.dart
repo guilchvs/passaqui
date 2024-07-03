@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:brazilian_banks/brazilian_banks.dart';
 import 'package:http/http.dart' as http;
 import 'package:passaqui/src/services/auth_service.dart';
 
@@ -70,4 +71,38 @@ class AccountService {
       rethrow;
     }
   }
+
+  Future<List<BrasilApiBanks>> getBrazilianBanksList() async {
+    final banks = await BrasilApiBanks.getBanks();
+    return banks;
+  }
+
+  Future<dynamic> getBankAccountValidadion(
+      {required int bankCode,
+        required String branchNumber,
+        required String accountNumberWithDigit,
+        required String accountType}) async {
+    var response = BankAccountValidationService().validateAccountNumber(
+      bankAccountModel: BankAccountModel(
+          bankCode: bankCode,
+          branchNumber: branchNumber,
+          accountNumberWithDigit: accountNumberWithDigit,
+          accountType: AccountType.checking),
+    );
+
+    if (response.errorMessage == null) {
+      if (response.isValid!) {
+        print('account digit is correct');
+        return 'account digit is correct';
+      } else {
+        print('the correct account digit probably is ${response.digit}');
+        return 'the correct account digit probably is ${response.digit}';
+      }
+    } else {
+      print(response.errorMessage);
+    }
+
+    return response;
+  }
+
 }

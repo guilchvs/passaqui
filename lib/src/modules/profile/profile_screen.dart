@@ -5,7 +5,6 @@ import 'package:passaqui/src/modules/home/home_page.dart';
 
 import '../../core/di/service_locator.dart';
 import '../../core/navigation/navigation_handler.dart';
-import '../../shared/widget/appbar.dart';
 
 class ProfileScreen extends StatefulWidget {
   static const String route = "/profile";
