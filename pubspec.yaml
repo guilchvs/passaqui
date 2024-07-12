@@ -37,6 +37,7 @@ dependencies:
   flutter_inappwebview: ^6.0.0
   flutter_typeahead: ^4.0.0
 
+
 dependency_overrides:
   webview_flutter_android: 3.16.1
 

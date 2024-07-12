@@ -238,7 +238,7 @@ class _SendProposalScreenState extends State<SendProposalScreen> {
                   //
                 }
               },
-              child: Text('Prosseguir para baixar proposta'),
+              child: Text('Prosseguir'),
             ),
           ],
         );
