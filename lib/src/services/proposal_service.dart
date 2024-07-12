@@ -5,8 +5,7 @@ import 'package:passaqui/src/services/auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProposalService {
-  Future<Map<String, dynamic>> sendProposal(String? cpf, int periodo, double vlrEmprestimo) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future<Map<String, dynamic>> sendProposal(String cpf, int periodo, double vlrEmprestimo) async {
     final AuthService _authService = DIService().inject<AuthService>();
     final baseUrl = 'http://passcash-api-hml.us-east-1.elasticbeanstalk.com'; // Replace with your API base URL
     final token = await _authService.getToken();
@@ -38,11 +37,16 @@ class ProposalService {
       print('CPF: $cpf; periodo: $periodo; vlrEmprestimo: $vlrEmprestimo');
 
       if (response.statusCode == 200) {
-        final Map<String, dynamic> responseBody = json.decode(response.body);
-        return responseBody;
+        try {
+          final Map<String, dynamic> responseBody = json.decode(response.body);
+          return responseBody;
+        } catch (e) {
+          print('Error decoding JSON: $e');
+          return {'HasError': false, 'Message': 'Error decoding JSON.'};
+        }
       } else {
-        print('Erro ao enviar proposta. Status code: ${response.statusCode}\n Response: ${response.body}');
-        return {'HasError': true, 'Message': 'Erro ao enviar proposta. ${response.body}'};
+         print('Erro ao enviar proposta. Status code: ${response.statusCode}\n Response: ${response.body}');
+         return {'HasError': true, 'Message': 'Erro ao enviar proposta. ${response.body}'};
       }
     } catch (e) {
       print('Erro ao enviar proposta: $e');

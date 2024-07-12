@@ -21,6 +21,7 @@ class CreateAccountScreen extends StatefulWidget {
 }
 
 class _CreateAccountScreenState extends State<CreateAccountScreen> {
+  final TextEditingController _dateController = TextEditingController();
   late PageController _pageController;
   int _currentPageIndex = 0;
 
@@ -72,13 +73,31 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     _pageController = PageController();
     controllers =
         List.generate(labels.length, (index) => TextEditingController());
+    _dateController.addListener(_formatDate);
     super.initState();
+  }
+
+  void _formatDate() {
+    String text = _dateController.text;
+    // Remove any non-digit characters
+    text = text.replaceAll(RegExp(r'[^0-9]'), '');
+    // Add slashes
+    if (text.length >= 5) {
+      text = '${text.substring(0, 2)}/${text.substring(2, 4)}/${text.substring(4, 8)}';
+    } else if (text.length >= 3) {
+      text = '${text.substring(0, 2)}/${text.substring(2, 4)}${text.length > 4 ? '/' : ''}${text.length > 4 ? text.substring(4) : ''}';
+    }
+    _dateController.value = _dateController.value.copyWith(
+      text: text,
+      selection: TextSelection.collapsed(offset: text.length),
+    );
   }
 
   @override
   void dispose() {
     _pageController.dispose();
     controllers.forEach((controller) => controller.dispose());
+    _dateController.dispose();
     super.dispose();
   }
 
@@ -533,7 +552,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
           hintStyle: TextStyle(
             color: const Color(0xFFA8CA4B),
           )),
-      readOnly: true,
+      readOnly: false,
       onTap: () async {
         DateTime? picked = await showDatePicker(
           context: context,
@@ -564,4 +583,59 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       },
     );
   }
+
+  // Widget _buildDateField() {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       Text(
+  //         placeholders[5],
+  //         style: TextStyle(
+  //           color: Colors.black,
+  //           fontSize: 16,
+  //         ),
+  //       ),
+  //       Theme(
+  //         data: Theme.of(context).copyWith(
+  //             inputDecorationTheme: InputDecorationTheme(
+  //           border: UnderlineInputBorder(
+  //               borderSide:
+  //                   BorderSide(color: const Color(0xFFA8CA4B), width: 2.0)),
+  //           focusedBorder: UnderlineInputBorder(
+  //               borderSide:
+  //                   BorderSide(color: const Color(0xFFA8CA4B), width: 2.0)),
+  //         )),
+  //         child: InputDatePickerFormField(
+  //           firstDate: DateTime(1900),
+  //           lastDate: DateTime.now(),
+  //           initialDate: DateTime.now(),
+  //           fieldLabelText: '',
+  //           fieldHintText: 'dd/mm/aaaa',
+  //           errorFormatText: 'Formato inválido',
+  //           errorInvalidText: 'Data inválida',
+  //           onDateSubmitted: (pickedDate) {
+  //             if (pickedDate != null) {
+  //               String formattedDate =
+  //                   DateFormat('dd-MM-yyyy').format(pickedDate);
+  //               setState(() {
+  //                 controllers[5].text = formattedDate;
+  //               });
+  //             }
+  //           },
+  //         ),
+  //       ),
+  //       if (showError && controllers[5].text.isEmpty)
+  //         Padding(
+  //           padding: const EdgeInsets.only(left: 16.0),
+  //           child: Text(
+  //             'Este campo não pode ficar vazio',
+  //             style: TextStyle(
+  //               color: Colors.red,
+  //               fontSize: 12,
+  //             ),
+  //           ),
+  //         ),
+  //     ],
+  //   );
+  // }
 }
