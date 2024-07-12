@@ -31,6 +31,7 @@ class AuthService {
       await prefs.setString('cpf', cpf);
       await prefs.setString('email', email);
     } else {
+      print(response.body);
       throw Exception('Failed to login');
     }
   }

@@ -66,6 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
           break;
         case 2:
           print('Navigating to BiometriaSuccessScreen');
+          print('Biometria service: $_biometriaService');
           DIService()
               .inject<NavigationHandler>()
               .navigate(BiometriaSucessScreen.route);

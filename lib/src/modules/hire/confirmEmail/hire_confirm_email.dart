@@ -457,7 +457,7 @@ class _HireConfirmEmailScreenState extends State<HireConfirmEmailScreen>
     final baseUrl =
         'http://passcash-api-hml.us-east-1.elasticbeanstalk.com'; // Replace with your API base URL
     final token = await _authService.getToken(); // Retrieve JWT token
-    final url = Uri.parse('$baseUrl/api/ApiMaster/iniciarBiometria?cpf=$cpf');
+    final url = Uri.parse('$baseUrl/api/ApiMaster/iniciarBiometria?cpf=41838714847');
 
     try {
       final response = await http.post(

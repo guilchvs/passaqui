@@ -106,10 +106,12 @@ class NavigationHandler {
       case HireValueScreen.route:
         final args = settings.arguments as Map<String, dynamic>?;
         final String? cpf = args?['cpf'] as String?;
+        final int selectedPeriod = args?['selectedPeriod'] as int;
         return MaterialPageRoute(
           builder: (context) => HireValueScreen(
             jsonResponse: args?['jsonResponse'] as Map<String, dynamic>?,
             cpf: cpf ?? '',
+            selectedPeriod: selectedPeriod,
           ),
         );
       case HireConfirmCpfScreen.route:
