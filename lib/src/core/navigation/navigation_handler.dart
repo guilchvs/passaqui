@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:passaqui/src/modules/auth/create-account/create_account_screen.dart';
 import 'package:passaqui/src/modules/auth/forgot_password/forgot_password_screen.dart';
 import 'package:passaqui/src/modules/auth/forgot_password/success/forgot_password_success.dart';
@@ -11,6 +12,7 @@ import 'package:passaqui/src/modules/hire/steps/hire_step_screen.dart';
 import 'package:passaqui/src/modules/hire/value/hire_value_screen.dart';
 import 'package:passaqui/src/modules/home/home_page.dart';
 import 'package:passaqui/src/modules/proposal/consult_proposal_screen.dart';
+import 'package:passaqui/src/modules/proposal/download_proposal_screen.dart';
 import 'package:passaqui/src/modules/proposal/finish_proposal_screen.dart';
 import 'package:passaqui/src/modules/proposal/send_proposal.dart';
 import 'package:passaqui/src/modules/welcome/welcome_screen.dart';
@@ -148,6 +150,10 @@ class NavigationHandler {
       case BiometriaWaitScreen.route:
         return MaterialPageRoute(
           builder: (context) => BiometriaWaitScreen(),
+        );
+      case DownloadProposalScreen.route:
+        return MaterialPageRoute(
+          builder: (context) => DownloadProposalScreen(),
         );
     }
     return null;

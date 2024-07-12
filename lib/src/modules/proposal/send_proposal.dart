@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:passaqui/src/modules/auth/login/login_screen.dart';
 import 'package:passaqui/src/modules/home/home_page.dart';
 import 'package:passaqui/src/modules/profile/update-bank-account/update_profile_screen.dart';
+import 'package:passaqui/src/modules/proposal/download_proposal_screen.dart';
 import 'package:passaqui/src/services/auth_service.dart';
 import 'package:passaqui/src/services/preference_service.dart';
 import 'package:passaqui/src/services/proposal_service.dart';
@@ -64,12 +65,12 @@ class _SendProposalScreenState extends State<SendProposalScreen> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                DIService().inject<NavigationHandler>().navigate(DownloadProposalScreen.route);
                   if (!hasError) {
                     //
                   }
                 },
-                child: Text('OK'),
+                child: Text('Prosseguir para baixar proposta'),
               ),
             ],
           );
