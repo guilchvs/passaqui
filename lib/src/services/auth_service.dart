@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
-  final String baseUrl = "http://passcash-api-hml.us-east-1.elasticbeanstalk.com/api";
+  final String baseUrl = "https://localhost:7151/api";
 
   Future<void> login(String username, String password) async {
     final url = Uri.parse('$baseUrl/Account/login');
@@ -83,6 +83,25 @@ class AuthService {
 
     return response;
   }
+
+Future<http.Response> enviarEmailAlteracaoSenha({required String email, required String bodyHtml}) async {
+    final url = Uri.parse('$baseUrl/Account/enviarEmail');
+    final corpoHtml = jsonEncode({
+        'email': email,
+        'subject': 'Alteração de Senha - PassCash',
+        'body': bodyHtml
+      });
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: corpoHtml
+    );
+
+    return response;
+  }
+
   Future<String?> getToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('jwt');
