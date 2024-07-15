@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
-  // final String baseUrl = "https://localhost:7151/api";
+  // final String baseUrl = "http://10.0.2.2:5000/api";
   final baseUrl = 'http://passcash-api-hml.us-east-1.elasticbeanstalk.com/api'; // Replace with your API base URL
 
   Future<void> login(String username, String password) async {

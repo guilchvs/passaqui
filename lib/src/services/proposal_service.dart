@@ -10,7 +10,6 @@ class ProposalService {
     final baseUrl = 'http://passcash-api-hml.us-east-1.elasticbeanstalk.com'; // Replace with your API base URL
     final token = await _authService.getToken();
 
-    // Uri url = Uri.parse('$baseUrl/api/ApiMaster/enviarPropostaSaqueAniversario');
     Uri url = Uri.parse('$baseUrl/api/ApiMaster/enviarPropostaSaqueAniversario').replace(queryParameters: {
       'cpf': cpf,
       'periodo': periodo.toString(),
@@ -50,6 +49,39 @@ class ProposalService {
       }
     } catch (e) {
       print('Erro ao enviar proposta: $e');
+      return {'HasError': true, 'Message': 'Exception: $e'};
+    }
+  }
+
+  Future<Map<String, dynamic>> sendCCBtoEmail() async {
+    final AuthService _authService = DIService().inject<AuthService>();
+    final baseUrl = 'http://passcash-api-hml.us-east-1.elasticbeanstalk.com'; // Replace with your API base URL
+    final token = await _authService.getToken();
+
+    Uri url = Uri.parse('$baseUrl/api/ApiMaster/downloadCCB');
+
+    try {
+      final response = await http.get(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        try {
+          final Map<String, dynamic> responseBody = json.decode(response.body);
+          return responseBody;
+        } catch (e) {
+          return {'Message': 'Error sending JSON.'};
+        }
+      } else {
+        print('Erro ao enviar contrato. Status code: ${response.statusCode}\n Response: ${response.body}');
+        return {'HasError': true, 'Message': 'Erro ao enviar contrato. ${response.body}'};
+      }
+    } catch (e) {
+      print('Erro ao enviar contrato: $e');
       return {'HasError': true, 'Message': 'Exception: $e'};
     }
   }

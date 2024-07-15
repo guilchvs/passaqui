@@ -158,7 +158,6 @@
 //   }
 // }
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:passaqui/src/modules/profile/update-bank-account/update_profile_screen.dart';
@@ -185,9 +184,9 @@ class _SendProposalScreenState extends State<SendProposalScreen> {
   late PageController _pageController;
   final AuthService _authService = DIService().inject<AuthService>();
   final ProposalService _proposalService =
-  DIService().inject<ProposalService>();
+      DIService().inject<ProposalService>();
   final PreferenceService _preferenceService =
-  DIService().inject<PreferenceService>();
+      DIService().inject<PreferenceService>();
   String userName = '';
   bool isLoading = false;
 
@@ -211,12 +210,13 @@ class _SendProposalScreenState extends State<SendProposalScreen> {
     // final cpf = prefs.getString('cpf') ?? '';
     final cpf = "01049588479";
     //final cpf = await _authService.getCpf();
-    final periodo = prefs.getInt('selectedPeriod') ?? 1; // Default to 1 if not found
+    final periodo =
+        prefs.getInt('selectedPeriod') ?? 1; // Default to 1 if not found
     final vlrEmprestimo =
         prefs.getDouble('vlrEmprestimo') ?? 0.0; // Default to 0.0 if not found
 
     Map<String, dynamic> responseBody =
-    await _proposalService.sendProposal(cpf, periodo, vlrEmprestimo);
+        await _proposalService.sendProposal(cpf, periodo, vlrEmprestimo);
 
     print('RESPONSE BODY : $responseBody');
     bool hasError = responseBody['HasError'] == true;
@@ -229,18 +229,28 @@ class _SendProposalScreenState extends State<SendProposalScreen> {
           content: Text(hasError
               ? 'Não foi possível enviar sua proposta. Verifique seus dados e tente novamente'
               : 'Proposta enviada com sucesso!'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                DIService().inject<NavigationHandler>()
-                    .navigate(DownloadProposalScreen.route);
-                if (!hasError) {
-                  //
-                }
-              },
-              child: Text('Prosseguir'),
-            ),
-          ],
+          actions: hasError
+              ? [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('OK'),
+                  ),
+                ]
+              : [
+                  TextButton(
+                    onPressed: () {
+                      DIService()
+                          .inject<NavigationHandler>()
+                          .navigate(DownloadProposalScreen.route);
+                      if (!hasError) {
+                        //
+                      }
+                    },
+                    child: Text('Prosseguir'),
+                  ),
+                ],
         );
       },
     );
@@ -287,7 +297,8 @@ class _SendProposalScreenState extends State<SendProposalScreen> {
                 // ),
                 Expanded(
                   child: SvgPicture.asset(
-                    'assets/images/credit-approved.svg', // Replace with your SVG asset path
+                    'assets/images/credit-approved.svg',
+                    // Replace with your SVG asset path
                     height: 300, // Adjust the height as needed
                   ),
                 ),
@@ -305,7 +316,8 @@ class _SendProposalScreenState extends State<SendProposalScreen> {
                 ),
                 Expanded(
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 20),
                     child: Align(
                       alignment: Alignment.bottomCenter,
                       child: SizedBox(
