@@ -405,6 +405,7 @@ class _DownloadProposalScreenState extends State<DownloadProposalScreen> {
                 Text('Failed to download file: ${response.statusCode}')),
           );
         }
+
       } catch (e) {
         print('Error: $e');
         ScaffoldMessenger.of(context).showSnackBar(

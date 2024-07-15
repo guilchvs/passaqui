@@ -36,6 +36,7 @@ dependencies:
   brazilian_banks: ^0.6.0
   flutter_inappwebview: ^6.0.0
   flutter_typeahead: ^4.0.0
+  date_format_field: ^0.1.0
 
 
 dependency_overrides:
