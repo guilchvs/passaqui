@@ -208,8 +208,8 @@ class _SendProposalScreenState extends State<SendProposalScreen> {
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     // final cpf = prefs.getString('cpf') ?? '';
-    final cpf = "01049588479";
-    //final cpf = await _authService.getCpf();
+    // final cpf = "01049588479";
+    final cpf = await _authService.getCpf();
     final periodo =
         prefs.getInt('selectedPeriod') ?? 1; // Default to 1 if not found
     final vlrEmprestimo =

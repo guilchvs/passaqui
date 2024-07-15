@@ -5,7 +5,7 @@ import 'package:passaqui/src/services/auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProposalService {
-  Future<Map<String, dynamic>> sendProposal(String cpf, int periodo, double vlrEmprestimo) async {
+  Future<Map<String, dynamic>> sendProposal(String? cpf, int periodo, double vlrEmprestimo) async {
     final AuthService _authService = DIService().inject<AuthService>();
     final baseUrl = 'http://passcash-api-hml.us-east-1.elasticbeanstalk.com'; // Replace with your API base URL
     final token = await _authService.getToken();

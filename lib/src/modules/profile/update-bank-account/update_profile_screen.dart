@@ -663,7 +663,7 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
                         width: 150,
                         child: PassaquiTextField(
                           editingController: bankAccountDigitInputController,
-                          placeholder: "Dígito Conta",
+                          placeholder: "Dígito",
                           keyBoardType: TextInputType.number,
                         ),
                       ),

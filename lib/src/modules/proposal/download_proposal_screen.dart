@@ -313,9 +313,11 @@ class _DownloadProposalScreenState extends State<DownloadProposalScreen> {
                 Navigator.of(context).pop();
                 if (success) {
                   DIService().inject<NavigationHandler>().navigate(HomeScreen.route);
+                } else {
+                  Navigator.of(context).pop();
                 }
               },
-              child: Text('Ir para Tela Inicial'),
+              child: success ? Text('Ir para Tela Inicial') : Text('Tente novamente'),
             ),
           ],
         );
