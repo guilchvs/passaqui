@@ -329,205 +329,205 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         ],
       ),
       resizeToAvoidBottomInset: true,
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      body: SafeArea(
+        child: Stack(
           children: [
-            LinearProgressIndicator(
-              value: (_currentPageIndex + 1) / labels.length,
-              valueColor:
-                  AlwaysStoppedAnimation<Color>(const Color(0xFFA8CA4B)),
-              backgroundColor: Colors.grey[50],
-            ),
-            Container(
-              height: MediaQuery.of(context).size.height -
-                  kToolbarHeight -
-                  kBottomNavigationBarHeight,
-              child: PageView.builder(
-                controller: _pageController,
-                itemCount: labels.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 32),
-                        if (labels[index]
-                            .startsWith("Bem vindo ao PassAqui!")) ...[
-                          RichText(
-                            text: TextSpan(
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.black,
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w600,
-                              ),
-                              children: [
-                                TextSpan(
-                                  text: 'Bem vindo ao PassAqui!',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
+            SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  LinearProgressIndicator(
+                    value: (_currentPageIndex + 1) / labels.length,
+                    valueColor: AlwaysStoppedAnimation<Color>(const Color(0xFFA8CA4B)),
+                    backgroundColor: Colors.grey[50],
+                  ),
+                  Container(
+                    height: MediaQuery.of(context).size.height - kToolbarHeight - kBottomNavigationBarHeight,
+                    child: PageView.builder(
+                      controller: _pageController,
+                      itemCount: labels.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 28),
+                              if (labels[index].startsWith("Bem vindo ao PassAqui!")) ...[
+                                RichText(
+                                  text: TextSpan(
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.black,
+                                      fontFamily: 'Inter',
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: 'Bem vindo ao PassAqui!',
+                                        style: TextStyle(fontWeight: FontWeight.w600),
+                                      ),
+                                      TextSpan(
+                                        text: '\n\nPara começar precisamos de algumas informações. Será rápido e fácil.',
+                                        style: TextStyle(fontWeight: FontWeight.normal),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                TextSpan(
-                                  text:
-                                      '\n\nPara começar precisamos de algumas informações. Será rápido e fácil.',
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.normal),
+                              ] else ...[
+                                Text(
+                                  labels[index],
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black,
+                                    fontFamily: 'Inter',
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ],
-                            ),
+                              SizedBox(height: 28),
+                              if (index == 5) ...[
+                                Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: _buildDateField(),
+                                ),
+                                SizedBox(height: 16),
+                                if (showError && controllers[index].text.isEmpty)
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 16.0),
+                                    child: Text(
+                                      'Este campo não pode ficar vazio',
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                              ] else ...[
+                                PassaquiTextField(
+                                  placeholder: placeholders[index],
+                                  editingController: controllers[index],
+                                  keyBoardType: index == 3 ||
+                                      index == 4 ||
+                                      index == 7 ||
+                                      index == 8 ||
+                                      index == 10
+                                      ? TextInputType.number
+                                      : TextInputType.text,
+                                  isVisible: index != 1 && index != 2,
+                                  showVisibility: index == 1 || index == 2,
+                                  placeholderColor: Colors.grey,
+                                  textColor: Colors.black,
+                                ),
+                                if ((index == 1 || index == 2) &&
+                                    controllers[index].text.isNotEmpty &&
+                                    controllers[index].text.length < 8)
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 16.0),
+                                    child: Text(
+                                      'A senha deve ter no mínimo 8 caracteres e conter letras e números',
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                                if (index == 3 && showCpfError)
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 16.0),
+                                    child: Text(
+                                      'CPF inválido',
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                                if (index == 6 && showEmailError)
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 16.0),
+                                    child: Text(
+                                      'Email inválido',
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                                if (index == 8 && showCepError)
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 16.0),
+                                    child: Text(
+                                      'CEP não encontrado. Clique em prosseguir para continuar',
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                                if (index == 2 &&
+                                    showError &&
+                                    controllers[1].text.isNotEmpty &&
+                                    controllers[2].text.isNotEmpty &&
+                                    controllers[1].text != controllers[2].text)
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 16.0),
+                                    child: Text(
+                                      'As senhas não correspondem',
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                                if (showError && controllers[index].text.isEmpty)
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 20.0, top: 10),
+                                    child: Text(
+                                      'Este campo não pode ficar vazio',
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                                if (index == 4 &&
+                                    showError &&
+                                    controllers[4].text.isNotEmpty &&
+                                    controllers[4].text.length != 11)
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 16.0),
+                                    child: Text(
+                                      'O telefone deve ter exatamente 11 dígitos',
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                              SizedBox(height: MediaQuery.of(context).viewInsets.bottom),
+                            ],
                           ),
-                        ] else ...[
-                          Text(
-                            labels[index],
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.black,
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                        SizedBox(height: 28),
-                        if (index == 5) ...[
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: _buildDateField(),
-                          ),
-                          SizedBox(height: 16),
-                          if (showError && controllers[index].text.isEmpty)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 16.0),
-                              child: Text(
-                                'Este campo não pode ficar vazio',
-                                style: TextStyle(
-                                  color: Colors.red,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                        ] else ...[
-                          PassaquiTextField(
-                            placeholder: placeholders[index],
-                            editingController: controllers[index],
-                            keyBoardType: index == 3 ||
-                                    index == 4 ||
-                                    index == 7 ||
-                                    index == 8 ||
-                                    index == 10
-                                ? TextInputType.number
-                                : TextInputType.text,
-                            isVisible: index != 1 && index != 2,
-                            showVisibility: index == 1 || index == 2,
-                            placeholderColor: Colors.grey,
-                            textColor: Colors.black,
-                          ),
-                          SizedBox(height: 18),
-                          if ((index == 1 || index == 2) &&
-                              controllers[index].text.isNotEmpty &&
-                              controllers[index].text.length < 8)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 16.0),
-                              child: Text(
-                                'A senha deve ter no mínimo 8 caracteres e conter letras e números',
-                                style: TextStyle(
-                                  color: Colors.red,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                          if (index == 3 && showCpfError)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 16.0),
-                              child: Text(
-                                'CPF inválido',
-                                style: TextStyle(
-                                  color: Colors.red,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                          if (index == 6 && showEmailError)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 16.0),
-                              child: Text(
-                                'Email inválido',
-                                style: TextStyle(
-                                  color: Colors.red,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                          if (index == 8 && showCepError)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 16.0),
-                              child: Text(
-                                'CEP não encontrado. Clique em prosseguir para continuar',
-                                style: TextStyle(
-                                  color: Colors.red,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                          if (index == 2 &&
-                              showError &&
-                              controllers[1].text.isNotEmpty &&
-                              controllers[2].text.isNotEmpty &&
-                              controllers[1].text != controllers[2].text)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 16.0),
-                              child: Text(
-                                'As senhas não correspondem',
-                                style: TextStyle(
-                                  color: Colors.red,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                          if (showError && controllers[index].text.isEmpty)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 16.0),
-                              child: Text(
-                                'Este campo não pode ficar vazio',
-                                style: TextStyle(
-                                  color: Colors.red,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                          if (index == 4 &&
-                              showError &&
-                              controllers[4].text.isNotEmpty &&
-                              controllers[4].text.length != 11)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 16.0),
-                              child: Text(
-                                'O telefone deve ter exatamente 11 dígitos',
-                                style: TextStyle(
-                                  color: Colors.red,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                        ],
-                        Spacer(),
-                        Column(
-                          children: [
-                            PassaquiButton(
-                              label: _currentPageIndex == labels.length - 1
-                                  ? 'Concluir'
-                                  : 'Próximo',
-                              onTap: nextPage,
-                              showArrow: true,
-                            ),
-                            SizedBox(height: 8),
-                          ],
-                        ),
-                      ],
+                        );
+                      },
+                      physics: NeverScrollableScrollPhysics(),
                     ),
-                  );
-                },
-                physics: NeverScrollableScrollPhysics(),
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: PassaquiButton(
+                  label: _currentPageIndex == labels.length - 1 ? 'Concluir' : 'Próximo',
+                  onTap: nextPage,
+                  showArrow: true,
+                ),
               ),
             ),
           ],
@@ -535,6 +535,241 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       ),
     );
   }
+
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     appBar: AppBar(
+  //       backgroundColor: Colors.grey[50],
+  //       elevation: 0,
+  //       automaticallyImplyLeading: false,
+  //       leading: IconButton(
+  //         icon: Icon(Icons.chevron_left),
+  //         color: const Color(0xFFA8CA4B),
+  //         onPressed: previousPage,
+  //       ),
+  //       actions: [
+  //         IconButton(
+  //           icon: Icon(Icons.close),
+  //           color: const Color(0xFFA8CA4B),
+  //           onPressed: navigateToWelcomeScreen,
+  //         ),
+  //       ],
+  //     ),
+  //     resizeToAvoidBottomInset: true,
+  //     body: SafeArea(
+  //       child: SingleChildScrollView(
+  //         child: Column(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: [
+  //             LinearProgressIndicator(
+  //               value: (_currentPageIndex + 1) / labels.length,
+  //               valueColor:
+  //                   AlwaysStoppedAnimation<Color>(const Color(0xFFA8CA4B)),
+  //               backgroundColor: Colors.grey[50],
+  //             ),
+  //             Container(
+  //               height: MediaQuery.of(context).size.height -
+  //                   kToolbarHeight -
+  //                   kBottomNavigationBarHeight,
+  //               child: PageView.builder(
+  //                 controller: _pageController,
+  //                 itemCount: labels.length,
+  //                 itemBuilder: (context, index) {
+  //                   return Padding(
+  //                     padding: const EdgeInsets.all(24.0),
+  //                     child: Column(
+  //                       crossAxisAlignment: CrossAxisAlignment.start,
+  //                       children: [
+  //                         SizedBox(height: 28),
+  //                         if (labels[index]
+  //                             .startsWith("Bem vindo ao PassAqui!")) ...[
+  //                           RichText(
+  //                             text: TextSpan(
+  //                               style: TextStyle(
+  //                                 fontSize: 18,
+  //                                 color: Colors.black,
+  //                                 fontFamily: 'Inter',
+  //                                 fontWeight: FontWeight.w600,
+  //                               ),
+  //                               children: [
+  //                                 TextSpan(
+  //                                   text: 'Bem vindo ao PassAqui!',
+  //                                   style: TextStyle(fontWeight: FontWeight.w600),
+  //                                 ),
+  //                                 TextSpan(
+  //                                   text:
+  //                                       '\n\nPara começar precisamos de algumas informações. Será rápido e fácil.',
+  //                                   style:
+  //                                       TextStyle(fontWeight: FontWeight.normal),
+  //                                 ),
+  //                               ],
+  //                             ),
+  //                           ),
+  //                         ] else ...[
+  //                           Text(
+  //                             labels[index],
+  //                             style: TextStyle(
+  //                               fontSize: 18,
+  //                               color: Colors.black,
+  //                               fontFamily: 'Inter',
+  //                               fontWeight: FontWeight.w600,
+  //                             ),
+  //                           ),
+  //                         ],
+  //                         SizedBox(height: 28),
+  //                         if (index == 5) ...[
+  //                           Padding(
+  //                             padding: const EdgeInsets.all(16.0),
+  //                             child: _buildDateField(),
+  //                           ),
+  //                           SizedBox(height: 16),
+  //                           if (showError && controllers[index].text.isEmpty)
+  //                             Padding(
+  //                               padding: const EdgeInsets.only(left: 16.0),
+  //                               child: Text(
+  //                                 'Este campo não pode ficar vazio',
+  //                                 style: TextStyle(
+  //                                   color: Colors.red,
+  //                                   fontSize: 12,
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                         ] else ...[
+  //                           PassaquiTextField(
+  //                             placeholder: placeholders[index],
+  //                             editingController: controllers[index],
+  //                             keyBoardType: index == 3 ||
+  //                                     index == 4 ||
+  //                                     index == 7 ||
+  //                                     index == 8 ||
+  //                                     index == 10
+  //                                 ? TextInputType.number
+  //                                 : TextInputType.text,
+  //                             isVisible: index != 1 && index != 2,
+  //                             showVisibility: index == 1 || index == 2,
+  //                             placeholderColor: Colors.grey,
+  //                             textColor: Colors.black,
+  //                           ),
+  //                           if ((index == 1 || index == 2) &&
+  //                               controllers[index].text.isNotEmpty &&
+  //                               controllers[index].text.length < 8)
+  //                             Padding(
+  //                               padding: const EdgeInsets.only(left: 16.0),
+  //                               child: Text(
+  //                                 'A senha deve ter no mínimo 8 caracteres e conter letras e números',
+  //                                 style: TextStyle(
+  //                                   color: Colors.red,
+  //                                   fontSize: 12,
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                           if (index == 3 && showCpfError)
+  //                             Padding(
+  //                               padding: const EdgeInsets.only(left: 16.0),
+  //                               child: Text(
+  //                                 'CPF inválido',
+  //                                 style: TextStyle(
+  //                                   color: Colors.red,
+  //                                   fontSize: 12,
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                           if (index == 6 && showEmailError)
+  //                             Padding(
+  //                               padding: const EdgeInsets.only(left: 16.0),
+  //                               child: Text(
+  //                                 'Email inválido',
+  //                                 style: TextStyle(
+  //                                   color: Colors.red,
+  //                                   fontSize: 12,
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                           if (index == 8 && showCepError)
+  //                             Padding(
+  //                               padding: const EdgeInsets.only(left: 16.0),
+  //                               child: Text(
+  //                                 'CEP não encontrado. Clique em prosseguir para continuar',
+  //                                 style: TextStyle(
+  //                                   color: Colors.red,
+  //                                   fontSize: 12,
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                           if (index == 2 &&
+  //                               showError &&
+  //                               controllers[1].text.isNotEmpty &&
+  //                               controllers[2].text.isNotEmpty &&
+  //                               controllers[1].text != controllers[2].text)
+  //                             Padding(
+  //                               padding: const EdgeInsets.only(left: 16.0),
+  //                               child: Text(
+  //                                 'As senhas não correspondem',
+  //                                 style: TextStyle(
+  //                                   color: Colors.red,
+  //                                   fontSize: 12,
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                           if (showError && controllers[index].text.isEmpty)
+  //                             Padding(
+  //                               padding: const EdgeInsets.only(left: 20.0, top: 10),
+  //                               child: Text(
+  //                                 'Este campo não pode ficar vazio',
+  //                                 style: TextStyle(
+  //                                   color: Colors.red,
+  //                                   fontSize: 12,
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                           if (index == 4 &&
+  //                               showError &&
+  //                               controllers[4].text.isNotEmpty &&
+  //                               controllers[4].text.length != 11)
+  //                             Padding(
+  //                               padding: const EdgeInsets.only(left: 16.0),
+  //                               child: Text(
+  //                                 'O telefone deve ter exatamente 11 dígitos',
+  //                                 style: TextStyle(
+  //                                   color: Colors.red,
+  //                                   fontSize: 12,
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                         ],
+  //                             SizedBox(height: MediaQuery.of(context).viewInsets.bottom,),
+  //                             Expanded(
+  //                                 child: Align(
+  //                                   alignment: Alignment.bottomCenter,
+  //                                   child: SizedBox(
+  //                                     width: double.infinity,
+  //                                     child: Padding(
+  //                                       padding: const EdgeInsets.all(0),
+  //                                       child: PassaquiButton(
+  //                                         label: _currentPageIndex == labels.length - 1
+  //                                             ? 'Concluir'
+  //                                             : 'Próximo',
+  //                                         onTap: nextPage,
+  //                                         showArrow: true,
+  //                                       ),
+  //                                     ),
+  //                                   ),
+  //                                 ),
+  //                               ),
+  //                       ],
+  //                     ),
+  //                   );
+  //                 },
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildDateField() {
     return DateFormatField(
