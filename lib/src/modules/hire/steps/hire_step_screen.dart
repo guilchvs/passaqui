@@ -33,9 +33,9 @@ class _HireStepsScreenState extends State<HireStepsScreen> {
   List<HireStepItem> steps = [
     const HireStepItem(
       title: r"Chegou o saque aniversário Pa$$aqui",
-      image: "assets/images/simulation.svg",
+      image: "assets/images/credit_default.svg",
       description:
-          "Uma forma simples e fácil de dar um alívio nas suas despesas e em qualquer outro momento",
+          "Uma forma simples de utilizar um dinheiro que já é seu!",
       showButton: false,
     ),
     const HireStepItem(
