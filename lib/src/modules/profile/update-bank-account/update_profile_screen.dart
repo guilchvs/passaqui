@@ -492,16 +492,14 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
 
   late TextEditingController bankInputController;
   late TextEditingController agencyAndDigitInputController;
-  late TextEditingController bankAccountInputController;
-  late TextEditingController bankAccountDigitInputController;
+  late TextEditingController accountAndDigitInputController;
 
   final FocusNode bankInputFocusNode = FocusNode();
 
   bool _isFormValid() {
     return bankInputController.text.isNotEmpty &&
         agencyAndDigitInputController.text.isNotEmpty &&
-        bankAccountInputController.text.isNotEmpty &&
-        bankAccountDigitInputController.text.isNotEmpty;
+        accountAndDigitInputController.text.isNotEmpty;
   }
 
   @override
@@ -509,8 +507,7 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
     super.initState();
     bankInputController = TextEditingController();
     agencyAndDigitInputController = TextEditingController();
-    bankAccountInputController = TextEditingController();
-    bankAccountDigitInputController = TextEditingController();
+    accountAndDigitInputController = TextEditingController();
     _initializeCpf();
     _fetchBanks();
   }
@@ -519,8 +516,7 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
   void dispose() {
     bankInputController.dispose();
     agencyAndDigitInputController.dispose();
-    bankAccountInputController.dispose();
-    bankAccountDigitInputController.dispose();
+    accountAndDigitInputController.dispose();
     bankInputFocusNode.dispose();
     super.dispose();
   }
@@ -540,6 +536,13 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
     } catch (e) {
       //
     }
+  }
+
+  String _formatWithHyphen(String number) {
+    if (number.isNotEmpty) {
+      return '${number.substring(0, number.length - 1)}-${number.substring(number.length - 1)}';
+    }
+    return number;
   }
 
   @override
@@ -653,20 +656,20 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
                     children: [
                       Expanded(
                         child: PassaquiTextField(
-                          editingController: bankAccountInputController,
+                          editingController: accountAndDigitInputController,
                           placeholder: "Conta",
                           keyBoardType: TextInputType.number,
                         ),
                       ),
-                      const SizedBox(width: 8),
-                      SizedBox(
-                        width: 150,
-                        child: PassaquiTextField(
-                          editingController: bankAccountDigitInputController,
-                          placeholder: "Dígito",
-                          keyBoardType: TextInputType.number,
-                        ),
-                      ),
+                      // const SizedBox(width: 8),
+                      // SizedBox(
+                      //   width: 150,
+                      //   child: PassaquiTextField(
+                      //     editingController: bankAccountDigitInputController,
+                      //     placeholder: "Dígito",
+                      //     keyBoardType: TextInputType.number,
+                      //   ),
+                      // ),
                     ],
                   ),
                   const SizedBox(height: 16),
@@ -691,8 +694,7 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
                         onTap: () {
                           if (bankInputController.text.isEmpty ||
                               agencyAndDigitInputController.text.isEmpty ||
-                              bankAccountInputController.text.isEmpty ||
-                              bankAccountDigitInputController.text.isEmpty) {
+                              accountAndDigitInputController.text.isEmpty) {
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -758,7 +760,7 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           Text(
-                                            agencyAndDigitInputController.text,
+                                            _formatWithHyphen(agencyAndDigitInputController.text),
                                             style: const TextStyle(
                                                 color: Colors.white),
                                           ),
@@ -775,10 +777,11 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           Text(
-                                            bankAccountDigitInputController
-                                                .text.isEmpty
-                                                ? '${bankAccountInputController.text}'
-                                                : '${bankAccountInputController.text}-${bankAccountDigitInputController.text}',
+                                            _formatWithHyphen(accountAndDigitInputController.text),
+                                            // bankAccountDigitInputController
+                                            //     .text.isEmpty
+                                            //     ? '${bankAccountInputController.text}'
+                                            //     : '${bankAccountInputController.text}-${bankAccountDigitInputController.text}',
                                             style: const TextStyle(
                                                 color: Colors.white),
                                           ),
@@ -796,21 +799,31 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
                                           0;
                                       String agencyAndDigit =
                                           agencyAndDigitInputController.text;
-                                      String bankAccount =
-                                          bankAccountInputController.text;
-                                      String bankAccountDigit =
-                                          bankAccountDigitInputController.text;
+                                      String accountAndDigit = accountAndDigitInputController.text;
 
                                       // Separate agency and digit if they are combined
                                       String agency = agencyAndDigit;
                                       String agencyDigit = '';
-                                      int dashIndex = agencyAndDigit.indexOf('-');
-                                      if (dashIndex != -1) {
-                                        agency = agencyAndDigit.substring(0, dashIndex).trim();
-                                        agencyDigit = agencyAndDigit.substring(dashIndex + 1).trim();
+
+                                      String account = accountAndDigit;
+                                      String accountDigit = '';
+
+                                      // int dashIndex = agencyAndDigit.indexOf('-');
+                                      // if (dashIndex != -1) {
+                                      //   agency = agencyAndDigit.substring(0, dashIndex).trim();
+                                      //   agencyDigit = agencyAndDigit.substring(dashIndex + 1).trim();
+                                      // }
+                                       if (agencyAndDigit.isNotEmpty){
+                                         agency = agencyAndDigit.substring(0, agencyAndDigit.length - 1).trim();
+                                         agencyDigit = agencyAndDigit.substring(agencyAndDigit.length - 1).trim();
+                                       }
+
+                                      if (accountAndDigit.isNotEmpty){
+                                        account = accountAndDigit.substring(0, accountAndDigit.length - 1).trim();
+                                        accountDigit = accountAndDigit.substring(accountAndDigit.length - 1).trim();
                                       }
 
-                                      if (agency.isEmpty || bankAccount.isEmpty) {
+                                      if (agency.isEmpty || account.isEmpty) {
                                         showDialog(
                                           context: context,
                                           builder: (BuildContext context) {
@@ -835,16 +848,16 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
                                       print('Bank Code: $bankCode');
                                       print('Agency: $agency');
                                       print('Agency Digit: $agencyDigit');
-                                      print('Bank Account: $bankAccount');
-                                      print(
-                                          'Bank Account Digit: $bankAccountDigit');
+                                      print(' Account: $account');
+                                      print('Bank Account Digit: $accountDigit');
                                       print('CPF: $cpf');
 
                                       var response =
                                       await _accountService.saveBankAccount(
                                         bankCode: bankCode,
-                                        bankAccount: bankAccount,
-                                        bankAccountDigit: bankAccountDigit,
+                                        bankAccountDigit: accountDigit,
+                                        account: account,
+                                        accountDigit: accountDigit,
                                         agency: agency,
                                         agencyDigit: agencyDigit,
                                         cpf: cpf as String,

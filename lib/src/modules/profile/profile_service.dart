@@ -13,8 +13,9 @@ class AccountService {
   Future<http.Response> saveBankAccount(
       {required int bankCode,
       required String agency,
-      required String bankAccount,
+      required String account,
       required String cpf,
+        required accountDigit,
       String? agencyDigit,
       String? bankAccountDigit}) async {
     final url = Uri.parse('$baseUrl/Account/cadastrarDadosBancarios');
@@ -23,7 +24,7 @@ class AccountService {
       'cpf': cpf,
       'banco': bankCode,
       'agencia': agency,
-      'conta': bankAccount,
+      'conta': account,
     };
 
 
@@ -32,7 +33,7 @@ class AccountService {
     }
 
     if (bankAccountDigit != null && bankAccountDigit.isNotEmpty) {
-      body['digitoConta'] = bankAccountDigit;
+      body['digitoConta'] = accountDigit;
     }
 
     final jsonBody = jsonEncode(body);
@@ -55,8 +56,8 @@ class AccountService {
             'banco': bankCode,
             'agencia': agency,
             'digitoAgencia': agencyDigit,
-            'conta': bankAccount,
-            'digitoConta': bankAccountDigit,
+            'conta': account,
+            'digitoConta': accountDigit,
           })}');
       print('Response Status Code: ${response.statusCode}');
       print('Response Body: ${response.body}');

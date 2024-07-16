@@ -285,14 +285,14 @@ class _DownloadProposalScreenState extends State<DownloadProposalScreen> {
 
       if (response['HasError'] == true) {
         print('Error: ${response['Message']}');
-        _showDialog('Erro', response['Message']);
+        _showDialog('Tente novamente', "Instabilidade na conexão");
       } else {
         print('Success: ${response['Message']}');
         _showDialog('E-mail Enviado!', 'Contrato enviado para e-mail com sucesso!', success: true);
       }
     } catch (e) {
-      print('Ocorreu um erro');
-      _showDialog('Erro', 'Erro ao enviar contrato');
+      // print('Ocorreu um erro');
+      // _showDialog('Erro', 'Erro ao enviar contrato');
     } finally {
       setState(() {
         _isDownloading = false; // Hide loading indicator
@@ -314,7 +314,7 @@ class _DownloadProposalScreenState extends State<DownloadProposalScreen> {
                 if (success) {
                   DIService().inject<NavigationHandler>().navigate(HomeScreen.route);
                 } else {
-                  Navigator.of(context).pop();
+                  //
                 }
               },
               child: success ? Text('Ir para Tela Inicial') : Text('Tente novamente'),
