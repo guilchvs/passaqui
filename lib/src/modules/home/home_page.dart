@@ -66,6 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
           break;
         case 2:
           print('Navigating to BiometriaSuccessScreen');
+          print('Biometria service: $_biometriaService');
           DIService()
               .inject<NavigationHandler>()
               .navigate(BiometriaSucessScreen.route);
@@ -340,7 +341,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               InkWell(
                                 onTap: () async {
-                                  await fetchBiometriaData();
+                                  // await fetchBiometriaData();
+                                  DIService()
+                                      .inject<NavigationHandler>()
+                                      .navigate(HireStepsScreen.route);
                                   // Handle navigation based on biometria status if needed
                                   // For now, it just navigates to HireStepsScreen directly
                                 },

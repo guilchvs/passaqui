@@ -5,6 +5,7 @@ import 'package:passaqui/src/core/navigation/navigation_handler.dart';
 import 'package:passaqui/src/modules/auth/forgot_password/success/forgot_password_success.dart';
 import 'package:passaqui/src/shared/widget/button.dart';
 import 'package:passaqui/src/shared/widget/text_field.dart';
+import 'package:passaqui/src/services/auth_service.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   static const String route = "/forgot-password";
@@ -23,6 +24,29 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     _emailController = TextEditingController();
     super.initState();
   }
+
+  final AuthService _authService = AuthService();
+
+ Future<void> enviarEmailAlteracaoSenha() async {
+  final emailE = _emailController.text;
+
+    try {
+      final response = await _authService.enviarEmailAlteracaoSenha(
+        email: emailE,
+        bodyHtml: '<!DOCTYPE html> <html lang="en"> <head>     <meta charset="UTF-8">     <meta name="viewport" content="width=device-width, initial-scale=1.0">     <title>Recuperação de Conta - [Nome do Aplicativo]</title>     <style>         body {             font-family: Arial, sans-serif;             line-height: 1.6;             background-color: #f4f4f4;             margin: 0;             padding: 20px;         }         .container {             max-width: 600px;             margin: 0 auto;             background-color: #fff;             padding: 20px;             border-radius: 8px;             box-shadow: 0 0 10px rgba(0,0,0,0.1);         }         .button {             display: inline-block;             background-color: #007bff;             color: #fff;             text-decoration: none;             padding: 10px 20px;             border-radius: 5px;         }         .button:hover {             background-color: #0056b3;         }     </style> </head> <body>     <div class="container">         <h2 style="text-align: center; color: #007bff;">Recuperação de Conta - Passcash</h2>         <p>Prezado(a) [Nome do Usuário],</p>         <p>Recebemos uma solicitação de recuperação de conta para o seu perfil no aplicativo Passcash.</p>         <p>Para continuar com o processo de recuperação, clique no botão abaixo:</p>         <p><a href="http://passcash-api-hml.us-east-1.elasticbeanstalk.com/alterarSenha.html?email=${emailE}" class="button">Recuperar Conta Agora</a></p>         <p>Se você não solicitou essa recuperação ou se acredita que tenha recebido este email por engano, por favor, ignore esta mensagem. Nenhuma alteração foi feita em sua conta até o momento.</p>         <p>Atenciosamente,<br>Equipe de Suporte Passcash</p>     </div> </body> </html>'
+      );
+
+      if (response.statusCode == 200) {
+        print('Email enviado com sucesso!');
+        //DIService().inject<NavigationHandler>().navigate(SuccessScreen.route);
+      } else {
+        throw Exception('Failed to register account: ${response.body}');
+      }
+    } catch (e) {
+      print('Error registering account: $e');
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -112,6 +136,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     showArrow: true,
                     minimumSize: const Size(200, 40),
                     onTap: () {
+                      enviarEmailAlteracaoSenha();
                       DIService()
                           .inject<NavigationHandler>()
                           .navigate(ForgotPasswordSuccessScreen.route);

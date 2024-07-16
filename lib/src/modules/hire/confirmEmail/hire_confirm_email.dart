@@ -375,7 +375,6 @@ class _HireConfirmEmailScreenState extends State<HireConfirmEmailScreen>
     super.initState();
     _fetchUserEmail(); // Fetch user's email when screen initializes
     _fetchBiometriaData();
-    print("Quack quack iniciado");
   }
 
   @override
@@ -413,7 +412,6 @@ class _HireConfirmEmailScreenState extends State<HireConfirmEmailScreen>
       _navigateToScreen(biometriaStatus);
     } catch (e) {
       print('Error fetching biometria data: $e');
-      // Handle error if needed
     } finally {
       setState(() {
         _loading = false; // Reset loading state
@@ -453,6 +451,7 @@ class _HireConfirmEmailScreenState extends State<HireConfirmEmailScreen>
     setState(() {
       _isLoading = true;
     });
+    print("CPF DO USUARIO: $cpf");
 
     final baseUrl =
         'http://passcash-api-hml.us-east-1.elasticbeanstalk.com'; // Replace with your API base URL

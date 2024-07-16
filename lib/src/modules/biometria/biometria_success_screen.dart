@@ -5,6 +5,7 @@ import 'package:passaqui/src/modules/profile/profile_screen.dart';
 import 'package:passaqui/src/modules/profile/update-bank-account/update_profile_screen.dart';
 import 'package:passaqui/src/shared/widget/appbar.dart';
 import 'package:passaqui/src/shared/widget/button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../core/di/service_locator.dart';
 import '../../core/navigation/navigation_handler.dart';
@@ -24,6 +25,8 @@ class _BiometriaSucessScreenState extends State<BiometriaSucessScreen> {
   void initState() {
     super.initState();
   }
+
+
 
   @override
   Widget build(BuildContext context) {

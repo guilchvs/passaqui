@@ -22,25 +22,25 @@ class BiometriaWaitScreen extends StatefulWidget {
   State<BiometriaWaitScreen> createState() => _BiometriaWaitScreenState();
 }
 
-class _BiometriaWaitScreenState extends State<BiometriaWaitScreen> {
+class _BiometriaWaitScreenState extends State<BiometriaWaitScreen> with RouteAware {
   late Timer _timer;
-  int? _biometriaResult;
+  int _biometriaResult = 0;
   final BiometriaService _biometriaService = DIService().inject<BiometriaService>();
 
 
   @override
   void initState() {
     super.initState();
-
-    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
-      print("Fetching API every 5 seconds!");
-      fetchBiometriaData();
+    print("Print");
+    _timer = Timer(Duration(seconds: 5), () {
+      // print("Fetching API every 5 seconds!");
+      //fetchBiometriaData();
+      DIService().inject<NavigationHandler>().navigate(BiometriaSucessScreen.route);
     });
   }
 
   @override
   void dispose() {
-    // Cancel the timer when the state is disposed
     _timer.cancel();
     super.dispose();
   }
@@ -91,7 +91,7 @@ class _BiometriaWaitScreenState extends State<BiometriaWaitScreen> {
             ),
             const SizedBox(height: 26),
             Text(
-              'Ainda não terminaram de analisar seu pedido de crédito pessoal. Aguarde um pouco mais.',
+              'Ainda não terminaram de analisar seus documentos. Aguarde um pouco mais.',
               style: GoogleFonts.roboto(
                 color: Colors.white,
                 fontSize: 16,

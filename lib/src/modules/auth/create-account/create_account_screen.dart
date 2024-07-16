@@ -1,6 +1,7 @@
+import 'package:cpf_cnpj_validator/cpf_validator.dart';
+import 'package:date_format_field/date_format_field.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:cpf_cnpj_validator/cpf_validator.dart';
 import 'package:passaqui/src/modules/welcome/welcome_screen.dart';
 import 'package:passaqui/src/services/auth_service.dart';
 import 'package:passaqui/src/shared/widget/button.dart';
@@ -21,8 +22,10 @@ class CreateAccountScreen extends StatefulWidget {
 }
 
 class _CreateAccountScreenState extends State<CreateAccountScreen> {
+  final TextEditingController _dateController = TextEditingController();
   late PageController _pageController;
   int _currentPageIndex = 0;
+  late DateTime? date;
 
   late List<TextEditingController> controllers;
   List<String> labels = [
@@ -72,13 +75,31 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     _pageController = PageController();
     controllers =
         List.generate(labels.length, (index) => TextEditingController());
+    _dateController.addListener(_formatDate);
     super.initState();
+  }
+
+  void _formatDate() {
+    String text = _dateController.text;
+    text = text.replaceAll(RegExp(r'[^0-9]'), '');
+    if (text.length >= 5) {
+      text =
+          '${text.substring(0, 2)}/${text.substring(2, 4)}/${text.substring(4, 8)}';
+    } else if (text.length >= 3) {
+      text =
+          '${text.substring(0, 2)}/${text.substring(2, 4)}${text.length > 4 ? '/' : ''}${text.length > 4 ? text.substring(4) : ''}';
+    }
+    _dateController.value = _dateController.value.copyWith(
+      text: text,
+      selection: TextSelection.collapsed(offset: text.length),
+    );
   }
 
   @override
   void dispose() {
     _pageController.dispose();
     controllers.forEach((controller) => controller.dispose());
+    _dateController.dispose();
     super.dispose();
   }
 
@@ -144,7 +165,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         logradouro: controllers[9].text.trim(),
         numeroLogradouro: int.tryParse(controllers[10].text.trim()) ?? 0,
         complemento: controllers[11].text.trim(),
-        dataNascimento: _formatDateForSaving(controllers[5].text.trim()),
+        dataNascimento: _formatDateForSaving(date),
         rg: controllers[7].text.trim(),
         bairro: controllers[12].text.trim(),
         cidade: controllers[13].text.trim(),
@@ -162,13 +183,12 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     }
   }
 
-  String _formatDateForSaving(String date) {
+  String _formatDateForSaving(DateTime? date) {
     try {
-      DateTime parsedDate = DateFormat('dd-MM-yyyy').parse(date);
-      return DateFormat('yyyy-MM-dd').format(parsedDate);
+      return DateFormat('yyyy-MM-dd').format(date!);
     } catch (e) {
       print('Error formatting date: $e');
-      return date; // Return original if format cannot be determined
+      return date as String; // Return original if format cannot be determined
     }
   }
 
@@ -231,7 +251,6 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     } else if (_currentPageIndex == 8 && controllers[8].text.isNotEmpty) {
       _findCEPandFillAddress();
     } else if (_currentPageIndex != 11) {
-      // Verifica se o campo está vazio em outras etapas
       if (controllers[_currentPageIndex].text.isNotEmpty) {
         return true;
       } else {
@@ -371,7 +390,10 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                         ],
                         SizedBox(height: 28),
                         if (index == 5) ...[
-                          _buildDateField(),
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: _buildDateField(),
+                          ),
                           SizedBox(height: 16),
                           if (showError && controllers[index].text.isEmpty)
                             Padding(
@@ -515,53 +537,37 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   }
 
   Widget _buildDateField() {
-    return TextFormField(
-      controller: controllers[5],
-      keyboardType: TextInputType.datetime,
-      decoration: InputDecoration(
-          labelText: placeholders[5],
+    return DateFormatField(
+        type: DateFormatType.type2,
+        addCalendar: false,
+        decoration: const InputDecoration(
           labelStyle: TextStyle(
-            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+            fontStyle: FontStyle.italic,
           ),
-          hintText: 'dd-mm-yyyy',
-          border: OutlineInputBorder(
-              borderSide:
-                  BorderSide(color: const Color(0xFFA8CA4B), width: 2.0)),
-          focusedBorder: OutlineInputBorder(
-              borderSide:
-                  BorderSide(color: const Color(0xFFA8CA4B), width: 2.0)),
-          hintStyle: TextStyle(
-            color: const Color(0xFFA8CA4B),
-          )),
-      readOnly: true,
-      onTap: () async {
-        DateTime? picked = await showDatePicker(
-          context: context,
-          initialDate: DateTime.now(),
-          firstDate: DateTime(1900),
-          lastDate: DateTime.now(),
-          builder: (BuildContext context, Widget? child) {
-            return Theme(
-              data: ThemeData.light().copyWith(
-                colorScheme: ColorScheme.light(
-                  primary: const Color(0xFFA8CA4B),
-                  onPrimary: Colors.white,
-                  surface: Colors.white,
-                  onSurface: Colors.black, // Text color
-                ),
-                dialogBackgroundColor: Colors.white, // Background color
-              ),
-              child: child!,
-            );
-          },
-        );
-        if (picked != null) {
-          String formattedDate = DateFormat('dd-MM-yyyy').format(picked);
-          setState(() {
-            controllers[5].text = formattedDate;
-          });
-        }
-      },
-    );
+          enabledBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Color(0xFFA8CA4B),
+              width: 2.0,
+            ),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: const Color(0xFFA8CA4B), width: 1.0),
+          ),
+        ),
+        onComplete: (date) {
+          try {
+            controllers[5].text = 'ok';
+            setState(() {
+              this.date = date;
+            });
+          } catch (e) {
+            // Handle invalid date format
+            setState(() {
+              showError = true;
+            });
+          }
+        });
   }
 }

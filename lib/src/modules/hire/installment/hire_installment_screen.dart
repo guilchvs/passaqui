@@ -10,7 +10,8 @@ import 'package:passaqui/src/shared/widget/card.dart';
 
 import '../../../core/di/service_locator.dart';
 import '../../../core/navigation/navigation_handler.dart';
-import '../../../services/auth_service.dart'; // Import your AuthService
+import '../../../services/auth_service.dart';
+import '../../../services/preference_service.dart'; // Import your AuthService
 
 class HireInstallmentScreen extends StatefulWidget {
   static const String route = "/hire-installment";
@@ -118,6 +119,14 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
         _isLoading = false; // Reset loading state
       });
     }
+  }
+
+  int _extractSelectedPeriodInt(String selectedPeriod) {
+    return int.tryParse(selectedPeriod.split(' ')[0]) ?? 0;
+  }
+
+  Future<void> _saveSelectedPeriod(int selectedPeriod) async {
+    await PreferenceService.saveSelectedPeriod(selectedPeriod);
   }
 
   @override
@@ -314,13 +323,20 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
 
                                   // Navigate to HireValueScreen with jsonResponse as argument
                                   if (_jsonResponse != null) {
+                                    if (_selectedPeriod.isEmpty){
+                                      setState((){
+                                        _selectedPeriod = '1';
+                                      });
+                                    }
+                                    int selectedPeriodInt = _extractSelectedPeriodInt(_selectedPeriod);
+                                    _saveSelectedPeriod(selectedPeriodInt);
                                     DIService().inject<NavigationHandler>().navigate(
                                       HireValueScreen.route,
-                                      arguments: {'jsonResponse': _jsonResponse, 'cpf': widget.cpf},
+                                      arguments: {'jsonResponse': _jsonResponse, 'cpf': widget.cpf, 'selectedPeriod': selectedPeriodInt as int},
                                     );
                                   } else {
                                     print('No JSON response available');
-                                    // Handle case where API response has not been received yet
+                                    print(_jsonResponse);
                                   }
 
                               },

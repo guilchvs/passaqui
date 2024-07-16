@@ -59,7 +59,7 @@ class _WrongPersonalInfoScreenState extends State<WrongPersonalInfoScreen> {
             ),
             const SizedBox(height: 26),
             Text(
-              'Caso este não seja o seu CPF, é necessário acessar o app PaSSAqui com o seu ${destiny} para dar continuidade a sua solicitação. Caso tenha dúvidas, entre em contato com a nossa central de atendimento.',
+              'Caso este não seja o seu CPF, é necessário acessar o app PaSSAqui com o seu ${destiny} para dar continuidade a sua solicitação. Havendo dúvidas, entre em contato com a nossa central de atendimento.',
               style: GoogleFonts.roboto(
                 color: Colors.white,
                 fontSize: 20,

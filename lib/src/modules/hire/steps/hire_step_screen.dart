@@ -149,9 +149,10 @@ class HireStepItem extends StatelessWidget {
                 showButton ?
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 40
+                    horizontal: 14
                   ),
                   child: PassaquiButton(
+                    centerText: true,
                     label: "Continuar",
                     onTap: (){
                       DIService().inject<NavigationHandler>().navigate(HireCpfScreen.route);
