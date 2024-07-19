@@ -3,9 +3,11 @@ import 'package:brazilian_banks/brazilian_banks.dart';
 import 'package:http/http.dart' as http;
 import 'package:passaqui/src/services/auth_service.dart';
 
+import '../../core/app_config.dart';
+
 class AccountService {
-  final String baseUrl =
-      "http://passcash-api-hml.us-east-1.elasticbeanstalk.com/api";
+
+  final baseUrl = AppConfig.baseUrl;
   final AuthService _authService;
 
   AccountService(this._authService);
@@ -18,7 +20,7 @@ class AccountService {
         required accountDigit,
       String? agencyDigit,
       String? bankAccountDigit}) async {
-    final url = Uri.parse('$baseUrl/Account/cadastrarDadosBancarios');
+    final url = Uri.parse('$baseUrl/api/Account/cadastrarDadosBancarios');
     final token = await _authService.getToken();
     final Map<String, dynamic> body = {
       'cpf': cpf,

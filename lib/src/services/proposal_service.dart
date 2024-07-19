@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:passaqui/src/core/app_config.dart';
 import 'package:passaqui/src/core/di/service_locator.dart';
 import 'package:passaqui/src/services/auth_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,7 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ProposalService {
   Future<Map<String, dynamic>> sendProposal(String? cpf, int periodo, double vlrEmprestimo) async {
     final AuthService _authService = DIService().inject<AuthService>();
-    final baseUrl = 'http://passcash-api-hml.us-east-1.elasticbeanstalk.com'; // Replace with your API base URL
+    //final baseUrl = 'http://passcash-api-hml.us-east-1.elasticbeanstalk.com'; // Replace with your API base URL
+    final baseUrl = AppConfig.baseUrl;
     final token = await _authService.getToken();
 
     Uri url = Uri.parse('$baseUrl/api/ApiMaster/enviarPropostaSaqueAniversario').replace(queryParameters: {
@@ -55,7 +57,7 @@ class ProposalService {
 
   Future<Map<String, dynamic>> sendCCBtoEmail() async {
     final AuthService _authService = DIService().inject<AuthService>();
-    final baseUrl = 'http://passcash-api-hml.us-east-1.elasticbeanstalk.com'; // Replace with your API base URL
+    final baseUrl = AppConfig.baseUrl;
     final token = await _authService.getToken();
 
     Uri url = Uri.parse('$baseUrl/api/ApiMaster/downloadCCB');

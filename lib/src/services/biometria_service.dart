@@ -82,9 +82,10 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:passaqui/src/services/auth_service.dart';
 
+import '../core/app_config.dart';
+
 class BiometriaService {
-  final String baseUrl =
-      'http://passcash-api-hml.us-east-1.elasticbeanstalk.com'; // Replace with your API base URL
+  final String baseUrl = AppConfig.baseUrl;
   final AuthService _authService;
 
   BiometriaService(this._authService);

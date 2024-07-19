@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_fonts/google_fonts.dart';
+import 'package:passaqui/src/core/app_config.dart';
 import 'package:passaqui/src/modules/hire/value/hire_value_screen.dart';
 import 'package:passaqui/src/shared/widget/appbar.dart';
 import 'package:passaqui/src/shared/widget/button.dart';
@@ -64,11 +65,10 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
       _isLoading = true; // Set loading state while waiting for API response
     });
 
-    final baseUrl =
-        'http://passcash-api-hml.us-east-1.elasticbeanstalk.com'; // Replace with your API base URL
+    final baseUrl = AppConfig.baseUrl;
     final token = await _authService.getToken(); // Retrieve JWT token
-    // final cpf = '01052320414';
     Uri url;
+
     if (amount != null)
       url = Uri.parse(
           '$baseUrl/api/ApiMaster/fazerSimulacaoFGTS?cpf=$cpf&vlrEmprestimo=$amount');

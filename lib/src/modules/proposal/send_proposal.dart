@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:passaqui/src/core/app_config.dart';
 import 'package:passaqui/src/services/auth_service.dart';
 import 'package:passaqui/src/services/preference_service.dart';
 import 'package:passaqui/src/services/proposal_service.dart';
@@ -47,8 +48,7 @@ class _SendProposalScreenState extends State<SendProposalScreen> {
     });
     print("CPF DO USUARIO: $cpf");
 
-    final baseUrl =
-        'http://passcash-api-hml.us-east-1.elasticbeanstalk.com'; // Replace with your API base URL
+    final baseUrl = AppConfig.baseUrl;
     final token = await _authService.getToken(); // Retrieve JWT token
     final url = Uri.parse('$baseUrl/api/ApiMaster/iniciarBiometria?cpf=$cpf');
 

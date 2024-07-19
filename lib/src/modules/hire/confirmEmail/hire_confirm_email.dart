@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:passaqui/src/core/app_config.dart';
 import 'package:passaqui/src/modules/hire/biometria/hire_biometria_screen.dart';
 import 'package:passaqui/src/modules/profile/update-bank-account/update_profile_screen.dart';
 import 'package:passaqui/src/services/biometria_service.dart';
@@ -120,8 +121,7 @@ class _HireConfirmEmailScreenState extends State<HireConfirmEmailScreen>
     });
     print("CPF DO USUARIO: $cpf");
 
-    final baseUrl =
-        'http://passcash-api-hml.us-east-1.elasticbeanstalk.com'; // Replace with your API base URL
+    final baseUrl = AppConfig.baseUrl;
     final token = await _authService.getToken(); // Retrieve JWT token
     final url = Uri.parse('$baseUrl/api/ApiMaster/iniciarBiometria?cpf=$cpf');
 
