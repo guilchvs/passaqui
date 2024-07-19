@@ -85,7 +85,6 @@ import 'package:passaqui/src/services/auth_service.dart';
 import '../core/app_config.dart';
 
 class BiometriaService {
-  final String baseUrl = AppConfig.baseUrl;
   final AuthService _authService;
 
   BiometriaService(this._authService);
@@ -97,7 +96,7 @@ class BiometriaService {
         throw Exception('Token not available'); // Handle token absence as needed
       }
 
-      final url = Uri.parse('$baseUrl/api/ApiMaster/retornoBiometria'); // Replace with your API endpoint
+      final url = Uri.parse('${AppConfig.api.apiMaster}/retornoBiometria'); // Replace with your API endpoint
       final response = await http.get(
         url,
         headers: <String, String>{

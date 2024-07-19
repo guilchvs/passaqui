@@ -7,7 +7,6 @@ import '../../core/app_config.dart';
 
 class AccountService {
 
-  final baseUrl = AppConfig.baseUrl;
   final AuthService _authService;
 
   AccountService(this._authService);
@@ -18,15 +17,21 @@ class AccountService {
       required String account,
       required String cpf,
         required accountDigit,
+        required int accountType,
       String? agencyDigit,
-      String? bankAccountDigit}) async {
-    final url = Uri.parse('$baseUrl/api/Account/cadastrarDadosBancarios');
+      String? bankAccountDigit
+      }) async {
+
+    final url = Uri.parse('${AppConfig.api.account}/cadastrarDadosBancarios');
+
     final token = await _authService.getToken();
+
     final Map<String, dynamic> body = {
       'cpf': cpf,
       'banco': bankCode,
       'agencia': agency,
       'conta': account,
+      'tipoConta': accountType
     };
 
 
@@ -60,6 +65,7 @@ class AccountService {
             'digitoAgencia': agencyDigit,
             'conta': account,
             'digitoConta': accountDigit,
+            'tipoConta': accountType
           })}');
       print('Response Status Code: ${response.statusCode}');
       print('Response Body: ${response.body}');

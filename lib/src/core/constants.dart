@@ -1,5 +1,13 @@
-import 'package:passaqui/src/core/app_config.dart';
+class Constants {
+  static const String baseUrl = 'http://10.0.2.2:5000';
+  static const _ApiEndpoints api = _ApiEndpoints();
 
-abstract class Constants {
-  static const baseUrl = AppConfig.baseUrl;
+  const Constants._();
+}
+
+class _ApiEndpoints {
+  final String account = '${Constants.baseUrl}/api/Account';
+  final String apiMaster = '${Constants.baseUrl}/api/ApiMaster';
+
+  const _ApiEndpoints();
 }

@@ -8,23 +8,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ProposalService {
   Future<Map<String, dynamic>> sendProposal(String? cpf, int periodo, double vlrEmprestimo) async {
     final AuthService _authService = DIService().inject<AuthService>();
-    //final baseUrl = 'http://passcash-api-hml.us-east-1.elasticbeanstalk.com'; // Replace with your API base URL
-    final baseUrl = AppConfig.baseUrl;
     final token = await _authService.getToken();
 
-    Uri url = Uri.parse('$baseUrl/api/ApiMaster/enviarPropostaSaqueAniversario').replace(queryParameters: {
+    Uri url = Uri.parse('${AppConfig.api.apiMaster}/enviarPropostaSaqueAniversario').replace(queryParameters: {
       'cpf': cpf,
       'periodo': periodo.toString(),
       'vlrEmprestimo': vlrEmprestimo.toString(),
     });
-
-    // final requestBody = {
-    //   'cpf': cpf,
-    //   'periodo': periodo,
-    //   'vlrEmprestimo': vlrEmprestimo,
-    // };
-
-    // final requestBodyJson = jsonEncode(requestBody);
 
     try {
       final response = await http.post(
@@ -57,10 +47,9 @@ class ProposalService {
 
   Future<Map<String, dynamic>> sendCCBtoEmail() async {
     final AuthService _authService = DIService().inject<AuthService>();
-    final baseUrl = AppConfig.baseUrl;
     final token = await _authService.getToken();
 
-    Uri url = Uri.parse('$baseUrl/api/ApiMaster/downloadCCB');
+    Uri url = Uri.parse('${AppConfig.api.apiMaster}/downloadCCB');
 
     try {
       final response = await http.get(

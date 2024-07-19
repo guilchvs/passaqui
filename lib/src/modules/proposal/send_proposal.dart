@@ -48,9 +48,8 @@ class _SendProposalScreenState extends State<SendProposalScreen> {
     });
     print("CPF DO USUARIO: $cpf");
 
-    final baseUrl = AppConfig.baseUrl;
     final token = await _authService.getToken(); // Retrieve JWT token
-    final url = Uri.parse('$baseUrl/api/ApiMaster/iniciarBiometria?cpf=$cpf');
+    final url = Uri.parse('${AppConfig.api.apiMaster}/iniciarBiometria?cpf=$cpf');
 
     try {
       final response = await http.post(
@@ -63,6 +62,7 @@ class _SendProposalScreenState extends State<SendProposalScreen> {
 
       if (response.statusCode == 200) {
         final _url = response.body;
+        print('BIOMETRIA: $_url');
         DIService().inject<NavigationHandler>().navigate(
           HireBiometriaScreen.route,
           arguments: {'url': _url},

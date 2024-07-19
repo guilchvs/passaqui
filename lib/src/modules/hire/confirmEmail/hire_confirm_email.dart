@@ -121,9 +121,8 @@ class _HireConfirmEmailScreenState extends State<HireConfirmEmailScreen>
     });
     print("CPF DO USUARIO: $cpf");
 
-    final baseUrl = AppConfig.baseUrl;
     final token = await _authService.getToken(); // Retrieve JWT token
-    final url = Uri.parse('$baseUrl/api/ApiMaster/iniciarBiometria?cpf=$cpf');
+    final url = Uri.parse('${AppConfig.api.apiMaster}/iniciarBiometria?cpf=$cpf');
 
     try {
       final response = await http.post(

@@ -5,10 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../core/app_config.dart';
 
 class AuthService {
-  final baseUrl = AppConfig.baseUrl;
-
   Future<void> login(String username, String password) async {
-    final url = Uri.parse('$baseUrl/Account/login');
+    final url = Uri.parse('${AppConfig.api.account}/login');
     final response = await http.post(
       url,
       headers: <String, String>{
@@ -55,7 +53,7 @@ class AuthService {
     required String cidade,
     required String estado,
   }) async {
-    final url = Uri.parse('$baseUrl/Account/register');
+    final url = Uri.parse('${AppConfig.api}/Account/register');
     final body = jsonEncode({
       'email': email,
       'name': name,
@@ -87,7 +85,7 @@ class AuthService {
   }
 
 Future<http.Response> enviarEmailAlteracaoSenha({required String email, required String bodyHtml}) async {
-    final url = Uri.parse('$baseUrl/Account/enviarEmail');
+    final url = Uri.parse('${AppConfig.api}/Account/enviarEmail');
     final corpoHtml = jsonEncode({
         'email': email,
         'subject': 'Alteração de Senha - PassCash',

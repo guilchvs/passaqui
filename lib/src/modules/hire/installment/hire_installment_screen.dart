@@ -71,9 +71,9 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
 
     if (amount != null)
       url = Uri.parse(
-          '$baseUrl/api/ApiMaster/fazerSimulacaoFGTS?cpf=$cpf&vlrEmprestimo=$amount');
+          '${AppConfig.api.apiMaster}/fazerSimulacaoFGTS?cpf=$cpf&vlrEmprestimo=$amount');
     else
-      url = Uri.parse('$baseUrl/api/ApiMaster/fazerSimulacaoFGTS?cpf=$cpf');
+      url = Uri.parse('${AppConfig.api.apiMaster}/fazerSimulacaoFGTS?cpf=$cpf');
 
     try {
       final response = await http.post(
