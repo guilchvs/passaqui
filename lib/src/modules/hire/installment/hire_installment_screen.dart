@@ -39,17 +39,18 @@ class _InstallmentOption {
     int displayValue = numberOfValues + 1;
     return '$displayValue x de ${VlrRepasse.toStringAsFixed(2)} - Juros de ${VlrJuros.toStringAsFixed(2)}%';
   }
-
 }
 
 class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
   final TextEditingController _amountController = TextEditingController();
   String _selectedPeriod = ''; // Default selected period
   bool _isLoading = false;
-  final AuthService _authService = AuthService(); // Instance of your AuthService
-  List<_InstallmentOption> _installmentOptions = []; // List to store installment options
+  String _buttonLabel = 'Simular';
+  final AuthService _authService =
+      AuthService(); // Instance of your AuthService
+  List<_InstallmentOption> _installmentOptions =
+      []; // List to store installment options
   dynamic _jsonResponse;
-
 
   @override
   void initState() {
@@ -58,18 +59,19 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
     // Other initialization code here
   }
 
-
   Future<void> _simulateApiCall(String cpf, double? amount) async {
     setState(() {
       _isLoading = true; // Set loading state while waiting for API response
     });
 
-    final baseUrl = 'http://passcash-api-hml.us-east-1.elasticbeanstalk.com'; // Replace with your API base URL
+    final baseUrl =
+        'http://passcash-api-hml.us-east-1.elasticbeanstalk.com'; // Replace with your API base URL
     final token = await _authService.getToken(); // Retrieve JWT token
     // final cpf = '01052320414';
-    Uri url; 
-    if(amount != null)
-      url = Uri.parse('$baseUrl/api/ApiMaster/fazerSimulacaoFGTS?cpf=$cpf&vlrEmprestimo=$amount');
+    Uri url;
+    if (amount != null)
+      url = Uri.parse(
+          '$baseUrl/api/ApiMaster/fazerSimulacaoFGTS?cpf=$cpf&vlrEmprestimo=$amount');
     else
       url = Uri.parse('$baseUrl/api/ApiMaster/fazerSimulacaoFGTS?cpf=$cpf');
 
@@ -87,25 +89,30 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
         final jsonResponse = jsonDecode(response.body);
 
         setState(() {
-          _jsonResponse = jsonResponse; // Store the JSON response in _jsonResponse variable
+          _jsonResponse =
+              jsonResponse; // Store the JSON response in _jsonResponse variable
         });
 
         List<_InstallmentOption> options = [];
-        List<dynamic> simulacaoParcelas = _jsonResponse['SimulacaoParcelas'] ?? [];
+        List<dynamic> simulacaoParcelas =
+            _jsonResponse['SimulacaoParcelas'] ?? [];
         int cont = 0;
 
-          for (var parcela in simulacaoParcelas) {
-            options.add(_InstallmentOption(
-              numberOfValues: cont, // Increment numberOfValues by 1
-              VlrRepasse: (parcela['VlrRepasse'] ?? 0.0).toDouble(),
-              VlrJuros: ((parcela['VlrJuros'] ?? 0.0).toDouble() / (parcela['VlrRepasse'] ?? 0.0).toDouble()) * 100,
-            ));
-            cont++;
-          }
+        for (var parcela in simulacaoParcelas) {
+          options.add(_InstallmentOption(
+            numberOfValues: cont, // Increment numberOfValues by 1
+            VlrRepasse: (parcela['VlrRepasse'] ?? 0.0).toDouble(),
+            VlrJuros: ((parcela['VlrJuros'] ?? 0.0).toDouble() /
+                    (parcela['VlrRepasse'] ?? 0.0).toDouble()) *
+                100,
+          ));
+          cont++;
+        }
 
         setState(() {
           _installmentOptions = options;
           _selectedPeriod = options.isNotEmpty ? options.first.toString() : '';
+          _buttonLabel = 'Próximo';
         });
       } else {
         // Handle other status codes here
@@ -199,9 +206,12 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
                                       // Wrap with FocusScope
                                       child: TextFormField(
                                         controller: _amountController,
-                                        keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                        keyboardType:
+                                            TextInputType.numberWithOptions(
+                                                decimal: true),
                                         inputFormatters: [
-                                          FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
+                                          FilteringTextInputFormatter.allow(
+                                              RegExp(r'^\d*\.?\d{0,2}')),
                                         ],
                                         style: GoogleFonts.inter(
                                           color: Color(0xFF136048),
@@ -212,18 +222,23 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
                                         decoration: InputDecoration(
                                           border: InputBorder.none,
                                           hintText: '0,00',
-                                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                                          floatingLabelBehavior:
+                                              FloatingLabelBehavior.never,
                                           hintStyle: GoogleFonts.inter(
-                                            color: Color(0xFF136048).withOpacity(0.3),
+                                            color: Color(0xFF136048)
+                                                .withOpacity(0.3),
                                             fontSize: 26,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
                                         // Trigger API call on editing complete
                                         onEditingComplete: () {
-                                          final amount = double.tryParse(_amountController.text.replaceAll(',', '.'));
+                                          final amount = double.tryParse(
+                                              _amountController.text
+                                                  .replaceAll(',', '.'));
                                           if (amount != null) {
-                                            _simulateApiCall(widget.cpf ?? '', amount);
+                                            _simulateApiCall(
+                                                widget.cpf ?? '', amount);
                                             // Unfocus keyboard after API call
                                             FocusScope.of(context).unfocus();
                                           } else {
@@ -313,32 +328,41 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
                           const SizedBox(height: 64),
                           Center(
                             child: PassaquiButton(
-                              label: 'Simular',
+                              label: _buttonLabel,
                               style: PassaquiButtonStyle.primary,
                               showArrow: true,
                               onTap: () {
-                                final amount = double.tryParse(_amountController.text.replaceAll(',', '.'));
-                                  _simulateApiCall(widget.cpf ?? '', amount);
-                                  FocusScope.of(context).unfocus();
+                                final amount = double.tryParse(_amountController
+                                    .text
+                                    .replaceAll(',', '.'));
+                                _simulateApiCall(widget.cpf ?? '', amount);
+                                FocusScope.of(context).unfocus();
 
-                                  // Navigate to HireValueScreen with jsonResponse as argument
-                                  if (_jsonResponse != null) {
-                                    if (_selectedPeriod.isEmpty){
-                                      setState((){
-                                        _selectedPeriod = '1';
-                                      });
-                                    }
-                                    int selectedPeriodInt = _extractSelectedPeriodInt(_selectedPeriod);
-                                    _saveSelectedPeriod(selectedPeriodInt);
-                                    DIService().inject<NavigationHandler>().navigate(
-                                      HireValueScreen.route,
-                                      arguments: {'jsonResponse': _jsonResponse, 'cpf': widget.cpf, 'selectedPeriod': selectedPeriodInt as int},
-                                    );
-                                  } else {
-                                    print('No JSON response available');
-                                    print(_jsonResponse);
+                                // Navigate to HireValueScreen with jsonResponse as argument
+                                if (_jsonResponse != null) {
+                                  if (_selectedPeriod.isEmpty) {
+                                    setState(() {
+                                      _selectedPeriod = '1';
+                                    });
                                   }
-
+                                  int selectedPeriodInt =
+                                      _extractSelectedPeriodInt(
+                                          _selectedPeriod);
+                                  _saveSelectedPeriod(selectedPeriodInt);
+                                  DIService()
+                                      .inject<NavigationHandler>()
+                                      .navigate(
+                                    HireValueScreen.route,
+                                    arguments: {
+                                      'jsonResponse': _jsonResponse,
+                                      'cpf': widget.cpf,
+                                      'selectedPeriod': selectedPeriodInt as int
+                                    },
+                                  );
+                                } else {
+                                  print('No JSON response available');
+                                  print(_jsonResponse);
+                                }
                               },
                             ),
                           ),
@@ -351,7 +375,9 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
                   Container(
                     color: Colors.black.withOpacity(0.5),
                     child: Center(
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
                     ),
                   ),
               ],
