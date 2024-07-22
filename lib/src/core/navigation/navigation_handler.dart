@@ -4,6 +4,7 @@ import 'package:passaqui/src/modules/auth/create-account/create_account_screen.d
 import 'package:passaqui/src/modules/auth/forgot_password/forgot_password_screen.dart';
 import 'package:passaqui/src/modules/auth/forgot_password/success/forgot_password_success.dart';
 import 'package:passaqui/src/modules/auth/login/login_screen.dart';
+import 'package:passaqui/src/modules/auth/privacy_terms/privacy_terms_screen.dart';
 import 'package:passaqui/src/modules/auth/success/success_screen.dart';
 import 'package:passaqui/src/modules/hire/confirmEmail/hire_confirm_email.dart';
 import 'package:passaqui/src/modules/hire/cpf/hire_cpf_screen.dart';
@@ -49,6 +50,10 @@ class NavigationHandler {
       case CreateAccountScreen.route:
         return MaterialPageRoute(
           builder: (context) => const CreateAccountScreen(),
+        );
+      case PrivacyTermsScreen.route:
+        return MaterialPageRoute(
+          builder: (context) => const PrivacyTermsScreen(),
         );
       case ForgotPasswordScreen.route:
         return MaterialPageRoute(

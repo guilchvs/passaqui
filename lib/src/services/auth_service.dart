@@ -53,7 +53,7 @@ class AuthService {
     required String cidade,
     required String estado,
   }) async {
-    final url = Uri.parse('${AppConfig.api}/Account/register');
+    final url = Uri.parse('${AppConfig.api.account}/register');
     final body = jsonEncode({
       'email': email,
       'name': name,

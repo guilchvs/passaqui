@@ -3,6 +3,7 @@ import 'package:passaqui/src/core/di/service_locator.dart';
 import 'package:passaqui/src/core/navigation/navigation_handler.dart';
 import 'package:passaqui/src/modules/auth/create-account/create_account_screen.dart';
 import 'package:passaqui/src/modules/auth/login/login_screen.dart';
+import 'package:passaqui/src/modules/auth/privacy_terms/privacy_terms_screen.dart';
 import 'package:passaqui/src/shared/widget/button.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -63,9 +64,11 @@ class WelcomeScreen extends StatelessWidget {
               height: 50,
               centerText: true,
               onTap: () {
+
                 DIService()
                     .inject<NavigationHandler>()
-                    .navigate(CreateAccountScreen.route);
+                    .navigate(PrivacyTermsScreen.route);
+
               },
               style: PassaquiButtonStyle.primary,
             ),

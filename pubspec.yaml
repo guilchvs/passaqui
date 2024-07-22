@@ -13,6 +13,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   cupertino_icons: ^1.0.2
+  syncfusion_flutter_pdfviewer: ^26.1.42
   cpf_cnpj_validator: ^2.0.0
   search_cep: ^4.0.2
 
@@ -37,6 +38,8 @@ dependencies:
   flutter_inappwebview: ^6.0.0
   flutter_typeahead: ^4.0.0
   date_format_field: ^0.1.0
+  flutter_pdfview: ^1.3.2
+  device_info_plus: ^10.1.0
 
 
 dependency_overrides:
@@ -50,6 +53,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/pdf/
     - assets/images/
     - assets/images/withdraw/
   fonts:

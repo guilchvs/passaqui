@@ -109,7 +109,7 @@ class SuccessScreen extends StatelessWidget {
                   style: PassaquiButtonStyle.secondary,
                   centerText: true,
                   textColor: Colors.black,
-                  label: "Volte à tela de início",
+                  label: "Voltar para início",
                   minimumSize: Size(200, 40),
                   onTap: () {
                     Navigator.of(context).pushNamed(WelcomeScreen.route);
