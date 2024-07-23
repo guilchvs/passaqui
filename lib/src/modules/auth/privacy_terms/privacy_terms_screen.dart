@@ -37,15 +37,15 @@ class _PrivacyTermsScreenState extends State<PrivacyTermsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: const PassaquiAppBar(
-      //   showLogo: false,
-      //   showBackButton: false,
-      // ),
+      appBar: const PassaquiAppBar(
+        showLogo: false,
+        showBackButton: true,
+      ),
       backgroundColor: Color.fromRGBO(18, 96, 73, 1),
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 56.0, bottom: 22),
+            padding: const EdgeInsets.only(bottom: 22),
             child: Text(
               'Termos de privacidade',
               style: const TextStyle(
