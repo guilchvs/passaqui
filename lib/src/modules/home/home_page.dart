@@ -6,6 +6,7 @@ import 'package:passaqui/src/modules/biometria/biometria_success_screen.dart';
 import 'package:passaqui/src/modules/biometria/wait/biometria_wait_screen.dart';
 import 'package:passaqui/src/modules/profile/update-bank-account/update_profile_screen.dart';
 import 'package:passaqui/src/modules/proposal/consult_proposal_screen.dart';
+import 'package:passaqui/src/modules/welcome/welcome_screen.dart';
 import 'package:passaqui/src/services/auth_service.dart'; // Import AuthService
 import 'package:passaqui/src/shared/widget/button.dart';
 import 'package:passaqui/src/shared/widget/card.dart';
@@ -148,16 +149,44 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.only(right: 28.0),
                                   child: Image.asset(
-                                    "assets/images/notification_bell.png",
-                                    height: 34,
-                                    width: 34,
+                                    "assets/images/logout.png",
+                                    color: Colors.white,
+                                    height: 30,
+                                    width: 30,
                                   ),
                                 ),
                                 onTap: () {
-                                  Navigator.of(context).pop();
-                                  DIService()
-                                      .inject<NavigationHandler>()
-                                      .navigate(ConsultProposalScreen.route);
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text("Logout"),
+                                        content: Text("Deseja mesmo sair do aplicativo?"),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            child: Text("Voltar ao app"),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                          TextButton(
+                                            child: Text("Sair"),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                              _authService.logout();
+                                              DIService().inject<NavigationHandler>().navigate(WelcomeScreen.route);
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                  //_authService.logout();
+                                  //DIService().inject<NavigationHandler>().navigate(WelcomeScreen.route);
+                                  // Navigator.of(context).pop();
+                                  // DIService()
+                                  //     .inject<NavigationHandler>()
+                                  //     .navigate(ConsultProposalScreen.route);
                                 },
                               ),
                             ],

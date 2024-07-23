@@ -125,6 +125,9 @@ Future<http.Response> enviarEmailAlteracaoSenha({required String email, required
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('jwt');
+    await prefs.remove('nome');
+    await prefs.remove('email');
+    await prefs.remove('cpf');
   }
 
 
