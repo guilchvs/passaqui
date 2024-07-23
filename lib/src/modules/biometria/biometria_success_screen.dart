@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:passaqui/src/modules/profile/profile_screen.dart';
-import 'package:passaqui/src/modules/profile/update-bank-account/update_profile_screen.dart';
+import 'package:passaqui/src/modules/profile/update-bank-account/update_bank_account_screen.dart';
 import 'package:passaqui/src/shared/widget/appbar.dart';
 import 'package:passaqui/src/shared/widget/button.dart';
 import 'package:shared_preferences/shared_preferences.dart';

@@ -27,7 +27,7 @@ import '../../modules/biometria/biometria_success_screen.dart';
 import '../../modules/biometria/wait/biometria_wait_screen.dart';
 import '../../modules/hire/wrongInfo/wrong_cpf_screen.dart';
 import '../../modules/profile/profile_screen.dart';
-import '../../modules/profile/update-bank-account/update_profile_screen.dart';
+import '../../modules/profile/update-bank-account/update_bank_account_screen.dart';
 
 class NavigationHandler {
   final GlobalKey<NavigatorState> _globalKey = GlobalKey();

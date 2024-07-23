@@ -4,7 +4,7 @@ import 'package:passaqui/src/core/navigation/navigation_handler.dart';
 import 'package:passaqui/src/modules/biometria/biometria_error_screen.dart';
 import 'package:passaqui/src/modules/biometria/biometria_success_screen.dart';
 import 'package:passaqui/src/modules/biometria/wait/biometria_wait_screen.dart';
-import 'package:passaqui/src/modules/profile/update-bank-account/update_profile_screen.dart';
+import 'package:passaqui/src/modules/profile/update-bank-account/update_bank_account_screen.dart';
 import 'package:passaqui/src/modules/proposal/consult_proposal_screen.dart';
 import 'package:passaqui/src/modules/welcome/welcome_screen.dart';
 import 'package:passaqui/src/services/auth_service.dart'; // Import AuthService
@@ -109,7 +109,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.of(context).pop();
                                   DIService()
                                       .inject<NavigationHandler>()
                                       .navigate(ProfileScreen.route);
@@ -149,13 +148,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.only(right: 28.0),
                                   child:
-                                  Icon(Icons.logout, color: Colors.white),
-                                  // Image.asset(
-                                  //   "assets/images/logout.png",
-                                  //   color: Colors.white,
-                                  //   height: 30,
-                                  //   width: 30,
-                                  // ),
+                                  //Icon(Icons.logout, color: Colors.white),
+                                  Image.asset(
+                                    "assets/images/logout.png",
+                                     color: Colors.white,
+                                     height: 30,
+                                     width: 30,
+                                   ),
                                 ),
                                 onTap: () {
                                   showDialog(

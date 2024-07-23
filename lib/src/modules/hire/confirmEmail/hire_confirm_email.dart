@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:passaqui/src/core/app_config.dart';
 import 'package:passaqui/src/modules/hire/biometria/hire_biometria_screen.dart';
-import 'package:passaqui/src/modules/profile/update-bank-account/update_profile_screen.dart';
+import 'package:passaqui/src/modules/profile/update-bank-account/update_bank_account_screen.dart';
 import 'package:passaqui/src/services/biometria_service.dart';
 import 'package:passaqui/src/shared/widget/appbar.dart';
 import 'package:passaqui/src/shared/widget/button.dart';
