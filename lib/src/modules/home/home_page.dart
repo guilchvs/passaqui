@@ -112,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Navigator.of(context).pop();
                                   DIService()
                                       .inject<NavigationHandler>()
-                                      .navigate(UpdateBankProfileScreen.route);
+                                      .navigate(ProfileScreen.route);
                                 },
                                 child: Image.asset(
                                   "assets/images/ellipse.png",
@@ -148,12 +148,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               GestureDetector(
                                 child: Padding(
                                   padding: const EdgeInsets.only(right: 28.0),
-                                  child: Image.asset(
-                                    "assets/images/logout.png",
-                                    color: Colors.white,
-                                    height: 30,
-                                    width: 30,
-                                  ),
+                                  child:
+                                  Icon(Icons.logout, color: Colors.white),
+                                  // Image.asset(
+                                  //   "assets/images/logout.png",
+                                  //   color: Colors.white,
+                                  //   height: 30,
+                                  //   width: 30,
+                                  // ),
                                 ),
                                 onTap: () {
                                   showDialog(
