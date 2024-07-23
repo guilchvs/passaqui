@@ -267,7 +267,7 @@ class _UpdateBankProfileScreenState extends State<UpdateBankProfileScreen> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 0),
                       child: PassaquiButton(
-                        disabled: true,
+                        style: PassaquiButtonStyle.defaultLight,
                         label: "Continuar",
                         showArrow: true,
                         minimumSize: const Size(200, 40),
