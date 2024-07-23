@@ -212,26 +212,102 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     }
   }
 
+  // bool _isFieldValid() {
+  //   if (_currentPageIndex == 1) {
+  //     String password = controllers[1].text.trim();
+  //     if (password.isNotEmpty &&
+  //         password.length >= 8 &&
+  //         _containsLettersAndNumbers(password)) {
+  //       return true;
+  //     } else {
+  //       return false;
+  //     }
+  //   } else if (_currentPageIndex == 2) {
+  //     String password = controllers[1].text.trim();
+  //     String confirmPassword = controllers[2].text.trim();
+  //     // Verifica se ambos os campos de senha estão preenchidos
+  //     if (password.isNotEmpty && confirmPassword.isNotEmpty) {
+  //       // Verifica se as senhas são iguais
+  //       if (password == confirmPassword) {
+  //         return true;
+  //       } else {
+  //         return false;
+  //       }
+  //     } else {
+  //       return false;
+  //     }
+  //   } else if (_currentPageIndex == 3) {
+  //     bool isCpfValid = CPFValidator.isValid(controllers[3].text.trim());
+  //     if (!isCpfValid) {
+  //       setState(() {
+  //         showCpfError = true;
+  //       });
+  //       return false;
+  //     }
+  //     return true;
+  //   } else if (_currentPageIndex == 4) {
+  //     String telefone = controllers[4].text.trim();
+  //     // Verifica se o telefone tem exatamente 11 dígitos
+  //     if (telefone.length == 11) {
+  //       return true;
+  //     } else {
+  //       setState(() {
+  //         showError = true;
+  //       });
+  //       return false;
+  //     }
+  //   } else if (_currentPageIndex == 6) {
+  //     bool isEmailValid = RegExp(
+  //             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+  //         .hasMatch(controllers[6].text.trim());
+  //     if (!isEmailValid) {
+  //       setState(() {
+  //         showEmailError = true;
+  //       });
+  //       return false;
+  //     }
+  //     return true;
+  //   } else if (_currentPageIndex == 8 && controllers[8].text.isNotEmpty) {
+  //     _findCEPandFillAddress();
+  //   } else if (_currentPageIndex != 11) {
+  //     if (controllers[_currentPageIndex].text.isNotEmpty) {
+  //       return true;
+  //     } else {
+  //       return false;
+  //     }
+  //   }
+  //   return true;
+  // }
   bool _isFieldValid() {
     if (_currentPageIndex == 1) {
       String password = controllers[1].text.trim();
-      // Verifica se a senha tem pelo menos 8 caracteres e contém letras e números
+      print('Password: $password');
+
       if (password.isNotEmpty &&
           password.length >= 8 &&
           _containsLettersAndNumbers(password)) {
+        print('Password is valid');
+        setState(() {
+          showError = false; // Hide error message
+        });
         return true;
       } else {
+        setState(() {
+          showError = true; // Show error for invalid password
+        });
+        print('Password is invalid');
         return false;
       }
     } else if (_currentPageIndex == 2) {
       String password = controllers[1].text.trim();
       String confirmPassword = controllers[2].text.trim();
-      // Verifica se ambos os campos de senha estão preenchidos
       if (password.isNotEmpty && confirmPassword.isNotEmpty) {
-        // Verifica se as senhas são iguais
         if (password == confirmPassword) {
           return true;
         } else {
+          setState(() {
+            showError = true; // Show error for non-matching passwords
+          });
           return false;
         }
       } else {
@@ -248,12 +324,11 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       return true;
     } else if (_currentPageIndex == 4) {
       String telefone = controllers[4].text.trim();
-      // Verifica se o telefone tem exatamente 11 dígitos
       if (telefone.length == 11) {
         return true;
       } else {
         setState(() {
-          showError = true;
+          showError = true; // Show error for invalid phone number
         });
         return false;
       }
@@ -274,6 +349,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       if (controllers[_currentPageIndex].text.isNotEmpty) {
         return true;
       } else {
+        setState(() {
+          showError = true; // Show error for empty fields
+        });
         return false;
       }
     }
@@ -281,19 +359,29 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   }
 
   bool _containsLettersAndNumbers(String value) {
-    bool hasLetters = false;
-    bool hasNumbers = false;
+    final hasLetters = RegExp(r'[a-zA-Z]').hasMatch(value);
+    final hasNumbers = RegExp(r'\d').hasMatch(value);
 
-    for (int i = 0; i < value.length; i++) {
-      if (value[i].toUpperCase() != value[i].toLowerCase()) {
-        hasLetters = true;
-      } else if (value[i].contains(RegExp(r'\d'))) {
-        hasNumbers = true;
-      }
-    }
+    print('Password contains letters: $hasLetters');
+    print('Password contains numbers: $hasNumbers');
 
     return hasLetters && hasNumbers;
   }
+
+  // bool _containsLettersAndNumbers(String value) {
+  //   bool hasLetters = false;
+  //   bool hasNumbers = false;
+  //
+  //   for (int i = 0; i < value.length; i++) {
+  //     if (value[i].toUpperCase() != value[i].toLowerCase()) {
+  //       hasLetters = true;
+  //     } else if (value[i].contains(RegExp(r'\d'))) {
+  //       hasNumbers = true;
+  //     }
+  //   }
+  //
+  //   return hasLetters && hasNumbers;
+  // }
 
   Future<void> _findCEPandFillAddress() async {
     String _cepAtual = controllers[8].text.trim();
@@ -332,7 +420,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: !_isLoading ? Colors.transparent : Colors.black.withOpacity(0.5),
+        backgroundColor:
+            !_isLoading ? Colors.transparent : Colors.black.withOpacity(0.5),
         elevation: 0,
         automaticallyImplyLeading: false,
         leading: IconButton(
@@ -448,8 +537,12 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                   textColor: Colors.black,
                                 ),
                                 if ((index == 1 || index == 2) &&
-                                    controllers[index].text.isNotEmpty &&
-                                    controllers[index].text.length < 8)
+                                        controllers[index].text.isNotEmpty &&
+                                        controllers[index].text.length < 8 ||
+                                    (index == 1 || index == 2) &&
+                                        controllers[index].text.isNotEmpty &&
+                                        !_containsLettersAndNumbers(
+                                            controllers[index].text))
                                   Padding(
                                     padding: const EdgeInsets.only(left: 16.0),
                                     child: Text(
