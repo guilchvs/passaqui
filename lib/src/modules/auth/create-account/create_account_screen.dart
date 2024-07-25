@@ -380,39 +380,6 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     }
   }
 
-  // Future<void> _findCEPandFillAddress() async {
-  //   String _cepAtual = controllers[8].text.trim();
-  //   final viaCepSearchCep = ViaCepSearchCep();
-  //   final infoCepJSON = await viaCepSearchCep.searchInfoByCep(cep: _cepAtual);
-  //   String parsedjson = infoCepJSON.toString();
-  //   if (parsedjson.contains('Right')) {
-  //     final values = parsedjson
-  //         .split(",")
-  //         .map((x) => x.trim())
-  //         .where((element) => element.isNotEmpty)
-  //         .toList();
-  //     final logradouro = values[1].replaceFirst('logradouro: ', '');
-  //     controllers[9].text = logradouro;
-  //
-  //     // quando existir colocar bairro: Super Quadra Morumbi, localidade: São Paulo, uf: SP,
-  //     // 1 logradouro, 3 bairro, 4 localidade, 5 uf
-  //     final bairro = values[3].replaceFirst('bairro: ', '');
-  //     controllers[12].text = bairro;
-  //     final cidade = values[4].replaceFirst('localidade: ', '');
-  //     controllers[13].text = cidade;
-  //     final uf = values[5].replaceFirst('uf: ', '');
-  //     controllers[14].text = uf;
-  //   } else {
-  //     setState(() {
-  //       showCepError = true;
-  //     });
-  //     controllers[9].text = "";
-  //     controllers[12].text = "";
-  //     controllers[13].text = "";
-  //     controllers[14].text = "";
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
