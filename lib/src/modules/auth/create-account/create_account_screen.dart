@@ -22,6 +22,7 @@ class CreateAccountScreen extends StatefulWidget {
 }
 
 class _CreateAccountScreenState extends State<CreateAccountScreen> {
+  List<bool> _fieldErrors = List.generate(15, (_) => false);
   final TextEditingController _dateController = TextEditingController();
   late PageController _pageController;
   int _currentPageIndex = 0;
@@ -37,7 +38,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     "Por favor, insira sua data de nascimento",
     "Estamos quase finalizando.\n\nInforme seu e-mail no campo abaixo:",
     "Agora precisamos do seu RG:",
-    "Agora entramos na etapa sobre sua residência.\n\nPedimos que insira seu CEP:",
+    "Agora entramos na etapa sobre sua residência.",
     "Insira abaixo o nome do logradouro, por favor:",
     "Agora informe o número da sua residência:",
     "Informe (caso exista) o complemento da localização de sua residência:",
@@ -58,7 +59,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     "Digite seu CEP",
     "Digite seu logradouro",
     "Digite seu número",
-    "Digite o complemento",
+    "Digite o complemento (opcional)",
     "Digite o bairro",
     "Digite a Cidade",
     "Digite o Estado",
@@ -79,7 +80,14 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     date = null;
     _setDateControllerText();
     _dateController.addListener(_formatDate);
+    controllers[8].addListener(_onTextChanged);
     super.initState();
+  }
+
+  void _onTextChanged() {
+    if (_currentPageIndex == 8 && controllers[8].text.isNotEmpty) {
+      _findCEPandFillAddress();
+    }
   }
 
   void _setDateControllerText() {
@@ -109,12 +117,13 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     _pageController.dispose();
     controllers.forEach((controller) => controller.dispose());
     _dateController.dispose();
+    controllers[8].removeListener(_onTextChanged);
     super.dispose();
   }
 
   void nextPage() {
     FocusScope.of(context).unfocus();
-    if (_currentPageIndex < labels.length - 1) {
+    if (_currentPageIndex < 8) {
       if (_isFieldValid()) {
         setState(() {
           showCpfError = false;
@@ -136,8 +145,20 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         return;
       }
     } else {
-      _registerAccount();
+      if (_isAddressEmpty())
+        _registerAccount();
+      else {
+        print('ops');
+      }
     }
+  }
+
+  void _validateFields() {
+    setState(() {
+      for (int i = 8; i <= 14; i++) {
+        _fieldErrors[i] = controllers[i].text.isEmpty;
+      }
+    });
   }
 
   void previousPage() {
@@ -212,72 +233,6 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     }
   }
 
-  // bool _isFieldValid() {
-  //   if (_currentPageIndex == 1) {
-  //     String password = controllers[1].text.trim();
-  //     if (password.isNotEmpty &&
-  //         password.length >= 8 &&
-  //         _containsLettersAndNumbers(password)) {
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   } else if (_currentPageIndex == 2) {
-  //     String password = controllers[1].text.trim();
-  //     String confirmPassword = controllers[2].text.trim();
-  //     // Verifica se ambos os campos de senha estão preenchidos
-  //     if (password.isNotEmpty && confirmPassword.isNotEmpty) {
-  //       // Verifica se as senhas são iguais
-  //       if (password == confirmPassword) {
-  //         return true;
-  //       } else {
-  //         return false;
-  //       }
-  //     } else {
-  //       return false;
-  //     }
-  //   } else if (_currentPageIndex == 3) {
-  //     bool isCpfValid = CPFValidator.isValid(controllers[3].text.trim());
-  //     if (!isCpfValid) {
-  //       setState(() {
-  //         showCpfError = true;
-  //       });
-  //       return false;
-  //     }
-  //     return true;
-  //   } else if (_currentPageIndex == 4) {
-  //     String telefone = controllers[4].text.trim();
-  //     // Verifica se o telefone tem exatamente 11 dígitos
-  //     if (telefone.length == 11) {
-  //       return true;
-  //     } else {
-  //       setState(() {
-  //         showError = true;
-  //       });
-  //       return false;
-  //     }
-  //   } else if (_currentPageIndex == 6) {
-  //     bool isEmailValid = RegExp(
-  //             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-  //         .hasMatch(controllers[6].text.trim());
-  //     if (!isEmailValid) {
-  //       setState(() {
-  //         showEmailError = true;
-  //       });
-  //       return false;
-  //     }
-  //     return true;
-  //   } else if (_currentPageIndex == 8 && controllers[8].text.isNotEmpty) {
-  //     _findCEPandFillAddress();
-  //   } else if (_currentPageIndex != 11) {
-  //     if (controllers[_currentPageIndex].text.isNotEmpty) {
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   }
-  //   return true;
-  // }
   bool _isFieldValid() {
     if (_currentPageIndex == 1) {
       String password = controllers[1].text.trim();
@@ -358,6 +313,26 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     return true;
   }
 
+  bool _isAddressEmpty() {
+      setState(() {
+        _fieldErrors[8] = controllers[8].text.isEmpty;
+        _fieldErrors[9] = controllers[9].text.isEmpty;
+        _fieldErrors[10] = controllers[10].text.isEmpty;
+        _fieldErrors[12] = controllers[12].text.isEmpty;
+        _fieldErrors[13] = controllers[13].text.isEmpty;
+        _fieldErrors[14] = controllers[14].text.isEmpty;
+      });
+
+    return controllers[8].text.isNotEmpty &&
+        controllers[9].text.isNotEmpty &&
+        controllers[10].text.isNotEmpty &&
+        controllers[12].text.isNotEmpty &&
+        controllers[13].text.isNotEmpty &&
+        controllers[14].text.isNotEmpty;
+  }
+
+
+
   bool _containsLettersAndNumbers(String value) {
     final hasLetters = RegExp(r'[a-zA-Z]').hasMatch(value);
     final hasNumbers = RegExp(r'\d').hasMatch(value);
@@ -368,53 +343,75 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     return hasLetters && hasNumbers;
   }
 
-  // bool _containsLettersAndNumbers(String value) {
-  //   bool hasLetters = false;
-  //   bool hasNumbers = false;
-  //
-  //   for (int i = 0; i < value.length; i++) {
-  //     if (value[i].toUpperCase() != value[i].toLowerCase()) {
-  //       hasLetters = true;
-  //     } else if (value[i].contains(RegExp(r'\d'))) {
-  //       hasNumbers = true;
-  //     }
-  //   }
-  //
-  //   return hasLetters && hasNumbers;
-  // }
-
   Future<void> _findCEPandFillAddress() async {
+    print("called here");
     String _cepAtual = controllers[8].text.trim();
     final viaCepSearchCep = ViaCepSearchCep();
     final infoCepJSON = await viaCepSearchCep.searchInfoByCep(cep: _cepAtual);
     String parsedjson = infoCepJSON.toString();
+
     if (parsedjson.contains('Right')) {
       final values = parsedjson
           .split(",")
           .map((x) => x.trim())
           .where((element) => element.isNotEmpty)
           .toList();
-      final logradouro = values[1].replaceFirst('logradouro: ', '');
-      controllers[9].text = logradouro;
 
-      // quando existir colocar bairro: Super Quadra Morumbi, localidade: São Paulo, uf: SP,
-      // 1 logradouro, 3 bairro, 4 localidade, 5 uf
+      final logradouro = values[1].replaceFirst('logradouro: ', '');
       final bairro = values[3].replaceFirst('bairro: ', '');
-      controllers[12].text = bairro;
       final cidade = values[4].replaceFirst('localidade: ', '');
-      controllers[13].text = cidade;
       final uf = values[5].replaceFirst('uf: ', '');
-      controllers[14].text = uf;
+
+      setState(() {
+        controllers[9].text = logradouro;
+        controllers[12].text = bairro;
+        controllers[13].text = cidade;
+        controllers[14].text = uf;
+        showCepError = false; // Hide error if CEP is valid
+      });
     } else {
       setState(() {
         showCepError = true;
+        controllers[9].text = "";
+        controllers[12].text = "";
+        controllers[13].text = "";
+        controllers[14].text = "";
       });
-      controllers[9].text = "";
-      controllers[12].text = "";
-      controllers[13].text = "";
-      controllers[14].text = "";
     }
   }
+
+  // Future<void> _findCEPandFillAddress() async {
+  //   String _cepAtual = controllers[8].text.trim();
+  //   final viaCepSearchCep = ViaCepSearchCep();
+  //   final infoCepJSON = await viaCepSearchCep.searchInfoByCep(cep: _cepAtual);
+  //   String parsedjson = infoCepJSON.toString();
+  //   if (parsedjson.contains('Right')) {
+  //     final values = parsedjson
+  //         .split(",")
+  //         .map((x) => x.trim())
+  //         .where((element) => element.isNotEmpty)
+  //         .toList();
+  //     final logradouro = values[1].replaceFirst('logradouro: ', '');
+  //     controllers[9].text = logradouro;
+  //
+  //     // quando existir colocar bairro: Super Quadra Morumbi, localidade: São Paulo, uf: SP,
+  //     // 1 logradouro, 3 bairro, 4 localidade, 5 uf
+  //     final bairro = values[3].replaceFirst('bairro: ', '');
+  //     controllers[12].text = bairro;
+  //     final cidade = values[4].replaceFirst('localidade: ', '');
+  //     controllers[13].text = cidade;
+  //     final uf = values[5].replaceFirst('uf: ', '');
+  //     controllers[14].text = uf;
+  //   } else {
+  //     setState(() {
+  //       showCepError = true;
+  //     });
+  //     controllers[9].text = "";
+  //     controllers[12].text = "";
+  //     controllers[13].text = "";
+  //     controllers[14].text = "";
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -520,7 +517,127 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                       ),
                                     ),
                                   ),
-                              ] else ...[
+                              ] else if (index == 8) ...[
+                                PassaquiTextField(
+                                  placeholder: placeholders[index],
+                                  editingController: controllers[8],
+                                  keyBoardType: TextInputType.number,
+                                  isVisible: true,
+                                  showVisibility: false,
+                                  placeholderColor: Colors.grey,
+                                  textColor: Colors.black,
+                                ),
+                                if (_fieldErrors[8])
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 4.0, left: 20),
+                                    child: Text(
+                                      "Esse campo é obrigatório",
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                SizedBox(height: _fieldErrors[8] ? 0 : 4),
+                                PassaquiTextField(
+                                  placeholder: placeholders[9], // Placeholder for the additional field
+                                  editingController: controllers[9], // Adjust if needed
+                                  keyBoardType: TextInputType.text,
+                                  isVisible: true,
+                                  showVisibility: false,
+                                  placeholderColor: Colors.grey,
+                                  textColor: Colors.black,
+                                ),
+                                if (_fieldErrors[9])
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 4.0, left: 20),
+                                    child: Text(
+                                      "Esse campo é obrigatório",
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                SizedBox(height: _fieldErrors[9] ? 0 : 4),
+                                PassaquiTextField(
+                                  placeholder: placeholders[10], // Placeholder for the additional field
+                                  editingController: controllers[10], // Adjust if needed
+                                  keyBoardType: TextInputType.number,
+                                  isVisible: true,
+                                  showVisibility: false,
+                                  placeholderColor: Colors.grey,
+                                  textColor: Colors.black,
+                                ),
+                                if (_fieldErrors[10])
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 4.0, left: 20),
+                                    child: Text(
+                                      "Esse campo é obrigatório",
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                SizedBox(height: _fieldErrors[10] ? 0 : 4),
+                                SizedBox(height: 4),
+                                PassaquiTextField(
+                                  placeholder: placeholders[11], // Placeholder for the additional field
+                                  editingController: controllers[11], // Adjust if needed
+                                  keyBoardType: TextInputType.text,
+                                  isVisible: true,
+                                  showVisibility: false,
+                                  placeholderColor: Colors.grey,
+                                  textColor: Colors.black,
+                                ),
+                                SizedBox(height: 4),
+                                PassaquiTextField(
+                                  placeholder: placeholders[12], // Placeholder for the additional field
+                                  editingController: controllers[12], // Adjust if needed
+                                  keyBoardType: TextInputType.text,
+                                  isVisible: true,
+                                  showVisibility: false,
+                                  placeholderColor: Colors.grey,
+                                  textColor: Colors.black,
+                                ),
+                                if (_fieldErrors[12])
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 4.0, left: 20),
+                                    child: Text(
+                                      "Esse campo é obrigatório",
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                SizedBox(height: _fieldErrors[12] ? 0 : 4),
+                                PassaquiTextField(
+                                  placeholder: placeholders[13], // Placeholder for the additional field
+                                  editingController: controllers[13], // Adjust if needed
+                                  keyBoardType: TextInputType.text,
+                                  isVisible: true,
+                                  showVisibility: false,
+                                  placeholderColor: Colors.grey,
+                                  textColor: Colors.black,
+                                ),
+                                if (_fieldErrors[13])
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 4.0, left: 20),
+                                    child: Text(
+                                      "Esse campo é obrigatório",
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                SizedBox(height: _fieldErrors[13] ? 0 : 4),
+                                PassaquiTextField(
+                                  placeholder: placeholders[14],
+                                  editingController: controllers[14],
+                                  keyBoardType: TextInputType.text,
+                                  isVisible: true,
+                                  showVisibility: false,
+                                  placeholderColor: Colors.grey,
+                                  textColor: Colors.black,
+                                ),
+                                if (_fieldErrors[14])
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 4.0, left: 20),
+                                    child: Text(
+                                      "Esse campo é obrigatório",
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                              ]
+                              else ...[
                                 PassaquiTextField(
                                   placeholder: placeholders[index],
                                   editingController: controllers[index],
@@ -652,7 +769,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: PassaquiButton(
-                  label: _currentPageIndex == labels.length - 1
+                  // label: _currentPageIndex == labels.length - 1
+                  label: _currentPageIndex == 8
                       ? 'Concluir'
                       : 'Próximo',
                   onTap: nextPage,
@@ -665,7 +783,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               child: Container(
                 color: Colors.black.withOpacity(0.5),
                 child: Center(
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator(color: Colors.white),
                 ),
               ),
             ),
@@ -682,9 +800,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         addCalendar: false,
         decoration: const InputDecoration(
           labelStyle: TextStyle(
-            fontWeight: FontWeight.bold,
+            color: Colors.black,
+            fontWeight: FontWeight.w500,
             fontSize: 18,
-            fontStyle: FontStyle.italic,
           ),
           enabledBorder: const UnderlineInputBorder(
             borderSide: BorderSide(
