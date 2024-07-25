@@ -105,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Padding(
                           padding: const EdgeInsets.only(left: 28, top: 70),
                           child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               GestureDetector(
                                 onTap: () {
@@ -113,10 +113,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                       .inject<NavigationHandler>()
                                       .navigate(ProfileScreen.route);
                                 },
-                                child: Image.asset(
-                                  "assets/images/ellipse.png",
-                                  height: 40,
-                                  width: 40,
+                                child: Column(
+                                  children: [
+                                    Image.asset(
+                                      "assets/images/ellipse.png",
+                                      height: 40,
+                                      width: 40,
+                                    ),
+                                    const SizedBox(height: 4),
+                                    const Text(
+                                      'Meu Perfil',
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        color: Colors.white,
+                                      )
+                                    )
+                                  ],
                                 ),
                               ),
                               const SizedBox(width: 10),
