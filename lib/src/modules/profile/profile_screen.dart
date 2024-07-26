@@ -101,6 +101,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: const PassaquiAppBar(
         showBackButton: true,
         showLogo: false,
+        navigationHandler: ,
       ),
       backgroundColor: const Color.fromRGBO(18, 96, 73, 1),
       body: SingleChildScrollView(

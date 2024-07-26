@@ -37,6 +37,12 @@ class _HomeScreenState extends State<HomeScreen> {
     _biometriaService = BiometriaService(_authService);
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    loadUserName();
+  }
+
   Future<void> loadUserName() async {
     try {
       final name = await _authService.getName();
