@@ -7,6 +7,7 @@ import 'package:passaqui/src/shared/widget/appbar.dart';
 import 'package:passaqui/src/shared/widget/button.dart';
 import 'package:passaqui/src/utils/format_cpf.dart';
 import 'package:passaqui/src/utils/format_phone_number.dart';
+import 'package:search_cep/search_cep.dart';
 import '../../core/di/service_locator.dart';
 import '../../core/navigation/navigation_handler.dart';
 import '../../services/auth_service.dart';
@@ -47,7 +48,66 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   void initState() {
     super.initState();
+    _cepController.addListener(_onTextChanged);
     _loadProfileData();
+  }
+
+  @override
+  void dispose(){
+    _cepController.removeListener(_onTextChanged);
+    super.dispose();
+  }
+
+
+  void _onTextChanged() {
+    if (_cepController.text.isNotEmpty) {
+      _findCEPandFillAddress();
+    }
+  }
+
+
+  Future<void> _findCEPandFillAddress() async {
+    String _cepAtual = _cepController.text.trim();
+    final viaCepSearchCep = ViaCepSearchCep();
+    final infoCepJSON = await viaCepSearchCep.searchInfoByCep(cep: _cepAtual);
+    String parsedjson = infoCepJSON.toString();
+
+    if (parsedjson.contains('Right')) {
+      final values = parsedjson
+          .split(",")
+          .map((x) => x.trim())
+          .where((element) => element.isNotEmpty)
+          .toList();
+
+      final logradouro = values[1].replaceFirst('logradouro: ', '');
+      final bairro = values[3].replaceFirst('bairro: ', '');
+      final cidade = values[4].replaceFirst('localidade: ', '');
+      final uf = values[5].replaceFirst('uf: ', '');
+
+      setState(() {
+        _logradouroController.text = logradouro;
+        _bairroController.text = bairro;
+        _cidadeController.text = cidade;
+        _ufController.text = uf;
+
+        // controllers[9].text = logradouro;
+        // controllers[12].text = bairro;
+        // controllers[13].text = cidade;
+        // controllers[14].text = uf;
+      });
+    } else {
+      setState(() {
+        _logradouroController.text = "";
+        _bairroController.text = "";
+        _cidadeController.text = "";
+        _ufController.text = "";
+
+        // controllers[9].text = "";
+        // controllers[12].text = "";
+        // controllers[13].text = "";
+        // controllers[14].text = "";
+      });
+    }
   }
 
   Future<void> _loadProfileData() async {
@@ -268,34 +328,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ],
             ),
             const SizedBox(height: 8),
-            // Row(
-            //   children: [
-            //     Text(
-            //       'CPF: ',
-            //       style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-            //     ),
-            //     Text(
-            //       formatCpf(_cpfController.text),
-            //       style: const TextStyle(
-            //           color: Colors.white),
-            //     ),
-            //   ],
-            // ),
-            // const SizedBox(height: 8),
-            // Row(
-            //   children: [
-            //     Text(
-            //       'RG: ',
-            //       style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-            //     ),
-            //     Text(
-            //       _rgController.text,
-            //       style: const TextStyle(
-            //           color: Colors.white),
-            //     ),
-            //   ],
-            // ),
-            // const SizedBox(height: 8),
             Row(
               children: [
                 Text(

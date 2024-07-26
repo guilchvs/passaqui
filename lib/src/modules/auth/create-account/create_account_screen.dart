@@ -344,7 +344,6 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   }
 
   Future<void> _findCEPandFillAddress() async {
-    print("called here");
     String _cepAtual = controllers[8].text.trim();
     final viaCepSearchCep = ViaCepSearchCep();
     final infoCepJSON = await viaCepSearchCep.searchInfoByCep(cep: _cepAtual);
