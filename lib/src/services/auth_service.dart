@@ -23,13 +23,16 @@ class AuthService {
       final responseBody = jsonDecode(response.body);
       print("BODY: $responseBody");
       final token = responseBody['jwtToken'];
+      final id = responseBody['id'];
       final nome = responseBody['nome'];
       final cpf = responseBody['cpf'];
       final email = responseBody['email'];
       final rg = responseBody['rg'];
       final telefone = responseBody['telefone'];
       final logradouro = responseBody['logradouro'];
+      final cep = responseBody['cep'];
       final numeroLogradouro = responseBody['numeroLogradouro'].toString();
+      final complemento = responseBody['complemento'].toString();
       final bairro = responseBody['bairro'];
       final cidade = responseBody['cidade'];
       final UF = responseBody['uf'];
@@ -37,12 +40,15 @@ class AuthService {
       final prefs = await SharedPreferences.getInstance();
 
       await prefs.setString('jwt', token);
+      await prefs.setInt('id', id);
       await prefs.setString('nome', nome);
       await prefs.setString('cpf', cpf);
       await prefs.setString('email', email);
       await prefs.setString('rg', rg);
       await prefs.setString('telefone', telefone);
       await prefs.setString('logradouro', logradouro);
+      await prefs.setString('cep', cep);
+      await prefs.setString('complemento', complemento);
       await prefs.setString('numeroLogradouro', numeroLogradouro);
       await prefs.setString('bairro', bairro);
       await prefs.setString('cidade', cidade);
@@ -128,6 +134,11 @@ class AuthService {
     return prefs.getString('jwt');
   }
 
+  Future<int?> getId() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('id');
+  }
+
   Future<String?> getName() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('nome');
@@ -158,6 +169,11 @@ class AuthService {
     return prefs.getString('logradouro');
   }
 
+  Future<String?> getCep() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('cep');
+  }
+
   Future<String?> getNumeroLogradouro() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('numeroLogradouro');
@@ -182,24 +198,97 @@ class AuthService {
     return prefs.getString('uf');
   }
 
+  Future<String?> getComplemento() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('complemento');
+  }
+
   Future<String?> getDataNascimento() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('dataNascimento');
   }
 
+  Future<void> setNome(String nome) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('nome', nome);
+  }
+
+  Future<void> setCpf(String cpf) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('cpf', cpf);
+  }
+
+  Future<void> setEmail(String email) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('email', email);
+  }
+
+  Future<void> setRg(String rg) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('rg', rg);
+  }
+
+  Future<void> setTelefone(String telefone) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('telefone', telefone);
+  }
+
+  Future<void> setLogradouro(String logradouro) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('logradouro', logradouro);
+  }
+
+  Future<void> setCep(String cep) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('cep', cep);
+  }
+
+  Future<void> setNumeroLogradouro(String numeroLogradouro) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('numeroLogradouro', numeroLogradouro);
+  }
+
+  Future<void> setComplemento(String complemento) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('complemento', complemento);
+  }
+
+  Future<void> setBairro(String bairro) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('bairro', bairro);
+  }
+
+  Future<void> setCidade(String cidade) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('cidade', cidade);
+  }
+
+  Future<void> setUf(String uf) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('uf', uf);
+  }
+
+  Future<void> setDataNascimento(String dataNascimento) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('dataNascimento', dataNascimento);
+  }
+
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('jwt');
+    await prefs.remove('id');
     await prefs.remove('nome');
     await prefs.remove('email');
     await prefs.remove('cpf');
     await prefs.remove('rg');
     await prefs.remove('telefone');
     await prefs.remove('logradouro');
+    await prefs.remove('cep');
     await prefs.remove('numeroLogradouro');
     await prefs.remove('bairro');
     await prefs.remove('cidade');
     await prefs.remove('UF');
+    await prefs.remove('complemento');
     await prefs.remove('dataNascimento');
   }
 }

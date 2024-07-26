@@ -114,6 +114,58 @@ class AccountService {
     return response;
   }
 
+  Future<bool> updateAccount({
+    required int id,
+    required String email,
+    required String name,
+    required String cpf,
+    required String telefone,
+    required String cep,
+    required String logradouro,
+    required int numeroLogradouro,
+    required String complemento,
+    required String dataNascimento,
+    required String rg,
+    required String bairro,
+    required String cidade,
+    required String estado,
+  }) async {
+    final url = Uri.parse('${AppConfig.api.account}/atualizarDadosUsuario'); // Adjust the URL path as necessary
 
+    final body = jsonEncode({
+      'id': id,
+      'email': email,
+      'name': name,
+      'cpf': cpf,
+      'telefone': telefone,
+      'cep': cep,
+      'logradouro': logradouro,
+      'numeroLogradouro': numeroLogradouro,
+      'complemento': complemento,
+      'dataNascimento': dataNascimento,
+      'rg': rg,
+      'bairro': bairro,
+      'cidade': cidade,
+      'uf': estado,
+    });
+
+    final response = await http.put(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: body,
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+      // Handle successful response
+    } else {
+      print(response.body);
+      return false;
+      // Handle error response
+      throw Exception('Failed to update profile');
+    }
+  }
 
 }

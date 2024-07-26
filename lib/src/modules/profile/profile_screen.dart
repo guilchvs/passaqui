@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:passaqui/src/modules/profile/edit_profile_screen.dart';
 import 'package:passaqui/src/shared/widget/appbar.dart';
 import 'package:passaqui/src/shared/widget/button.dart';
 import 'package:passaqui/src/utils/format_cpf.dart';
@@ -29,7 +30,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late TextEditingController rgController;
   late TextEditingController telefoneController;
   late TextEditingController logradouroController;
+  late TextEditingController cepController;
   late TextEditingController numeroLogradouroController;
+  late TextEditingController complementoController;
   late TextEditingController bairroController;
   late TextEditingController cidadeController;
   late TextEditingController ufController;
@@ -38,6 +41,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _initializeControllers();
   }
 
@@ -48,8 +56,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       final email = await _authService.getEmail() ?? '';
       final rg = await _authService.getRg() ?? '';
       final telefone = await _authService.getTelefone() ?? '';
+      final cep = await _authService.getCep() ?? '';
       final logradouro = await _authService.getLogradouro() ?? '';
       final numeroLogradouro = await _authService.getNumeroLogradouro() ?? '';
+      final complemento = await _authService.getComplemento() ?? '';
       final bairro = await _authService.getBairro() ?? '';
       final cidade = await _authService.getCidade() ?? '';
       final uf = await _authService.getUf() ?? '';
@@ -61,7 +71,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         emailController = TextEditingController(text: email);
         rgController = TextEditingController(text: rg);
         telefoneController = TextEditingController(text: telefone);
+        cepController = TextEditingController(text: cep);
         logradouroController = TextEditingController(text: logradouro);
+        complementoController = TextEditingController(text: complemento);
         numeroLogradouroController =
             TextEditingController(text: numeroLogradouro);
         bairroController = TextEditingController(text: bairro);
@@ -77,10 +89,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> _logout() async {
     try {
       await _authService.logout();
-      // Navigate to login screen or perform any additional actions after logout
       Navigator.pushReplacementNamed(context, '/login');
     } catch (e) {
-      // Handle logout error
       print('Error during logout: $e');
     }
   }
@@ -92,13 +102,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
         showBackButton: true,
         showLogo: false,
       ),
-      backgroundColor: Color.fromRGBO(18, 96, 73, 1),
+      backgroundColor: const Color.fromRGBO(18, 96, 73, 1),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
-              child: const Text(
+            const Center(
+              child: Text(
                 "Meu dados",
                 style: TextStyle(
                   fontFamily: 'Inter',
@@ -136,69 +146,55 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _buildInfoRow(
                       'Telefone:', formatPhoneNumber(telefoneController.text)),
                   _divider,
+                  _buildInfoRow('Cep:', cepController.text),
+                  _divider,
                   _buildInfoRow('Logradouro:', logradouroController.text),
                   _divider,
                   _buildInfoRow(
                       'Número do Logradouro:', numeroLogradouroController.text),
+                  _divider,
+                  _buildInfoRow(
+                      'Complemento:', complementoController.text),
                   _divider,
                   _buildInfoRow('Bairro:', bairroController.text),
                   _divider,
                   _buildInfoRow('Cidade:', cidadeController.text),
                   _divider,
                   _buildInfoRow('UF:', ufController.text),
-                  const SizedBox(height: 38),
+                  const SizedBox(height: 28),
                   GestureDetector(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text(
-                          "Sair do aplicativo",
+                          "Editar dados",
                           style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Inter',
-                              decoration: TextDecoration.underline,
-                              decorationColor: Colors.white,
-                              decorationThickness: 1.5),
+                            color: Colors.white,
+                            fontFamily: 'Inter',
+                            decoration: TextDecoration.underline,
+                            decorationColor: Colors.white,
+                            decorationThickness: 1.5,
+                          ),
                         ),
                         const SizedBox(width: 12),
                         Image.asset(
-                          "assets/images/logout.png",
+                          "assets/images/edit-icon.png",
                           color: Colors.white,
-                          height: 24,
-                          width: 24,
+                          height: 18,
+                          width: 18,
                         ),
+                        // const Icon(
+                        //     Icons.edit,
+                        //     color: Colors.white),
                       ],
                     ),
                     onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text("Logout"),
-                            content: Text("Deseja mesmo sair do aplicativo?"),
-                            actions: <Widget>[
-                              TextButton(
-                                child: Text("Voltar ao app"),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                              TextButton(
-                                child: Text("Sair"),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                  _authService.logout();
-                                  DIService()
-                                      .inject<NavigationHandler>()
-                                      .navigate(WelcomeScreen.route);
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
+                      DIService()
+                          .inject<NavigationHandler>()
+                          .navigate(EditProfileScreen.route);
                     },
-                  )
+                  ),
+                  const SizedBox(height: 18),
                 ],
               ),
             ),
