@@ -268,34 +268,34 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ],
             ),
             const SizedBox(height: 8),
-            Row(
-              children: [
-                Text(
-                  'CPF: ',
-                  style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  formatCpf(_cpfController.text),
-                  style: const TextStyle(
-                      color: Colors.white),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Text(
-                  'RG: ',
-                  style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  _rgController.text,
-                  style: const TextStyle(
-                      color: Colors.white),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
+            // Row(
+            //   children: [
+            //     Text(
+            //       'CPF: ',
+            //       style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+            //     ),
+            //     Text(
+            //       formatCpf(_cpfController.text),
+            //       style: const TextStyle(
+            //           color: Colors.white),
+            //     ),
+            //   ],
+            // ),
+            // const SizedBox(height: 8),
+            // Row(
+            //   children: [
+            //     Text(
+            //       'RG: ',
+            //       style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+            //     ),
+            //     Text(
+            //       _rgController.text,
+            //       style: const TextStyle(
+            //           color: Colors.white),
+            //     ),
+            //   ],
+            // ),
+            // const SizedBox(height: 8),
             Row(
               children: [
                 Text(
@@ -510,24 +510,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   onComplete: (date) {},
                 ),
               ),
-              PassaquiTextField(
-                placeholder: "CPF",
-                editingController: _cpfController,
-                keyBoardType: TextInputType.text,
-                isVisible: true,
-                showVisibility: false,
-                placeholderColor: Colors.grey,
-                textColor: Colors.white,
-              ),
-              PassaquiTextField(
-                placeholder: "RG",
-                editingController: _rgController,
-                keyBoardType: TextInputType.text,
-                isVisible: true,
-                showVisibility: false,
-                placeholderColor: Colors.grey,
-                textColor: Colors.white,
-              ),
+              // PassaquiTextField(
+              //   placeholder: "CPF",
+              //   editingController: _cpfController,
+              //   keyBoardType: TextInputType.text,
+              //   isVisible: true,
+              //   showVisibility: false,
+              //   placeholderColor: Colors.grey,
+              //   textColor: Colors.white,
+              // ),
+              // PassaquiTextField(
+              //   placeholder: "RG",
+              //   editingController: _rgController,
+              //   keyBoardType: TextInputType.text,
+              //   isVisible: true,
+              //   showVisibility: false,
+              //   placeholderColor: Colors.grey,
+              //   textColor: Colors.white,
+              // ),
               PassaquiTextField(
                 placeholder: "Telefone",
                 editingController: _telefoneController,
