@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:passaqui/src/modules/home/home_page.dart';
 import 'package:passaqui/src/modules/profile/edit_profile_screen.dart';
 import 'package:passaqui/src/shared/widget/appbar.dart';
 import 'package:passaqui/src/shared/widget/button.dart';
@@ -98,16 +99,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const PassaquiAppBar(
-        showBackButton: true,
-        showLogo: false,
-        navigationHandler: ,
-      ),
+      // appBar: const PassaquiAppBar(
+      //   showBackButton: true,
+      //   showLogo: false,
+      // ),
       backgroundColor: const Color.fromRGBO(18, 96, 73, 1),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 40), // Add some space at the top
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.arrow_back, color: Colors.white),
+                    onPressed: () {
+                      DIService()
+                          .inject<NavigationHandler>()
+                          .navigate(HomeScreen.route);
+                    },
+                  ),
+                ],
+              ),
+            ),
             const Center(
               child: Text(
                 "Meu dados",
@@ -154,8 +170,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _buildInfoRow(
                       'Número do Logradouro:', numeroLogradouroController.text),
                   _divider,
-                  _buildInfoRow(
-                      'Complemento:', complementoController.text),
+                  _buildInfoRow('Complemento:', complementoController.text),
                   _divider,
                   _buildInfoRow('Bairro:', bairroController.text),
                   _divider,
