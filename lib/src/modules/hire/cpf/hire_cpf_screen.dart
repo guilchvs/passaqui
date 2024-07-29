@@ -10,6 +10,7 @@ import 'package:passaqui/src/shared/widget/appbar.dart';
 import 'package:passaqui/src/shared/widget/button.dart';
 import 'package:passaqui/src/shared/widget/card.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:passaqui/src/utils/format_cpf.dart';
 
 class HireCpfScreen extends StatefulWidget {
   static const String route = "/hire-cpf";
@@ -21,13 +22,8 @@ class HireCpfScreen extends StatefulWidget {
 }
 
 class _HireCpfScreenState extends State<HireCpfScreen> {
-  final TextEditingController cpfController = TextEditingController();
   final AuthService _authService = DIService().inject<AuthService>();
   late String? cpf;
-
-  String _formatCpf(String cpf){
-    return cpf.replaceAll(RegExp(r'[^0-9]'), '');
-  }
 
   @override
   void initState() {
@@ -35,22 +31,9 @@ class _HireCpfScreenState extends State<HireCpfScreen> {
     _initializeCpf();
   }
 
-  void _initializeCpf() async{
+  void _initializeCpf() async {
     cpf = await _authService.getCpf();
-    setState(() {
-    });
-  }
-
-  void _checkAndNavigate() {
-    _logCpfInput();
-    final enteredCpf = _formatCpf(cpfController.text);
-    if (cpf == enteredCpf) {
-      DIService()
-          .inject<NavigationHandler>()
-          .navigate(HireInstallmentScreen.route, arguments: {'cpf': enteredCpf});
-    } else {
-      _showCpfMismatchDialog();
-    }
+    setState(() {});
   }
 
   void _showCpfMismatchDialog() {
@@ -59,7 +42,7 @@ class _HireCpfScreenState extends State<HireCpfScreen> {
       builder: (context) => AlertDialog(
         title: Text("CPF não cadastrado"),
         content: Text(
-            "O CPF informado não corresponde ao CPF cadastrado.",
+          "O CPF informado não corresponde ao CPF cadastrado.",
           style: TextStyle(color: Colors.red),
         ),
         actions: [
@@ -72,16 +55,12 @@ class _HireCpfScreenState extends State<HireCpfScreen> {
     );
   }
 
-
-  void _logCpfInput() {
-    final cpfInput = cpfController.text.replaceAll('.', '').replaceAll('-', '');
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const PassaquiAppBar(showBackButton: true, showLogo: false),
-      backgroundColor: Color.fromRGBO(18, 96, 73, 1), body: Column(
+      backgroundColor: Color.fromRGBO(18, 96, 73, 1),
+      body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
@@ -146,11 +125,9 @@ class _HireCpfScreenState extends State<HireCpfScreen> {
                             label: "Realizar consulta",
                             showArrow: true,
                             onTap: () {
-                              // _logCpfInput();
-                              // DIService()
-                              //     .inject<NavigationHandler>()
-                              //     .navigate(HireInstallmentScreen.route, arguments: {'cpf': _formatCpf(cpfController.text)});
-                              _checkAndNavigate();
+                              DIService().inject<NavigationHandler>().navigate(
+                                  HireInstallmentScreen.route,
+                                  arguments: {'cpf': cpf as String});
                             },
                           )
                         ],
@@ -168,7 +145,7 @@ class _HireCpfScreenState extends State<HireCpfScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Informe seu CPF: ",
+                            "Confirme seu CPF: ",
                             style: GoogleFonts.roboto(
                               color: Colors.black,
                               fontSize: 16,
@@ -180,18 +157,12 @@ class _HireCpfScreenState extends State<HireCpfScreen> {
                           ),
                           SizedBox(
                             width: 200, // Adjust width as needed
-                            child: TextFormField(
-                              controller: cpfController,
-                              inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(11)],
-                              keyboardType: TextInputType.number,
+                            child: Text(
+                              formatCpf(cpf as String),
                               style: GoogleFonts.roboto(
                                 color: Color(0xFF136048),
                                 fontSize: 26,
                                 fontWeight: FontWeight.bold,
-                              ),
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: '000.000.000-00',
                               ),
                             ),
                           ),
