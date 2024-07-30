@@ -24,56 +24,41 @@ class HireInstallmentScreen extends StatefulWidget {
   State<HireInstallmentScreen> createState() => _HireInstallmentScreenState();
 }
 
-class _InstallmentOption {
-  final int numberOfValues;
-  final double VlrRepasse;
-  final double VlrJuros;
-
-  _InstallmentOption({
-    required this.numberOfValues,
-    required this.VlrRepasse,
-    required this.VlrJuros,
-  });
-
-  @override
-  String toString() {
-    int displayValue = numberOfValues + 1;
-    return '$displayValue x de ${VlrRepasse.toStringAsFixed(2)} - Juros de ${VlrJuros.toStringAsFixed(2)}%';
-  }
-}
-
 class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
+  final AuthService _authService = DIService().inject<AuthService>();
   final TextEditingController _amountController = TextEditingController();
-  String _selectedPeriod = ''; // Default selected period
+  String _selectedPeriod = '';
   bool _isLoading = false;
   String _buttonLabel = 'Simular';
-  final AuthService _authService =
-      AuthService(); // Instance of your AuthService
-  List<_InstallmentOption> _installmentOptions =
-      []; // List to store installment options
+
+  int _simulacaoPeriodo = 0;
+  double _simulacaoVlrLiberado = 0.0;
+  double _simulacaoVlrJuros = 0.0;
+  double _simulacaoVlrOperacao = 0.0;
+  double _simulacaoVlrEmprestimoCliente = 0.0;
+  double _simulacaoTaxaMensal = 0.0;
+
   dynamic _jsonResponse;
 
   @override
   void initState() {
     super.initState();
     print('CPF received: ${widget.cpf}');
-    // Other initialization code here
   }
 
   Future<void> _simulateApiCall(String cpf, double? amount) async {
     setState(() {
-      _isLoading = true; // Set loading state while waiting for API response
+      _isLoading = true;
     });
 
-    final baseUrl = AppConfig.baseUrl;
-    final token = await _authService.getToken(); // Retrieve JWT token
+    final token = await _authService.getToken();
     Uri url;
 
-    if (amount != null)
-      url = Uri.parse(
-          '${AppConfig.api.apiMaster}/fazerSimulacaoFGTS?cpf=$cpf&vlrEmprestimo=$amount');
-    else
+    if (amount != null) {
+      url = Uri.parse('${AppConfig.api.apiMaster}/fazerSimulacaoFGTS?cpf=$cpf&vlrEmprestimo=$amount');
+    } else {
       url = Uri.parse('${AppConfig.api.apiMaster}/fazerSimulacaoFGTS?cpf=$cpf');
+    }
 
     try {
       final response = await http.post(
@@ -84,42 +69,76 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
         },
       );
 
+      print('Response Status Code: ${response.statusCode}');
+      print('Response Body: ${response.body}');
+
       if (response.statusCode == 200) {
-        // Handle successful API response here
         final jsonResponse = jsonDecode(response.body);
+        print('Decoded JSON Response: $jsonResponse');
 
         setState(() {
-          _jsonResponse =
-              jsonResponse; // Store the JSON response in _jsonResponse variable
-        });
+          _jsonResponse = jsonResponse;
 
-        List<_InstallmentOption> options = [];
-        List<dynamic> simulacaoParcelas =
-            _jsonResponse['SimulacaoParcelas'] ?? [];
-        int cont = 0;
-
-        for (var parcela in simulacaoParcelas) {
-          options.add(_InstallmentOption(
-            numberOfValues: cont, // Increment numberOfValues by 1
-            VlrRepasse: (parcela['VlrRepasse'] ?? 0.0).toDouble(),
-            VlrJuros: ((parcela['VlrJuros'] ?? 0.0).toDouble() /
-                    (parcela['VlrRepasse'] ?? 0.0).toDouble()) *
-                100,
-          ));
-          cont++;
-        }
-
-        setState(() {
-          _installmentOptions = options;
-          _selectedPeriod = options.isNotEmpty ? options.first.toString() : '';
-          _buttonLabel = 'Próximo';
+          if (jsonResponse['SimulacoesErro'] != null && jsonResponse['SimulacoesErro'].isNotEmpty) {
+            String errorMessage = jsonResponse['SimulacoesErro'][0]['Msg'] ?? 'Erro desconhecido';
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('Atenção'),
+                  content: Text(errorMessage),
+                  actions: <Widget>[
+                    TextButton(
+                      child: Text('OK'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+          } else if (jsonResponse['HasError'] == false) {
+            if (jsonResponse['Simulacoes'] != null && jsonResponse['Simulacoes'].isNotEmpty) {
+              var simulacao = jsonResponse['Simulacoes'][0];
+              _simulacaoPeriodo = simulacao['Periodo'];
+              _simulacaoVlrLiberado = simulacao['VlrLiberado'];
+              _simulacaoVlrJuros = simulacao['VlrJuros'];
+              _simulacaoVlrOperacao = simulacao['VlrOperacao'];
+              _simulacaoVlrEmprestimoCliente = simulacao['VlrEmprestimoCliente'];
+              _simulacaoTaxaMensal = simulacao['TaxaMensal'];
+              _buttonLabel = 'Próximo';
+            }
+          } else {
+            String errorDescription = 'Não conseguimos realizar a simulação. Tente novamente.';
+            if (jsonResponse['Messages'] != null &&
+                jsonResponse['Messages'].isNotEmpty &&
+                jsonResponse['Messages'][0]['Description'] != null) {
+              errorDescription = jsonResponse['Messages'][0]['Description'];
+            }
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('Atenção'),
+                  content: Text(errorDescription),
+                  actions: <Widget>[
+                    TextButton(
+                      child: Text('OK'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+          }
         });
       } else {
-        // Handle other status codes here
         print('Failed to load data: ${response.statusCode}');
       }
     } catch (e) {
-      // Handle exceptions
       print('Error: $e');
     } finally {
       setState(() {
@@ -231,7 +250,6 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        // Trigger API call on editing complete
                                         onEditingComplete: () {
                                           final amount = double.tryParse(
                                               _amountController.text
@@ -281,94 +299,211 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
                   ),
                 ),
                 Positioned(
-                  top: 300,
-                  left: 0,
+                  top: 270,
                   right: 0,
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 32.0),
-                            child: Text(
-                              "Escolha o número de períodos",
-                              style: GoogleFonts.inter(
-                                color: Colors.black,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
+                  left: 0,
+                  child: _jsonResponse != null &&
+                      !_jsonResponse['HasError'] &&
+                      (_jsonResponse['SimulacoesErro'] == null || _jsonResponse['SimulacoesErro'].isEmpty)
+                      ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 32.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Número de períodos: ",
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 8),
-                          Center(
-                            child: DropdownButton<String>(
-                              value: _selectedPeriod,
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  _selectedPeriod = newValue!;
-                                });
-                              },
-                              items: _installmentOptions.map((option) {
-                                return DropdownMenuItem<String>(
-                                  value: option.toString(),
-                                  child: Text(
-                                    option.toString(),
-                                    style: GoogleFonts.inter(
-                                      color: Color(0xFF136048),
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
+                            Text(
+                              "$_simulacaoPeriodo",
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 64),
-                          Center(
-                            child: PassaquiButton(
-                              label: _buttonLabel,
-                              style: PassaquiButtonStyle.primary,
-                              showArrow: true,
-                              onTap: () {
-                                final amount = double.tryParse(_amountController
-                                    .text
-                                    .replaceAll(',', '.'));
-                                _simulateApiCall(widget.cpf ?? '', amount);
-                                FocusScope.of(context).unfocus();
-
-                                // Navigate to HireValueScreen with jsonResponse as argument
-                                if (_jsonResponse != null) {
-                                  if (_selectedPeriod.isEmpty) {
-                                    setState(() {
-                                      _selectedPeriod = '1';
-                                    });
-                                  }
-                                  int selectedPeriodInt =
-                                      _extractSelectedPeriodInt(
-                                          _selectedPeriod);
-                                  _saveSelectedPeriod(selectedPeriodInt);
-                                  DIService()
-                                      .inject<NavigationHandler>()
-                                      .navigate(
-                                    HireValueScreen.route,
-                                    arguments: {
-                                      'jsonResponse': _jsonResponse,
-                                      'cpf': widget.cpf,
-                                      'selectedPeriod': selectedPeriodInt as int
-                                    },
-                                  );
-                                } else {
-                                  print('No JSON response available');
-                                  print(_jsonResponse);
-                                }
-                              },
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
+                      const SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 32.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Valor solicitado: ",
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                              ),
+                            ),
+                            Text(
+                              "R\$ ${_simulacaoVlrLiberado.toStringAsFixed(2)}",
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 32.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Valor do empréstimo: ",
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                              ),
+                            ),
+                            Text(
+                              "R\$ ${_simulacaoVlrEmprestimoCliente.toStringAsFixed(2)}",
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 32.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Taxa Mensal: ",
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                              ),
+                            ),
+                            Text(
+                              "${_simulacaoTaxaMensal.toStringAsFixed(2)}",
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 32.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Valor Juros: ",
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                              ),
+                            ),
+                            Text(
+                              "R\$ ${_simulacaoVlrJuros.toStringAsFixed(2)}",
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 28.0),
+                        child: const Divider(
+                          thickness: 2.0,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 32.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Valor Total da Operação: ",
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                              ),
+                            ),
+                            Text(
+                              "R\$ ${_simulacaoVlrOperacao.toStringAsFixed(2)}",
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 64),
+                      PassaquiButton(
+                        label: _buttonLabel,
+                        style: PassaquiButtonStyle.primary,
+                        showArrow: true,
+                        onTap: () {
+                          final amount = double.tryParse(
+                              _amountController.text.replaceAll(',', '.'));
+                          _simulateApiCall(widget.cpf ?? '', amount);
+                          FocusScope.of(context).unfocus();
+
+                          // Navigate to HireValueScreen with jsonResponse as argument
+                          if (_jsonResponse != null) {
+                            if (_selectedPeriod.isEmpty) {
+                              setState(() {
+                                _selectedPeriod = '1';
+                              });
+                            }
+                            int selectedPeriodInt =
+                                _extractSelectedPeriodInt(_selectedPeriod);
+                            _saveSelectedPeriod(selectedPeriodInt);
+                            DIService().inject<NavigationHandler>().navigate(
+                              HireValueScreen.route,
+                              arguments: {
+                                'jsonResponse': _jsonResponse,
+                                'cpf': widget.cpf,
+                                'selectedPeriod': selectedPeriodInt as int
+                              },
+                            );
+                          } else {
+                            print('No JSON response available');
+                            print(_jsonResponse);
+                          }
+                        },
+                      ),
+                    ],
+                  ) : Center(
+                    child: Text(
+                      "Preencha o campo acima para iniciar a simulação"
+                    )
                   ),
                 ),
                 if (_isLoading)
@@ -388,3 +523,4 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
     );
   }
 }
+
