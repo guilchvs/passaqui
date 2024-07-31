@@ -112,7 +112,7 @@ class _BiometriaSucessScreenState extends State<BiometriaSucessScreen> {
                 ),
                 const SizedBox(height: 20), // Add spacing between widgets
                 Text(
-                  'Agora sim! Seus documentos foram aprovados!',
+                  'Agora sim! Seus documentos foram aprovados e em poucos minutos o dinheiro estará na sua conta.',
                   style: GoogleFonts.roboto(
                     color: Colors.white,
                     fontSize: 26,
