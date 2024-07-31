@@ -165,10 +165,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _divider,
                   _buildInfoRow('Cep:', cepController.text),
                   _divider,
-                  _buildInfoRow('Logradouro:', logradouroController.text),
+                  _buildInfoRow('Endereço:', logradouroController.text),
                   _divider,
                   _buildInfoRow(
-                      'Número do Logradouro:', numeroLogradouroController.text),
+                      'Número de Endereço:', numeroLogradouroController.text),
                   _divider,
                   _buildInfoRow('Complemento:', complementoController.text),
                   _divider,
