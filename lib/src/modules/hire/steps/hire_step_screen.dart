@@ -36,13 +36,13 @@ class _HireStepsScreenState extends State<HireStepsScreen> {
       image: "assets/images/credit_default.svg",
       description:
           "Uma forma simples de utilizar um dinheiro que já é seu!",
-      showButton: false,
+      showButton: true,
     ),
     const HireStepItem(
       title: "Simule o quanto você precisa de forma rápida e fácil",
       image: "assets/images/simulation.svg",
       description: "",
-      showButton: false,
+      showButton: true,
     ),
     const HireStepItem(
       title: "Dinheiro no seu bolso e sem burocracias",
