@@ -579,7 +579,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 textColor: Colors.white,
               ),
               PassaquiTextField(
-                placeholder: "Logradouro",
+                placeholder: "Endereço",
                 editingController: _logradouroController,
                 keyBoardType: TextInputType.text,
                 isVisible: true,
@@ -588,7 +588,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 textColor: Colors.white,
               ),
               PassaquiTextField(
-                placeholder: "Número logradouro",
+                placeholder: "Número de endereço",
                 editingController: _numeroLogradouroController,
                 keyBoardType: TextInputType.text,
                 isVisible: true,

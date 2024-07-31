@@ -527,7 +527,7 @@ class CustomBottomBar extends StatelessWidget {
               padding: const EdgeInsets.only(left: 24.0, right: 24, top: 24),
               child: PassaquiButton(
                 style: PassaquiButtonStyle.defaultLight,
-                label: 'Prosseguir após validar documentação',
+                label: 'Prosseguir após enviar documentação',
                 height: 44,
                 centerText: true,
                 onTap: () {
