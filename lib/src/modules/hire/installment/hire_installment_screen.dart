@@ -43,7 +43,7 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
   @override
   void initState() {
     super.initState();
-    print('CPF received: ${widget.cpf}');
+    // print('CPF received: ${widget.cpf}');
   }
 
   Future<void> _simulateApiCall(String cpf, double? amount) async {
@@ -69,12 +69,9 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
         },
       );
 
-      print('Response Status Code: ${response.statusCode}');
-      print('Response Body: ${response.body}');
-
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
-        print('Decoded JSON Response: $jsonResponse');
+        // print('Decoded JSON Response: $jsonResponse');
 
         setState(() {
           _jsonResponse = jsonResponse;
@@ -475,27 +472,24 @@ class _HireInstallmentScreenState extends State<HireInstallmentScreen> {
                           _simulateApiCall(widget.cpf ?? '', amount);
                           FocusScope.of(context).unfocus();
 
-                          // Navigate to HireValueScreen with jsonResponse as argument
                           if (_jsonResponse != null) {
                             if (_selectedPeriod.isEmpty) {
                               setState(() {
                                 _selectedPeriod = '1';
                               });
                             }
-                            int selectedPeriodInt =
-                                _extractSelectedPeriodInt(_selectedPeriod);
-                            _saveSelectedPeriod(selectedPeriodInt);
+                            _saveSelectedPeriod(_simulacaoPeriodo);
                             DIService().inject<NavigationHandler>().navigate(
                               HireValueScreen.route,
                               arguments: {
                                 'jsonResponse': _jsonResponse,
                                 'cpf': widget.cpf,
-                                'selectedPeriod': selectedPeriodInt as int
+                                'selectedPeriod': _simulacaoPeriodo
                               },
                             );
                           } else {
                             print('No JSON response available');
-                            print(_jsonResponse);
+                            // print(_jsonResponse);
                           }
                         },
                       ),

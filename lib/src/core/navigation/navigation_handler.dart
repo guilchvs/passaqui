@@ -9,6 +9,7 @@ import 'package:passaqui/src/modules/auth/success/success_screen.dart';
 import 'package:passaqui/src/modules/hire/confirmEmail/hire_confirm_email.dart';
 import 'package:passaqui/src/modules/hire/cpf/hire_cpf_screen.dart';
 import 'package:passaqui/src/modules/hire/installment/hire_installment_screen.dart';
+import 'package:passaqui/src/modules/hire/installment/installments_screen.dart';
 import 'package:passaqui/src/modules/hire/steps/hire_step_screen.dart';
 import 'package:passaqui/src/modules/hire/value/hire_value_screen.dart';
 import 'package:passaqui/src/modules/home/home_page.dart';
@@ -124,6 +125,13 @@ class NavigationHandler {
             jsonResponse: args?['jsonResponse'] as Map<String, dynamic>?,
             cpf: cpf ?? '',
             selectedPeriod: selectedPeriod,
+          ),
+        );
+      case InstallmentsScreen.route:
+        final args = settings.arguments as Map<String, dynamic>?;
+        return MaterialPageRoute(
+          builder: (context) => InstallmentsScreen(
+            parcelas: args?['parcelas'] as List<dynamic>?,
           ),
         );
       case HireConfirmCpfScreen.route:

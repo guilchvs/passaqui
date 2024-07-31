@@ -48,11 +48,11 @@ class _BiometriaWaitScreenState extends State<BiometriaWaitScreen> with RouteAwa
   void fetchBiometriaData() async {
     _biometriaResult = await _biometriaService.fetchBiometriaData();
 
-    print('Biometria Result: $_biometriaResult'); // Print the fetched result
+    print('Biometria Result: $_biometriaResult');
 
     if (_biometriaResult == 1) {
       DIService().inject<NavigationHandler>().navigate(BiometriaErrorScreen.route);
-      _timer.cancel(); // Stop timer once valid result is received
+      _timer.cancel();
     } else if (_biometriaResult == 2) {
       DIService().inject<NavigationHandler>().navigate(BiometriaSucessScreen.route);
       _timer.cancel(); // Stop timer once valid result is received
@@ -71,15 +71,15 @@ class _BiometriaWaitScreenState extends State<BiometriaWaitScreen> with RouteAwa
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SvgPicture.asset(
-              'assets/images/il_processing_account.svg', // Replace with your SVG asset path
-              height: 300, // Adjust the height as needed
+              'assets/images/il_processing_account.svg',
+              height: 300,
             ),
             Center(
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
               ),
             ),
-            const SizedBox(height: 40), // Add spacing between widgets
+            const SizedBox(height: 40),
             Text(
               'Seu pedido de antecipação está em andamento.',
               style: GoogleFonts.roboto(
@@ -111,7 +111,7 @@ class _BiometriaWaitScreenState extends State<BiometriaWaitScreen> with RouteAwa
             //     );
             //   },
             // ),
-            const SizedBox(height: 16), // Add some spacing at the bottom
+            const SizedBox(height: 16),
           ],
         ),
       ),
