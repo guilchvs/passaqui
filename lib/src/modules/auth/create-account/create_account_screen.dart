@@ -39,12 +39,12 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     "Estamos quase finalizando.\n\nInforme seu e-mail no campo abaixo:",
     "Agora precisamos do seu RG:",
     "Agora entramos na etapa sobre sua residência.",
-    // "Insira abaixo o nome do logradouro, por favor:",
-    // "Agora informe o número da sua residência:",
-    // "Informe (caso exista) o complemento da localização de sua residência:",
-    // "Por favor confira ou informe o bairro:",
-    // "Caso nao esteja preenchida nos informe sua Cidade abaixo:",
-    // "E por ultimo por favor confira ou informe o Estado de sua residencia:"
+    "Insira abaixo o nome do logradouro, por favor:",
+    "Agora informe o número da sua residência:",
+    "Informe (caso exista) o complemento da localização de sua residência:",
+    "Por favor confira ou informe o bairro:",
+    "Caso nao esteja preenchida nos informe sua Cidade abaixo:",
+    "E por ultimo por favor confira ou informe o Estado de sua residencia:"
   ];
 
   List<String> placeholders = [
